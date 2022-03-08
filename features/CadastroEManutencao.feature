@@ -55,3 +55,4 @@ Scenario: Cadastro De Usuário Não Realizado (CNH já cadastrada)
     Then a memória do sistema não é alterada, não haverá duplicação do usuário já cadastrado
 
 ..Mudança solicitada na questão 8c
+..Nova Mudança da questão 9
