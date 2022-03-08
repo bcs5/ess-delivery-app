@@ -52,5 +52,4 @@ Scenario: Cadastro De Usuário Não Realizado (CNH já cadastrada)
     Given dado que o usuário esteja na página de cadastro do sistema
     And já exista na memória um usuário com email  "gertudrinha@email.com" 
     When o usuário preenche os dados CNH "12345678910", Nome completo: "Maria José Gertrudes", telefone "(99)99999-9999", data de nascimento "12/12/00", email: "gertudrinha@email.com" e endereço "Rua do Sol, 123, 55.555-000, Recife-PE"
-    Then a memória do sistema não é alterada
-    And não haverá duplicação do usuário já cadastrado
+    Then a memória do sistema não é alterada, não haverá duplicação do usuário já cadastrado
