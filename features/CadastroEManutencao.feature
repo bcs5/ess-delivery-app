@@ -36,14 +36,20 @@ Scenario: Cadastro De Usuário Não Realizado (Dado ausente no cadastro)
 
 Cenários de Serviço
 
+Scenario: Cadastro De Usuário Realizado 
+    Given dado que o usuário esteja na página de cadastro do sistema
+    And não exista na memória um usuário com número de registro da CNH  "12345678910"
+    When o usuário preenche os dados CNH "12345678910", Nome completo: "Maria José Gertrudes", telefone "(99)99999-9999", data de nascimento "12/12/00", email: "gertudrinha@email.com" e endereço "Rua do Sol, 123, 55.555-000, Recife-PE"
+    Then um usuário com os dados CNH "12345678910", Nome completo: "Maria José Gertrudes", telefone "(99)99999-9999", data de nascimento "12/12/00", email: "gertudrinha@email.com" e endereço "Rua do Sol, 123, 55.555-000, Recife-PE" é armazenado na memória
+
 Scenario: Cadastro De Usuário Não Realizado (CNH já cadastrada)
     Given dado que o usuário esteja na página de cadastro do sistema
-    And á exista na memória um usuário com número de registro da CNH  "12345678910"
+    And já exista na memória um usuário com número de registro da CNH  "12345678910"
     When o usuário preenche os dados CNH "12345678910", Nome completo: "Maria José Gertrudes", telefone "(99)99999-9999", data de nascimento "12/12/00", email: "gertudrinha@email.com" e endereço "Rua do Sol, 123, 55.555-000, Recife-PE"
     Then a memória do sistema não é alterada, não havendo duplicação do usuário já cadastrado
 
 Scenario: Cadastro De Usuário Não Realizado (CNH já cadastrada)
     Given dado que o usuário esteja na página de cadastro do sistema
-    And á exista na memória um usuário com email  "gertudrinha@email.com" 
+    And já exista na memória um usuário com email  "gertudrinha@email.com" 
     When o usuário preenche os dados CNH "12345678910", Nome completo: "Maria José Gertrudes", telefone "(99)99999-9999", data de nascimento "12/12/00", email: "gertudrinha@email.com" e endereço "Rua do Sol, 123, 55.555-000, Recife-PE"
     Then a memória do sistema não é alterada, não havendo duplicação do usuário já cadastrado
