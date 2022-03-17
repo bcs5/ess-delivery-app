@@ -57,4 +57,4 @@ Scenario: Entregador quer escrever uma observação na avaliação
     Given: usuário vai até a lista de entregas
     When: usuário clica em uma entrega já avaliada
     Then: Os valores das avaliações aparecem na tela
-    And: Não é permitido editar
+    And: Não é permitido adicionar abservações
