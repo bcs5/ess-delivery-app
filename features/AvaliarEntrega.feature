@@ -46,3 +46,9 @@ Scenario: Usuário avalia apenas uma das opções
     Or: Usuário escolhe o trabalho não avaliado anteriormente
     And: usuário escolhe um valor para apenas uma das opções
     Then: A avaliação é somada ao total de avaliações e dividida pelo número de avaliações e é armazenado no perfil do escolhido
+
+Scenario: Entregador quer apagar avaliações já feitas
+    Given: usuário vai até a lista de entregas
+    When: usuário clica em uma entrega já avaliada
+    Then: Os valores das avaliações aparecem na tela
+    And: Não é permitido editar
