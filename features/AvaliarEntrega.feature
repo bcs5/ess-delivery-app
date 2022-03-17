@@ -63,3 +63,4 @@ Scenario: Entregador quer enviar a avaliação para amigos
     When: usuário clica em uma entrega já avaliada
     Then: Os valores das avaliações aparecem na tela
     And: Não é permitido editar
+
