@@ -33,12 +33,38 @@ Scenario: Cadastro De Usuário Não Realizado (Dado ausente no cadastro)
     When o usuário preenche os dados CNH "12345678910", Nome completo: "Maria José Gertrudes", telefone "(99)99999-9999", data de nascimento "12/12/05", email: "gertudrinha@email.com" e endereço ""
     Then aparece mensagem informando que o cadastro não pôde ser realizado, por falta de preenchimento de dado cadastral obrigatório
 
+Scenario: Alteração de Dados De Usuario Realizada
+   Given que o usuário esteja na página de Alteração de Dados da Conta
+   When o usuário altera o campo de e-mail de "gertudres@email.com" para "gertudrinha123@email.com"
+   And o usuario confima a senha "123gzinha"
+   Then aparece mensagem informando o sucesso da alteração
+
+Scenario: Alteração de Dados De Usuario Não Realizada (senha incorreta)
+   Given que o usuário esteja na página de Alteração de Dados da Conta
+   And a senha do usuário é "123gzinha"
+   When o usuário altera o campo de e-mail de "gertudres@email.com" para "gertudrinha123@email.com"
+   And o usuario confima a senha "123gznh"
+   Then aparece mensagem informando que a alteração não pode ser realizada pois a senha digitada está incorreta
+
 Scenario: Alteração de Dados De Usuário Não Realizado (e-mail já existente)
     Given que o usuário esteja na página de Alteração de Dados da Conta
     And já exista usuário cadastrado com email  "gertudrinha@email.com" 
     When o usuário altera o campo de e-mail de "gertudres@email.com" para "gertudrinha@email.com"
     And salva a alteração
     Then aparece mensagem informando que a alteração de dados não pôde ser realizada, por já haver cadastro com o email informado
+
+Scenario: Alteração de Informações Pessoais Realizada
+   Given que o usuário esteja na página de Alteração de Dados do Usuário
+   When o usuário altera o campo de telefone de "(99)99999-9999" para "(81)99999-9999"
+   And o usuario confima a senha "123gzinha"
+   Then aparece mensagem informando o sucesso da alteração
+
+Scenario: Alteração de Informações Pessoais Não Realizada (senha incorreta)
+   Given que o usuário esteja na página de Alteração de Dados do Usuário
+   And a senha do usuário é "123gzinha"
+   When o usuário altera o campo de telefone de "(99)99999-9999" para "(81)99999-9999"
+   And o usuario confima a senha "123gznh"
+   Then aparece mensagem informando que a alteração não pode ser realizada pois a senha digitada está incorreta
 
 Scenario: Alteração de Informações Pessoais Não Realizada (CNH já existente)
     Given que o usuário esteja na página de Alteração de Informações Pessoais
@@ -74,6 +100,20 @@ Scenario: Login indisponível (Ausência de dado)
     When o usuário preenche o dado email "gertudrinha@email.com" 
     And não digita a senha
     Then o usuário não consegue confirmar o login
+
+Scenario: Exclusão de conta
+    Given que o usuário está na página Alteração de Dados da Conta
+    When o usuário escolhe a opção "excluir conta"
+    And confirma a senha "123gzinha"
+    Then aparece uma mensagem confirmando que a conta foi excluida
+    And o usuário volta para a tela de Login   
+
+Scenario: Exclusão de conta não realizada (senha incorreta)
+    Given que o usuário está na página Alteração de Dados da Conta
+    And a senha do usuário é "123gzinha"
+    When o usuário escolhe a opção "excluir conta"
+    And confirma a senha "123gznh"
+    Then aparece uma mensagem informando que não foi possível excluir a conta pois a senha informada está incorreta
     
 Cenários de Serviço
 
