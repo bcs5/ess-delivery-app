@@ -100,6 +100,20 @@ Scenario: Login indisponível (Ausência de dado)
     When o usuário preenche o dado email "gertudrinha@email.com" 
     And não digita a senha
     Then o usuário não consegue confirmar o login
+
+Scenario: Exclusão de conta
+    Given que o usuário está na página Alteração de Dados da Conta
+    When o usuário escolhe a opção "excluir conta"
+    And confirma a senha "123gzinha"
+    Then aparece uma mensagem confirmando que a conta foi excluida
+    And o usuário volta para a tela de Login   
+
+Scenario: Exclusão de conta não realizada (senha incorreta)
+    Given que o usuário está na página Alteração de Dados da Conta
+    And a senha do usuário é "123gzinha"
+    When o usuário escolhe a opção "excluir conta"
+    And confirma a senha "123gznh"
+    Then aparece uma mensagem informando que não foi possível excluir a conta pois a senha informada está incorreta
     
 Cenários de Serviço
 
