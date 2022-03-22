@@ -53,6 +53,19 @@ Scenario: Alteração de Dados De Usuário Não Realizado (e-mail já existente)
     And salva a alteração
     Then aparece mensagem informando que a alteração de dados não pôde ser realizada, por já haver cadastro com o email informado
 
+Scenario: Alteração de Informações Pessoais Realizada
+   Given que o usuário esteja na página de Alteração de Dados do Usuário
+   When o usuário altera o campo de telefone de "(99)99999-9999" para "(81)99999-9999"
+   And o usuario confima a senha "123gzinha"
+   Then aparece mensagem informando o sucesso da alteração
+
+Scenario: Alteração de Informações Pessoais Não Realizada (senha incorreta)
+   Given que o usuário esteja na página de Alteração de Dados do Usuário
+   And a senha do usuário é "123gzinha"
+   When o usuário altera o campo de telefone de "(99)99999-9999" para "(81)99999-9999"
+   And o usuario confima a senha "123gznh"
+   Then aparece mensagem informando que a alteração não pode ser realizada pois a senha digitada está incorreta
+
 Scenario: Alteração de Informações Pessoais Não Realizada (CNH já existente)
     Given que o usuário esteja na página de Alteração de Informações Pessoais
     And já exista usuário cadastrado com número de registro da CNH  "12345678910"
