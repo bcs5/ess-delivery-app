@@ -1,12 +1,12 @@
 import express = require('express');
 import bodyParser = require("body-parser");
 
-import { CarService } from './src/cars-service';
-import { Car } from './src/car';
+import { DeliverymanService } from './src/deliveryman-service';
+import { Deliveryman } from './src/deliveryman';
 
-var app = express();
+let app = express();
 
-var allowCrossDomain = function(req: any, res: any, next: any) {
+let allowCrossDomain = function(req: any, res: any, next: any) {
     res.header('Access-Control-Allow-Origin', "*");
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
@@ -16,13 +16,21 @@ app.use(allowCrossDomain);
 
 app.use(bodyParser.json());
 
-var carService: CarService = new CarService();
+let deliverymanService: DeliverymanService = new DeliverymanService();
+let deliveryAvailable: string[];
+  
 
-app.get('/cars', function(req, res){
-  const cars = carService.get();
-  res.send(JSON.stringify(cars));
+app.get('/', function(req, res){
+  let email = req.params.email;
+  let password = req.params.password;
+  let orderHistory = deliverymanService.getHistory(email, password);
+  /*
+  validacao 
+  */
+  res.send(JSON.stringify(orderHistory));
 });
 
+/*
 app.get('/cars/:id', function(req, res){
   const id = req.params.id;
   const car = carService.getById(id);
@@ -57,6 +65,7 @@ app.put('/cars', function (req: express.Request, res: express.Response) {
     res.status(404).send({ message: `Car ${car.id} could not be found.`});
   }
 })
+*/
 
 var server = app.listen(3000, function () {
   console.log('Example app listening on port 3000!')
