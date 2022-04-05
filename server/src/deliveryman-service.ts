@@ -13,14 +13,14 @@ export class DeliverymanService {
     return x;
   }
 
-  getHistory(email: string, passaword: string){
+  getHistory(email: string){
     let list = this.deliverymen.map(deliveryman => {
-      if(deliveryman.email == email && deliveryman.password == passaword){
+      if(deliveryman.email == email){
         return deliveryman.delivery;
       };
     });
 
-    return list;
+    return list[0];
   }
   /*
   add(car: Car): Car {
