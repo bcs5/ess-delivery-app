@@ -1,0 +1,45 @@
+{
+  "id": "identregador1",
+  "name": "José da Motinha",
+  "email": "josedamotinha@gmail.com",
+  "password": "40028922",
+  "phoneNumber": 40028922,
+  "cnh": 123456789,
+  "birthDate": [
+    26,
+    4,
+    1999
+  ],
+  "address": "Rua Brasil Imperio",
+  "wallet": 150,
+  "coordinates": [
+    165,
+    851
+  ],
+  "delivery": [
+    {
+      "idOrder": "dsaw2das",
+      "statusOrder": "Entregue",
+      "raceValue": 15.65,
+      "nameRestaurant": "Burger King",
+      "addressRestaurant": "Av. Conde Boa Vista em Boa Vista, Recife",
+      "addressClient": "Rua da Paz em Candeias, Jaboatao"
+    },
+    {
+      "idOrder": "bghfkjdfdjkn",
+      "statusOrder": "Entregue",
+      "raceValue": 13.25,
+      "nameRestaurant": "Bob's",
+      "addressRestaurant": "Av. Conde Boa Vista em Boa Vista, Recife",
+      "addressClient": "Rua do Aconchego em Rio Doce, Recife"
+    },
+    {
+      "idOrder": "hrtrtykimhr",
+      "statusOrder": "Entregue",
+      "raceValue": 15.65,
+      "nameRestaurant": "Mc Donald's",
+      "addressRestaurant": "Av. Conde Boa Vista, Recife",
+      "addressClient": "Rua da Burguesia em Boa Viagem, Recife"
+    }
+  ]
+}
