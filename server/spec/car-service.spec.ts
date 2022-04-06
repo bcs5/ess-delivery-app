@@ -1,11 +1,12 @@
 import 'jasmine';
-import { Car } from '../src/car';
-import { CarService } from '../src/cars-service';
+import { Deliveryman } from '../src/deliveryman';
+import { DeliverymanService } from '../src/deliveryman-service';
 
-describe("O servico de carros", () => {
-  var carService: CarService;
+describe("O servico de entregadores", () => {
+  var entregadorService: DeliverymanService;
 
-  beforeEach(() => carService = new CarService())
+  /*
+  beforeEach(() => entregadorService = new EntregadorService())
 
   it("é inicialmente vazio", () => {
     expect(carService.cars.length).toBe(0);
@@ -28,4 +29,5 @@ describe("O servico de carros", () => {
     expect(result.price).toBe(sample.price);
     expect(result.color).toBe(sample.color);
   })
+  */
 })
