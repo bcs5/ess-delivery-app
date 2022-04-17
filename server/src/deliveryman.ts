@@ -11,10 +11,9 @@ export class Deliveryman {
   address: string;
 
   //company information
-  id: string;
-  wallet: number;
-  delivery: Delivery[];
-  coordinates: [number, number];
+  id: number;
+  wallet: number = 0.0;
+  deliveries: Delivery[] = [];
 
   constructor(deliveryman: Deliveryman) {
     this.name = deliveryman.name;
@@ -26,9 +25,17 @@ export class Deliveryman {
     this.address = deliveryman.address;
 
     this.id = deliveryman.id;
-    this.wallet = deliveryman.wallet;
-    this.delivery = deliveryman.delivery;
-    this.coordinates = deliveryman.coordinates;
   }
 
+  addBalance(amount: number) {
+    this.wallet += amount;
+  }
+
+  addDelivery(delivery: Delivery) {
+    this.deliveries.unshift(delivery);
+  }
+
+  isFree() {
+    return !this.deliveries.length || this.deliveries[0].inactive();
+  }
 }
