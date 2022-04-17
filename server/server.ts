@@ -1,117 +1,101 @@
 import express = require('express');
 import bodyParser = require("body-parser");
-
-import { DeliverymanService } from './src/deliveryman-service';
-import { Deliveryman } from './src/deliveryman';
+import { RestaurantsService } from './src/restaurants-service';
+import { ClientsService } from './src/clients-service';
+import { DeliverymenService } from './src/deliverymen-service';
+import { OrdersService } from './src/orders-service';
+import { Order } from './src/order';
+import { DeliveriesService } from './src/deliveries-service';
+import { Request, Response } from 'express-serve-static-core';
 
 let app = express();
-
-let allowCrossDomain = function(req: any, res: any, next: any) {
-    res.header('Access-Control-Allow-Origin', "*");
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
-    next();
-}
-app.use(allowCrossDomain);
-
-app.use(bodyParser.json());
-
-let deliverymanService: DeliverymanService = new DeliverymanService();
-let deliveryAvailable: string[];
-
-var x = {
-  "id": "identregador1",
-  "name": "José da Motinha",
-  "email": "josedamotinha@gmail.com",
-  "password": "40028922",
-  "phoneNumber": 40028922,
-  "cnh": 123456789,
-  "birthDate": [26,4,1999],
-  "address": "Rua Brasil Imperio",
-  "wallet": 150,
-  "coordinates": [165, 851],
-  "delivery": [
-    {
-      "idOrder": "dsaw2das",
-      "statusOrder": "Entregue",
-      "raceValue": 15.65,
-      "nameRestaurant": "Burger King",
-      "addressRestaurant": "Av. Conde Boa Vista em Boa Vista, Recife",
-      "addressClient": "Rua da Paz em Candeias, Jaboatao"
-    },
-    {
-      "idOrder": "bghfkjdfdjkn",
-      "statusOrder": "Entregue",
-      "raceValue": 13.25,
-      "nameRestaurant": "Bob's",
-      "addressRestaurant": "Av. Conde Boa Vista em Boa Vista, Recife",
-      "addressClient": "Rua do Aconchego em Rio Doce, Recife"
-    },
-    {
-      "idOrder": "hrtrtykimhr",
-      "statusOrder": "Entregue",
-      "raceValue": 15.65,
-      "nameRestaurant": "Mc Donald's",
-      "addressRestaurant": "Av. Conde Boa Vista, Recife",
-      "addressClient": "Rua da Burguesia em Boa Viagem, Recife"
-    }
-  ]
-};
-
-
-deliverymanService.add(JSON.parse(JSON.stringify(x)));
-
-app.get('/', function(req, res){
-  let email = req.params.email;
-  let orderHistory = deliverymanService.getHistory(email);
-  /*
-  validacao 
-  */
-  res.send(JSON.stringify(orderHistory));
-});
-
-/*
-app.get('/cars/:id', function(req, res){
-  const id = req.params.id;
-  const car = carService.getById(id);
-  if (car) {
-    res.send(car);
-  } else {
-    res.status(404).send({ message: `Car ${id} could not be found`});
-  }
-});
-
-app.post('/cars', function(req: express.Request, res: express.Response){
-  const car: Car = <Car> req.body;
-  try {
-    const result = carService.add(car);
-    if (result) {
-      res.status(201).send(result);
-    } else {
-      res.status(403).send({ message: "Car list is full"});
-    }
-  } catch (err) {
-    const {message} = err;
-    res.status(400).send({ message })
-  }
-});
-
-app.put('/cars', function (req: express.Request, res: express.Response) {
-  const car: Car = <Car> req.body;
-  const result = carService.update(car);
-  if (result) {
-    res.send(result);
-  } else {
-    res.status(404).send({ message: `Car ${car.id} could not be found.`});
-  }
-})
-*/
+app.use(bodyParser.json())
+let restaurantService: RestaurantsService = new RestaurantsService();
+let clientsService: ClientsService = new ClientsService();
+let deliverymenService: DeliverymenService = new DeliverymenService();
+let ordersService: OrdersService = new OrdersService();
+let deliveriesService: DeliveriesService = new DeliveriesService(ordersService, deliverymenService);
 
 var server = app.listen(3000, function () {
   console.log('Example app listening on port 3000!')
 })
 
+var interval = setInterval(function() {
+  deliveriesService.process();
+}, 1000);
+
+app.get('/', function (req, res) {
+  res.send("Hello world!");
+});
+
+app.post('/restaurant', function (req, res) {
+  res.send(restaurantService.add(req.body));
+});
+
+app.post('/client', function (req, res) {
+  res.send(clientsService.add(req.body));
+});
+
+app.post('/deliveryman', function (req, res) {
+  res.send(deliverymenService.add(req.body));
+});
+
+app.post('/order', function (req, res) {
+  let client = clientsService.getById(req.body.clientId);
+  let restaurant = restaurantService.getById(req.body.restaurantId);
+  let payment = Number(req.body.payment);
+  let order = ordersService.add(<Order> {restaurant: restaurant, client: client, payment: payment});
+  deliveriesService.addOrder(order.id);
+  res.send(order);
+});
+
+function checkCredentials (req: Request, res: Response): string[] {
+  if (!req.headers.authorization || req.headers.authorization.indexOf('Basic ') === -1) {
+    res.status(401).json({ message: 'Missing Authorization Header' }).send();
+  }
+  const base64Credentials =  req.headers.authorization.split(' ')[1];
+  const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
+  return credentials.split(':');
+}
+
+app.get('/order/:orderId/accept', function(req, res) {
+  try {
+    const [username, password] = checkCredentials(req, res);
+    var delivery = deliveriesService.accept(Number(username), Number(req.params.orderId));
+    res.send(delivery.status);
+  } catch (e) {
+    res.status(500).send(e);
+  }
+});
+
+app.get('/order/:orderId/reject', function(req, res) {
+  try {
+    const [username, password] = checkCredentials(req, res);
+    deliveriesService.reject(Number(username), Number(req.params.orderId));
+    res.sendStatus(200);
+  } catch (e) {
+    res.status(500).send(e);
+  }
+});
+
+app.get('/orders/', function(req, res) {
+  try {
+    const [username, password] = checkCredentials(req, res);
+    let ans = deliveriesService.byDeliveryman(Number(username)).map(({order, status}) => status)
+    res.status(200).send(ans);
+  } catch (e) {
+    console.log(e);
+    res.status(500).send(e);
+  }
+});
+
+app.get('/process', function(req, res) {
+  deliveriesService.process();
+  res.status(200).send();
+});
+
 function closeServer(): void {
+  clearInterval(interval);
   server.close();
 }
 
