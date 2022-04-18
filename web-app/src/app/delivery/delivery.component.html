@@ -1,0 +1,16 @@
+<p># Pedido {{delivery.id}} {{delivery.status}}</p>
+<p>{{delivery.restaurant.name}}</p>
+<p>{{delivery.restaurant.address}}</p>
+<p>Pagamento {{delivery.payment}}</p>
+<p *ngIf="isPending()">
+  <button id="accepted-{{delivery.id}}" (click)="accept(delivery.id)">Aceitar</button>
+  <button id="rejected-{{delivery.id}}" (click)="reject(delivery.id)">Rejeitar</button>
+</p>
+<p *ngIf="isInProgress()">
+  <button id="collected-{{delivery.id}}" (click)="collect(delivery.id)">Coletado</button>
+</p>
+<div *ngIf="isCollected()">
+  <p>{{delivery.client.name}}</p>
+  <p>{{delivery.client.address}}</p>
+  <button *ngIf="!isFinished()" id="finished-{{delivery.id}}" (click)="finish(delivery.id)">Finalizado</button>
+</div>

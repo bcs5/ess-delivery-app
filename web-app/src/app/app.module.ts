@@ -8,13 +8,16 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { DeliveriesComponent } from './deliveries/deliveries.component';
-import { DeliveriesService } from './deliveries/delivery.service';
+import { DeliveriesService } from './deliveries/deliveries.service';
+import { DeliveryComponent } from './delivery/delivery.component';
+import { DeliveryService } from './delivery/delivery.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
-    DeliveriesComponent
+    DeliveriesComponent,
+    DeliveryComponent
   ],
   imports: [
     BrowserModule,
@@ -25,10 +28,14 @@ import { DeliveriesService } from './deliveries/delivery.service';
       {
         path: 'deliveries',
         component: DeliveriesComponent
+      },
+      {
+        path: 'delivery/:id',
+        component: DeliveryComponent
       }
     ])
   ],
-  providers: [DeliveriesService],
+  providers: [DeliveriesService, DeliveryService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

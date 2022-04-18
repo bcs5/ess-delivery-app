@@ -4,11 +4,13 @@
    <th>Restaurant</th>
    <th>Payment</th>
    <th>Status</th>
+   <th>details</th>
 </tr>
 <tr *ngFor="let delivery of deliveries">
    <td id="delivery-{{delivery.id}">{{delivery.id}}</td>
    <td>{{delivery.restaurant}}</td>
    <td>{{delivery.payment}}</td>
    <td>{{delivery.status}}</td>
+   <td><a [routerLink] = "['/delivery', delivery.id]">details</a></td>
 </tr>
 </table>

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgModule } from '@angular/core';
 
 import {  Delivery } from './delivery';
-import { DeliveriesService } from './delivery.service';
+import { DeliveriesService } from './deliveries.service';
 
 @Component({
   selector: 'app-root',
