@@ -1,6 +1,5 @@
 import 'jasmine';
 import request = require("request-promise");
-import { closeServer } from '../server';
 import { Client } from '../src/client';
 import { Deliveryman } from '../src/deliveryman';
 import { Order } from '../src/order';
@@ -168,8 +167,11 @@ describe("O servidor", () => {
     }, json: true};
     
     return request(options).then(body => {
-      expect(body[0]).toBe("inprogress");
-      expect(body[1]).toBe("rejected");
+      console.log(body)
+      expect(body[0].id).toBe(1);
+      expect(body[0].status).toBe("inprogress");
+      expect(body[1].id).toBe(0);
+      expect(body[1].status).toBe("rejected");
     }).catch(({ statusCode }) => {
       expect(statusCode).toBe(200);
     });
@@ -197,10 +199,11 @@ describe("O servidor", () => {
     }, json: true};
     
     return request(options).then(body => {
-      expect(body[0]).toBe("pending");
+      expect(body[0].id).toBe(0);
+      expect(body[0].restaurant).toBe(restaurant.name);
+      expect(body[0].status).toBe("pending");
     }).catch(({ statusCode }) => {
       expect(statusCode).toBe(200);
     });
   })
-
 })

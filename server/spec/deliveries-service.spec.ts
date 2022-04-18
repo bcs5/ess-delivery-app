@@ -163,7 +163,7 @@ describe("O servico de pedidos", () => {
       expect(result.order).toBe(order);
       expect(result.status).toBe("collected");
       expect(result.created_at.getTime()).toBe(FIVE_MIN_BEFORE.getTime());
-      expect(result.colleted_at.getTime()).toBe(NOW.getTime());
+      expect(result.collected_at.getTime()).toBe(NOW.getTime());
     })
 
     it("finalizar pedido", () => {
@@ -184,7 +184,7 @@ describe("O servico de pedidos", () => {
       expect(result.order).toBe(order);
       expect(result.status).toBe("finished");
       expect(result.created_at.getTime()).toBe(FIVE_MIN_BEFORE.getTime());
-      expect(result.colleted_at.getTime()).toBe(ONE_MIN_BEFORE.getTime());
+      expect(result.collected_at.getTime()).toBe(ONE_MIN_BEFORE.getTime());
       expect(result.finished_at.getTime()).toBe(NOW.getTime());
     })
 

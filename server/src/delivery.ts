@@ -6,7 +6,7 @@ export class Delivery {
   deliveryman: Deliveryman;
   blocklist: Set<number>;
   created_at: Date;
-  colleted_at: Date;
+  collected_at: Date;
   finished_at: Date;
   status: String;
 
@@ -40,7 +40,7 @@ export class Delivery {
 
   collect() {
     this.status = "collected";
-    this.colleted_at = new Date();
+    this.collected_at = new Date();
   }
 
   finish() {

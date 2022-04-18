@@ -7,6 +7,8 @@ import { OrdersService } from './src/orders-service';
 import { Order } from './src/order';
 import { DeliveriesService } from './src/deliveries-service';
 import { Request, Response } from 'express-serve-static-core';
+import { Delivery } from './src/delivery';
+import { DeliveryMapper } from './src/delivery-mapper';
 
 let app = express();
 app.use(bodyParser.json())
@@ -15,6 +17,7 @@ let clientsService: ClientsService = new ClientsService();
 let deliverymenService: DeliverymenService = new DeliverymenService();
 let ordersService: OrdersService = new OrdersService();
 let deliveriesService: DeliveriesService = new DeliveriesService(ordersService, deliverymenService);
+let deliveryMapper: DeliveryMapper = new DeliveryMapper();
 
 var server = app.listen(3000, function () {
   console.log('Example app listening on port 3000!')
@@ -81,10 +84,9 @@ app.get('/order/:orderId/reject', function(req, res) {
 app.get('/orders/', function(req, res) {
   try {
     const [username, password] = checkCredentials(req, res);
-    let ans = deliveriesService.byDeliveryman(Number(username)).map(({order, status}) => status)
+    let ans = deliveriesService.byDeliveryman(Number(username)).map(delivery => deliveryMapper.toJsonMinimal(delivery))
     res.status(200).send(ans);
   } catch (e) {
-    console.log(e);
     res.status(500).send(e);
   }
 });
