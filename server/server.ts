@@ -11,7 +11,18 @@ import { Delivery } from './src/delivery';
 import { DeliveryMapper } from './src/delivery-mapper';
 
 let app = express();
-app.use(bodyParser.json())
+
+
+var allowCrossDomain = function(req: any, res: any, next: any) {
+  res.header('Access-Control-Allow-Origin', "*");
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+  next();
+}
+
+app.use(allowCrossDomain);
+app.use(bodyParser.json());
+
 let restaurantService: RestaurantsService = new RestaurantsService();
 let clientsService: ClientsService = new ClientsService();
 let deliverymenService: DeliverymenService = new DeliverymenService();
