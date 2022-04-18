@@ -52,7 +52,7 @@ export class DeliveryComponent implements OnInit {
     return this.delivery.status == "pending";
   }
   isInProgress () {
-    return this.delivery.status == "inprogress";
+    return this.delivery.status == "in_progress";
   }
   isCollected () {
     return this.delivery.status == "collected";
