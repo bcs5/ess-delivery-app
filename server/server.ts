@@ -7,8 +7,8 @@ import { OrdersService } from './src/orders-service'
 import { Order } from './src/order'
 import { DeliveriesService } from './src/deliveries-service'
 import { Request, Response } from 'express-serve-static-core'
-import { Delivery } from './src/delivery'
 import { DeliveryMapper } from './src/delivery-mapper'
+import { Action } from './src/delivery-action'
 
 const app = express()
 
@@ -91,16 +91,7 @@ app.get('/order/:orderId/:action', function (req, res) {
     const [username, password] = extractCredentials(req, res)
     deliverymenService.auth(Number(username), password)
 
-    let delivery: Delivery
-    if (req.params.action == 'accept') {
-      delivery = deliveriesService.accept(Number(username), Number(req.params.orderId))
-    } else if (req.params.action == 'reject') {
-      delivery = deliveriesService.reject(Number(username), Number(req.params.orderId))
-    } else if (req.params.action == 'collect') {
-      delivery = deliveriesService.collect(Number(username), Number(req.params.orderId))
-    } else if (req.params.action == 'finish') {
-      delivery = deliveriesService.finish(Number(username), Number(req.params.orderId))
-    }
+    const delivery = deliveriesService.takeAction(Number(username), Number(req.params.orderId), <Action>(req.params.action))
     return res.send(deliveryMapper.toJson(delivery))
   } catch (e) {
     if (e == 'auth failed') {

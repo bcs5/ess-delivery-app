@@ -167,7 +167,7 @@ describe('O servidor', () => {
     }
     return request(options)
       .then(body => {
-        expect(body.status).toBe('inprogress')
+        expect(body.status).toBe('in_progress')
       })
       .catch(({ statusCode }) => {
         expect(statusCode).toBe(200)
@@ -187,7 +187,7 @@ describe('O servidor', () => {
 
     return request(options).then(body => {
       expect(body[0].id).toBe(1)
-      expect(body[0].status).toBe('inprogress')
+      expect(body[0].status).toBe('in_progress')
       expect(body[1].id).toBe(0)
       expect(body[1].status).toBe('rejected')
     }).catch(({ statusCode }) => {

@@ -1,4 +1,6 @@
 import { Delivery } from './delivery'
+import { Action } from './delivery-action'
+import { Status } from './delivery-status'
 import { Deliveryman } from './deliveryman'
 import { DeliverymenService } from './deliverymen-service'
 import { OrdersService } from './orders-service'
@@ -45,56 +47,49 @@ export class DeliveriesService {
     }
   }
 
-  accept (deliverymanId: number, orderId: number) {
+  takeAction (deliverymanId: number, orderId: number, action: Action): Delivery {
     const deliveryman = this.deliverymenService.getById(deliverymanId)
     if (!deliveryman) {
-      throw 'No deliveryman'
+      throw 'no deliveryman'
     }
-    if (deliveryman.deliveries) {
-      const delivery = deliveryman.deliveries[0]
-      if (delivery.order.id == orderId && delivery.status == 'pending') {
+    if (!deliveryman.deliveries) {
+      throw 'not performed'
+    }
+    const delivery = deliveryman.deliveries[0]
+    if (delivery.order.id != orderId) {
+      throw 'not performed'
+    }
+
+    switch (action) {
+      case Action.ACCEPT:
+        if (delivery.status != Status.PENDING) {
+          throw 'invalid state'
+        }
         delivery.accept()
         this.removeDelivery(delivery)
-        return delivery
-      }
-    }
-    throw 'not performed'
-  }
-
-  reject (deliverymanId: number, orderId: number) {
-    const deliveryman = this.deliverymenService.getById(deliverymanId)
-    if (deliveryman.deliveries) {
-      const delivery = deliveryman.deliveries[0]
-      if (delivery.order.id == orderId && delivery.status == 'pending') {
+        break
+      case Action.REJECT:
+        if (delivery.status != Status.PENDING) {
+          throw 'invalid state'
+        }
         delivery.reject()
-        return delivery
-      }
-    }
-    throw 'not performed'
-  }
-
-  collect (deliverymanId: number, orderId: number) {
-    const deliveryman = this.deliverymenService.getById(deliverymanId)
-    if (deliveryman.deliveries) {
-      const delivery = deliveryman.deliveries[0]
-      if (delivery.order.id == orderId && delivery.status == 'inprogress') {
+        break
+      case Action.COLLECT:
+        if (delivery.status != Status.IN_PROGRESS) {
+          throw 'invalid state'
+        }
         delivery.collect()
-        return delivery
-      }
-    }
-    throw 'not performed'
-  }
-
-  finish (deliverymanId: number, orderId: number) {
-    const deliveryman = this.deliverymenService.getById(deliverymanId)
-    if (deliveryman.deliveries) {
-      const delivery = deliveryman.deliveries[0]
-      if (delivery.order.id == orderId && delivery.status == 'collected') {
+        break
+      case Action.FINISH:
+        if (delivery.status != Status.COLLECTED) {
+          throw 'invalid state'
+        }
         delivery.finish()
-        return delivery
-      }
+        break
+      default:
+        throw 'invalid action'
     }
-    throw 'not performed'
+    return delivery
   }
 
   addOrder (orderId: number) {
