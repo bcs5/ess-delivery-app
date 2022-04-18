@@ -1,0 +1,14 @@
+<table>
+<tr *ngIf="deliveries.length > 0">
+   <th>Id</th>
+   <th>Restaurant</th>
+   <th>Payment</th>
+   <th>Status</th>
+</tr>
+<tr *ngFor="let delivery of deliveries">
+   <td id="delivery-{{delivery.id}">{{delivery.id}}</td>
+   <td>{{delivery.restaurant}}</td>
+   <td>{{delivery.payment}}</td>
+   <td>{{delivery.status}}</td>
+</tr>
+</table>

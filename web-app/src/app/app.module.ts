@@ -2,33 +2,33 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule }   from '@angular/router';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
-import { CarsComponent } from './cars/cars.component';
-import { CarService } from './cars/cars.service';
+import { DeliveriesComponent } from './deliveries/deliveries.component';
+import { DeliveriesService } from './deliveries/delivery.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
-    CarsComponent
+    DeliveriesComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpModule,
+    HttpClientModule,
     RouterModule.forRoot([
       {
-        path: 'cars',
-        component: CarsComponent
+        path: 'deliveries',
+        component: DeliveriesComponent
       }
     ])
   ],
-  providers: [CarService],
+  providers: [DeliveriesService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
