@@ -1,11 +1,11 @@
-import 'jasmine';
-import request = require("request-promise");
-import { Client } from '../src/client';
-import { Deliveryman } from '../src/deliveryman';
-import { Order } from '../src/order';
-import { Restaurant } from '../src/restaurant';
+import 'jasmine'
+import request = require('request-promise')
+import { Client } from '../src/client'
+import { Deliveryman } from '../src/deliveryman'
+import { Order } from '../src/order'
+import { Restaurant } from '../src/restaurant'
 
-const baseUrl = "http://localhost:3000";
+const baseUrl = 'http://localhost:3000'
 const restaurantUrl = `${baseUrl}/restaurant/`
 const clientUrl = `${baseUrl}/client/`
 const deliverymanUrl = `${baseUrl}/deliveryman/`
@@ -13,24 +13,24 @@ const orderUrl = `${baseUrl}/order/`
 const ordersUrl = `${baseUrl}/orders/`
 const processUrl = `${baseUrl}/process/`
 
-describe("O servidor", () => {
-  var server:any;
+describe('O servidor', () => {
+  let server: any
   const restaurant = <Restaurant> {
     name: "Bob's Madalena",
-    address: "Av. Eng. Abdias de Carvalho, 365 - Ilha do Retiro, Recife - PE, 50750-257"
+    address: 'Av. Eng. Abdias de Carvalho, 365 - Ilha do Retiro, Recife - PE, 50750-257'
   }
   const deliveryman = <Deliveryman> {
-    name: "Gabriel Mendes"
+    name: 'Gabriel Mendes'
   }
-  
+
   const deliveryman1 = <Deliveryman> {
-    name: "Jose Cruz",
-    password: "casa"
+    name: 'Jose Cruz',
+    password: 'casa'
   }
 
   const client = <Client> {
-    name: "Bezaliel Silva",
-    address: "Rua Visconde de Barbacena, 329 - Várzea, Recife - PE, 50740-445"
+    name: 'Bezaliel Silva',
+    address: 'Rua Visconde de Barbacena, 329 - Várzea, Recife - PE, 50740-445'
   }
 
   const order = {
@@ -45,200 +45,233 @@ describe("O servidor", () => {
     payment: 25.0
   }
 
-  beforeAll(() => {server = require('../server')});
-  afterAll(() => {server.closeServer()});
+  beforeAll(() => { server = require('../server') })
+  afterAll(() => { server.closeServer() })
 
-  it("cadastra restaurante", () => {
-    const options:any = {method: 'POST', uri: (restaurantUrl), body: restaurant, json: true};
+  it('cadastra restaurante', () => {
+    const options = { method: 'POST', uri: (restaurantUrl), body: restaurant, json: true }
     return request(options)
-    .then(body => {
-      var res = <Restaurant>(body);
-      expect(res.name).toBe(restaurant.name);
-      expect(res.address).toBe(restaurant.address);
-    });
+      .then(body => {
+        const res = <Restaurant>(body)
+        expect(res.name).toBe(restaurant.name)
+        expect(res.address).toBe(restaurant.address)
+      })
   })
 
-  it("cadastra cliente", () => {
-    const options:any = {method: 'POST', uri: (clientUrl), body: client, json: true};
+  it('cadastra cliente', () => {
+    const options = { method: 'POST', uri: (clientUrl), body: client, json: true }
     return request(options)
-    .then(body => {
-      var res = <Client>(body);
-      expect(res.name).toBe(client.name);
-      expect(res.address).toBe(client.address);
-    });
+      .then(body => {
+        const res = <Client>(body)
+        expect(res.name).toBe(client.name)
+        expect(res.address).toBe(client.address)
+      })
   })
 
-  it("cadastra entregador", () => {
-    const options:any = {method: 'POST', uri: (deliverymanUrl), body: deliveryman, json: true};
+  it('cadastra entregador', () => {
+    const options = { method: 'POST', uri: (deliverymanUrl), body: deliveryman, json: true }
     return request(options)
-    .then(body => {
-      var res = <Deliveryman>(body);
-      expect(res.name).toBe(deliveryman.name);
-      expect(res.wallet).toBe(0.0);
-    });
+      .then(body => {
+        const res = <Deliveryman>(body)
+        expect(res.name).toBe(deliveryman.name)
+        expect(res.wallet).toBe(0.0)
+      })
   })
 
-  it("cadastra pedido", () => {
-    const options:any = {method: 'POST', uri: (orderUrl), body: order, json: true};
+  it('cadastra pedido', () => {
+    const options = { method: 'POST', uri: (orderUrl), body: order, json: true }
     return request(options)
-    .then(body => {
-      var res = <Order>(body);
-      expect(res.restaurant.name).toBe(restaurant.name);
-      expect(res.client.name).toBe(client.name);
-      expect(res.payment).toBe(order.payment);
-    });
+      .then(body => {
+        const res = <Order>(body)
+        expect(res.restaurant.name).toBe(restaurant.name)
+        expect(res.client.name).toBe(client.name)
+        expect(res.payment).toBe(order.payment)
+      })
   })
 
-  it("rejeitar pedido", () => {
+  it('rejeitar pedido', () => {
     request.get(processUrl)
-    .catch(({ statusCode }) => {
-      expect(statusCode).toBe(200);
-    });
+      .catch(({ statusCode }) => {
+        expect(statusCode).toBe(200)
+      })
 
-    let uri = orderUrl + 0 + '/reject'
+    const uri = orderUrl + 0 + '/reject'
 
-    const options:any = {method: 'GET', uri: (uri), auth: {
-      'user': "0",
-      'pass': ""
-    }};
-    
+    const options: any = {
+      method: 'GET',
+      uri: (uri),
+      auth: {
+        user: '0',
+        pass: ''
+      }
+    }
+
     request(options)
-    .catch(({ statusCode }) => {
-      expect(statusCode).toBe(200);
-    })
+      .catch(({ statusCode }) => {
+        expect(statusCode).toBe(200)
+      })
 
     request.get(processUrl)
-    .catch(({ statusCode }) => {
-      expect(statusCode).toBe(200);
-    });
+      .catch(({ statusCode }) => {
+        expect(statusCode).toBe(200)
+      })
   })
 
-  it("cadastra pedido 2", () => {
-    const options:any = {method: 'POST', uri: (orderUrl), body: order1, json: true};
+  it('cadastra pedido 2', () => {
+    const options = { method: 'POST', uri: (orderUrl), body: order1, json: true }
     return request(options)
-    .then(body => {
-      var res = <Order>(body);
-      expect(res.restaurant.name).toBe(restaurant.name);
-      expect(res.client.name).toBe(client.name);
-      expect(res.payment).toBe(order1.payment);
-    });
+      .then(body => {
+        const res = <Order>(body)
+        expect(res.restaurant.name).toBe(restaurant.name)
+        expect(res.client.name).toBe(client.name)
+        expect(res.payment).toBe(order1.payment)
+      })
   })
 
-  it("aceitar pedido id errado", () => {
+  it('aceitar pedido id errado', () => {
     request.get(processUrl)
-    .catch(({ statusCode }) => {
-      expect(statusCode).toBe(200);
-    });
+      .catch(({ statusCode }) => {
+        expect(statusCode).toBe(200)
+      })
 
-    let uri = orderUrl + 0 + '/accept'
-    const options:any = {method: 'GET', uri: (uri), auth: {
-      'user': "0",
-      'pass': ""
-    }};
+    const uri = orderUrl + 0 + '/accept'
+    const options = {
+      method: 'GET',
+      uri: (uri),
+      auth: {
+        user: '0',
+        pass: ''
+      }
+    }
     return request(options)
-    .catch(({ statusCode }) => {
-      expect(statusCode).toBe(500);
-    })
+      .catch(({ statusCode }) => {
+        expect(statusCode).toBe(500)
+      })
   })
 
-  it("aceitar pedido", () => {
+  it('aceitar pedido', () => {
     request.get(processUrl)
-    .catch(({ statusCode }) => {
-      expect(statusCode).toBe(200);
-    });
+      .catch(({ statusCode }) => {
+        expect(statusCode).toBe(200)
+      })
 
-    let uri = orderUrl + 1 + '/accept'
-    const options:any = {method: 'GET', uri: (uri), auth: {
-      'user': "0",
-      'pass': ""
-    }, json: true};
+    const uri = orderUrl + 1 + '/accept'
+    const options = {
+      method: 'GET',
+      uri: (uri),
+      auth: {
+        user: '0',
+        pass: ''
+      },
+      json: true
+    }
     return request(options)
-    .then(body => {
-      expect(body.status).toBe("inprogress");
-    })
-    .catch(({ statusCode }) => {
-      expect(statusCode).toBe(200);
-    })
+      .then(body => {
+        expect(body.status).toBe('inprogress')
+      })
+      .catch(({ statusCode }) => {
+        expect(statusCode).toBe(200)
+      })
   })
 
-  it("listar pedidos", () => {
-    const options:any = {method: 'GET', uri: (ordersUrl), auth: {
-      'user': "0",
-      'pass': ""
-    }, json: true};
-    
+  it('listar pedidos', () => {
+    const options = {
+      method: 'GET',
+      uri: (ordersUrl),
+      auth: {
+        user: '0',
+        pass: ''
+      },
+      json: true
+    }
+
     return request(options).then(body => {
-      expect(body[0].id).toBe(1);
-      expect(body[0].status).toBe("inprogress");
-      expect(body[1].id).toBe(0);
-      expect(body[1].status).toBe("rejected");
+      expect(body[0].id).toBe(1)
+      expect(body[0].status).toBe('inprogress')
+      expect(body[1].id).toBe(0)
+      expect(body[1].status).toBe('rejected')
     }).catch(({ statusCode }) => {
-      expect(statusCode).toBe(200);
-    });
+      expect(statusCode).toBe(200)
+    })
   })
-  
-  it("cadastrar entregador 2", () => {
-    const options:any = {method: 'POST', uri: (deliverymanUrl), body: deliveryman1, json: true};
+
+  it('cadastrar entregador 2', () => {
+    const options = { method: 'POST', uri: (deliverymanUrl), body: deliveryman1, json: true }
     return request(options)
-    .then(body => {
-      var res = <Deliveryman>(body);
-      expect(res.name).toBe(deliveryman1.name);
-      expect(res.wallet).toBe(0.0);
-    });
+      .then(body => {
+        const res = <Deliveryman>(body)
+        expect(res.name).toBe(deliveryman1.name)
+        expect(res.wallet).toBe(0.0)
+      })
   })
 
-  it("listar pedidos entregador 2 com senha errada", () => {
+  it('listar pedidos entregador 2 com senha errada', () => {
     request.get(processUrl)
-    .catch(({ statusCode }) => {
-      expect(statusCode).toBe(200);
-    });
+      .catch(({ statusCode }) => {
+        expect(statusCode).toBe(200)
+      })
 
-    const options:any = {method: 'GET', uri: (ordersUrl), auth: {
-      'user': "1",
-      'pass': "casarao"
-    }, json: true};
-    
+    const options = {
+      method: 'GET',
+      uri: (ordersUrl),
+      auth: {
+        user: '1',
+        pass: 'casarao'
+      },
+      json: true
+    }
+
     return request(options).catch(({ statusCode }) => {
-      expect(statusCode).toBe(401);
-    });
+      expect(statusCode).toBe(401)
+    })
   })
 
-  it("entregador 2 pega pedido rejeitado", () => {
+  it('entregador 2 pega pedido rejeitado', () => {
     request.get(processUrl)
-    .catch(({ statusCode }) => {
-      expect(statusCode).toBe(200);
-    });
+      .catch(({ statusCode }) => {
+        expect(statusCode).toBe(200)
+      })
 
-    const options:any = {method: 'GET', uri: (ordersUrl), auth: {
-      'user': "1",
-      'pass': "casa"
-    }, json: true};
-    
+    const options = {
+      method: 'GET',
+      uri: (ordersUrl),
+      auth: {
+        user: '1',
+        pass: 'casa'
+      },
+      json: true
+    }
+
     return request(options).then(body => {
-      expect(body[0].id).toBe(0);
-      expect(body[0].restaurant).toBe(restaurant.name);
-      expect(body[0].status).toBe("pending");
+      expect(body[0].id).toBe(0)
+      expect(body[0].restaurant).toBe(restaurant.name)
+      expect(body[0].status).toBe('pending')
     }).catch(({ statusCode }) => {
-      expect(statusCode).toBe(200);
-    });
+      expect(statusCode).toBe(200)
+    })
   })
 
-  it("listar pedido rejeitado entregador 1", () => {
+  it('listar pedido rejeitado entregador 1', () => {
     request.get(processUrl)
-    .catch(({ statusCode }) => {
-      expect(statusCode).toBe(200);
-    });
+      .catch(({ statusCode }) => {
+        expect(statusCode).toBe(200)
+      })
 
-    const options:any = {method: 'GET', uri: (orderUrl + 0), auth: {
-      'user': "0",
-      'pass': ""
-    }, json: true};
+    const options = {
+      method: 'GET',
+      uri: (orderUrl + 0),
+      auth: {
+        user: '0',
+        pass: ''
+      },
+      json: true
+    }
     return request(options).then(body => {
-      expect(body.id).toBe(0);
-      expect(body.restaurant.name).toBe(restaurant.name);
-      expect(body.status).toBe("rejected");
+      expect(body.id).toBe(0)
+      expect(body.restaurant.name).toBe(restaurant.name)
+      expect(body.status).toBe('rejected')
     }).catch(({ statusCode }) => {
-      expect(statusCode).toBe(200);
-    });
+      expect(statusCode).toBe(200)
+    })
   })
 })
