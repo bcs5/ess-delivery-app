@@ -72,13 +72,13 @@ app.post('/order', function (req, res) {
   return res.send(order);
 });
 
-app.get('/order/:orderId/accept', function(req, res) {
+app.get('/order/:orderId', function(req, res) {
   try {
     const [username, password] = extractCredentials(req, res);
     deliverymenService.auth(Number(username), password);
 
-    var delivery = deliveriesService.accept(Number(username), Number(req.params.orderId));
-    return res.send(delivery.status);
+    var delivery = deliveriesService.byDeliveryman(Number(username)).find(({order}) => req.params.orderId == order.id);
+    return res.send(deliveryMapper.toJson(delivery));
   } catch (e) {
     if (e == "auth failed") {
       return res.status(401).send(e);
@@ -87,13 +87,22 @@ app.get('/order/:orderId/accept', function(req, res) {
   }
 });
 
-app.get('/order/:orderId/reject', function(req, res) {
+app.get('/order/:orderId/:action', function(req, res) {
   try {
     const [username, password] = extractCredentials(req, res);
     deliverymenService.auth(Number(username), password);
 
-    deliveriesService.reject(Number(username), Number(req.params.orderId));
-    return res.sendStatus(200);
+    var delivery: Delivery;
+    if (req.params.action == "accept") {
+      delivery = deliveriesService.accept(Number(username), Number(req.params.orderId));
+    } else if (req.params.action == "reject") {
+      delivery = deliveriesService.reject(Number(username), Number(req.params.orderId));
+    } else if (req.params.action == "collect") {
+      delivery = deliveriesService.collect(Number(username), Number(req.params.orderId));
+    } else if (req.params.action == "finish") {
+      delivery = deliveriesService.finish(Number(username), Number(req.params.orderId));
+    }
+    return res.send(deliveryMapper.toJson(delivery));
   } catch (e) {
     if (e == "auth failed") {
       return res.status(401).send(e);

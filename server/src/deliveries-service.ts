@@ -57,10 +57,9 @@ export class DeliveriesService {
         delivery.accept()
         this.removeDelivery(delivery);
         return delivery;
-      } else {
-        throw "No delivery found.";
       }
     }
+    throw 'not performed';
   }
 
   reject(deliverymanId: number, orderId: number) {
@@ -69,7 +68,7 @@ export class DeliveriesService {
       var delivery = deliveryman.deliveries[0];
       if (delivery.order.id == orderId && delivery.status == "pending") {
         delivery.reject()
-        return;
+        return delivery;
       }
     }
     throw 'not performed';
@@ -81,8 +80,10 @@ export class DeliveriesService {
       var delivery = deliveryman.deliveries[0];
       if (delivery.order.id == orderId && delivery.status == "inprogress") {
         delivery.collect()
+        return delivery;
       }
     }
+    throw 'not performed';
   }
 
   finish(deliverymanId: number, orderId: number) {
@@ -91,8 +92,10 @@ export class DeliveriesService {
       var delivery = deliveryman.deliveries[0];
       if (delivery.order.id == orderId && delivery.status == "collected") {
         delivery.finish()
+        return delivery;
       }
     }
+    throw 'not performed';
   }
 
   addOrder(orderId: number) {

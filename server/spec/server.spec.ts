@@ -151,10 +151,10 @@ describe("O servidor", () => {
     const options:any = {method: 'GET', uri: (uri), auth: {
       'user': "0",
       'pass': ""
-    }};
+    }, json: true};
     return request(options)
     .then(body => {
-      expect(body).toBe("inprogress");
+      expect(body.status).toBe("inprogress");
     })
     .catch(({ statusCode }) => {
       expect(statusCode).toBe(200);
@@ -168,7 +168,6 @@ describe("O servidor", () => {
     }, json: true};
     
     return request(options).then(body => {
-      console.log(body)
       expect(body[0].id).toBe(1);
       expect(body[0].status).toBe("inprogress");
       expect(body[1].id).toBe(0);
@@ -219,6 +218,25 @@ describe("O servidor", () => {
       expect(body[0].id).toBe(0);
       expect(body[0].restaurant).toBe(restaurant.name);
       expect(body[0].status).toBe("pending");
+    }).catch(({ statusCode }) => {
+      expect(statusCode).toBe(200);
+    });
+  })
+
+  it("listar pedido rejeitado entregador 1", () => {
+    request.get(processUrl)
+    .catch(({ statusCode }) => {
+      expect(statusCode).toBe(200);
+    });
+
+    const options:any = {method: 'GET', uri: (orderUrl + 0), auth: {
+      'user': "0",
+      'pass': ""
+    }, json: true};
+    return request(options).then(body => {
+      expect(body.id).toBe(0);
+      expect(body.restaurant.name).toBe(restaurant.name);
+      expect(body.status).toBe("rejected");
     }).catch(({ statusCode }) => {
       expect(statusCode).toBe(200);
     });
