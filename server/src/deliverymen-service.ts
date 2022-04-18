@@ -22,4 +22,11 @@ export class DeliverymenService {
   getById(deliverymanId: number): Deliveryman {
     return this.deliverymen.find(({ id }) => id == deliverymanId);
   }
+
+  auth (username: number, password: string) {
+    var stored = this.getById(username).password;
+    if((stored ? stored : "") != password) {
+      throw "auth failed";
+    }
+  }
 }

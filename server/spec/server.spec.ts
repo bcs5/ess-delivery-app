@@ -24,7 +24,8 @@ describe("O servidor", () => {
   }
   
   const deliveryman1 = <Deliveryman> {
-    name: "Jose Cruz"
+    name: "Jose Cruz",
+    password: "casa"
   }
 
   const client = <Client> {
@@ -187,6 +188,22 @@ describe("O servidor", () => {
     });
   })
 
+  it("listar pedidos entregador 2 com senha errada", () => {
+    request.get(processUrl)
+    .catch(({ statusCode }) => {
+      expect(statusCode).toBe(200);
+    });
+
+    const options:any = {method: 'GET', uri: (ordersUrl), auth: {
+      'user': "1",
+      'pass': "casarao"
+    }, json: true};
+    
+    return request(options).catch(({ statusCode }) => {
+      expect(statusCode).toBe(401);
+    });
+  })
+
   it("entregador 2 pega pedido rejeitado", () => {
     request.get(processUrl)
     .catch(({ statusCode }) => {
@@ -195,7 +212,7 @@ describe("O servidor", () => {
 
     const options:any = {method: 'GET', uri: (ordersUrl), auth: {
       'user': "1",
-      'pass': ""
+      'pass': "casa"
     }, json: true};
     
     return request(options).then(body => {
