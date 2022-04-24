@@ -10,7 +10,6 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { DeliveriesComponent } from './deliveries/deliveries.component';
 import { DeliveriesService } from './deliveries/deliveries.service';
 import { DeliveryComponent } from './delivery/delivery.component';
-import { DeliveryService } from './delivery/delivery.service';
 
 @NgModule({
   declarations: [
@@ -35,7 +34,7 @@ import { DeliveryService } from './delivery/delivery.service';
       }
     ])
   ],
-  providers: [DeliveriesService, DeliveryService],
+  providers: [DeliveriesService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

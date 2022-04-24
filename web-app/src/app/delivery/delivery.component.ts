@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { NgModule } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
+import { DeliveriesService } from '../deliveries/deliveries.service';
 
 import {  Delivery } from './delivery';
-import { DeliveryService } from './delivery.service';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +14,7 @@ export class DeliveryComponent implements OnInit {
   delivery: Delivery = new Delivery();
    id: number;
 
-   constructor(private route: ActivatedRoute, private deliveryService: DeliveryService) {}
+   constructor(private route: ActivatedRoute, private deliveryService: DeliveriesService) {}
 
    ngOnInit(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
