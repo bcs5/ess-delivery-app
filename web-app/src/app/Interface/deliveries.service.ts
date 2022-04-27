@@ -1,6 +1,8 @@
 import { Injectable }    from '@angular/core';
 import {  HttpClient, HttpHeaders } from '@angular/common/http';
+
 import { Delivery } from './delivery';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class DeliveriesService {
@@ -12,7 +14,11 @@ export class DeliveriesService {
 
   private taURL = 'http://localhost:3000';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
+
+  getDeliveryX(): Observable<Delivery[]> {
+    return this.http.get<Delivery[]>(this.taURL + "/orders", {headers: this.headers});
+  }
 
   getDeliveries(): Promise<Delivery[]> {
     const options: any = {headers: this.headers};

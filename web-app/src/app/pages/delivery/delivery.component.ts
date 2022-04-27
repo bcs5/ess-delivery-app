@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NgModule } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { DeliveriesService } from '../deliveries/deliveries.service';
-
-import {  Delivery } from './delivery';
+import { DeliveriesService } from 'src/app/Interface/deliveries.service';
+import { Delivery } from 'src/app/Interface/delivery';
 
 @Component({
   selector: 'app-root',
