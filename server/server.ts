@@ -19,8 +19,8 @@ const allowCrossDomain = function (req: Request, res: Response, next: express.Ne
   next()
 }
 
-app.use(allowCrossDomain)
-app.use(bodyParser.json())
+app.use(allowCrossDomain);
+app.use(bodyParser.json());
 
 const restaurantService: RestaurantsService = new RestaurantsService()
 const clientsService: ClientsService = new ClientsService()
@@ -29,7 +29,7 @@ const ordersService: OrdersService = new OrdersService()
 const deliveriesService: DeliveriesService = new DeliveriesService(ordersService, deliverymenService)
 const deliveryMapper: DeliveryMapper = new DeliveryMapper()
 
-function extractCredentials (req: Request, res: Response): string[] {
+function extractCredentials(req: Request, res: Response): string[] {
   if (!req.headers.authorization || !req.headers.authorization.includes('Basic ')) {
     res.status(401).json({ message: 'Missing Authorization Header' }).send()
   }
@@ -66,7 +66,7 @@ app.post('/order', function (req, res) {
   const client = clientsService.getById(req.body.clientId)
   const restaurant = restaurantService.getById(req.body.restaurantId)
   const payment = Number(req.body.payment)
-  const order = ordersService.add(<Order> { restaurant: restaurant, client: client, payment: payment })
+  const order = ordersService.add(<Order>{ restaurant: restaurant, client: client, payment: payment })
   deliveriesService.addOrder(order.id)
   return res.send(order)
 })
@@ -116,12 +116,30 @@ app.get('/orders/', function (req, res) {
   }
 })
 
+app.get('/getUser/', function (req, res) {
+  try {
+    const [username, password] = extractCredentials(req, res)
+    deliverymenService.auth(Number(username), password)
+
+    const nameDelivery = deliveriesService.nameDelivery(Number(username))
+    const walletDelivery = deliveriesService.walletDelivery(Number(username))
+    const ans = { name: nameDelivery, wallet: walletDelivery }
+
+    return res.status(200).send(ans)
+  } catch (e) {
+    if (e == 'auth failed') {
+      return res.status(401).send(e)
+    }
+    return res.status(500).send(e)
+  }
+})
+
 app.get('/process', function (req, res) {
   deliveriesService.process()
   return res.status(200).send()
 })
 
-function closeServer (): void {
+function closeServer(): void {
   clearInterval(interval)
   server.close()
 }

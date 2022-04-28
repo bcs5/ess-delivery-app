@@ -14,6 +14,9 @@ import { Subscription } from 'rxjs';
 export class DeliveriesComponent implements OnInit {
    constructor(private deliveriesService: DeliveriesService) { }
 
+   user: string;
+   wallet: number;
+
    delivery: Delivery = new Delivery();
    deliveries: Delivery[] = [];
 
@@ -21,20 +24,26 @@ export class DeliveriesComponent implements OnInit {
    source = interval(5000);
 
    activeButton(): void {
-      this.intervalSubscription.unsubscribe();
+      this.disableInterval();
       this.searchGet();
       this.activeInterval();
    }
+   
    searchGet(): void {
       this.deliveriesService.getDeliveryX()
          .subscribe((deliveries) => this.deliveries = deliveries);
+
+      this.deliveriesService.getUser().subscribe(value => {
+         this.user = value.name;
+         this.wallet = value.wallet;
+      });
    }
    activeInterval(): void {
-      this.intervalSubscription = this.source.subscribe(() =>
-         this.deliveriesService.getDeliveryX()
-            .subscribe((deliveries) => this.deliveries = deliveries)
-      );
-   }
+      this.intervalSubscription = this.source.subscribe(() => {
+         this.searchGet();
+      })
+   };
+
    disableInterval(): void {
       this.intervalSubscription.unsubscribe();
    }
