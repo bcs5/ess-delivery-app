@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class DeliveriesService {
 
+  //lembrete btoa('0:senha') vai ser substituido futuramente.
   private headers = new HttpHeaders({
     'Content-Type':  'application/json',
     'Authorization': 'Basic ' + btoa('0:senha')

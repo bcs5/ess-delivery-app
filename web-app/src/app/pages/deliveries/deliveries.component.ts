@@ -5,6 +5,7 @@ import { Delivery } from '../../Interface/delivery';
 import { DeliveriesService } from '../../Interface/deliveries.service';
 import { interval } from 'rxjs';
 import { Subscription } from 'rxjs';
+import { DeliveryManService } from 'src/app/Interface/delivery-man.service';
 
 @Component({
    selector: 'app-root',
@@ -12,7 +13,10 @@ import { Subscription } from 'rxjs';
    styleUrls: ['./deliveries.component.css']
 })
 export class DeliveriesComponent implements OnInit {
-   constructor(private deliveriesService: DeliveriesService) { }
+   constructor(private deliveriesService: DeliveriesService, private deliveryManService: DeliveryManService) { }
+
+   user: string;
+   wallet: number;
 
    delivery: Delivery = new Delivery();
    deliveries: Delivery[] = [];
@@ -21,20 +25,26 @@ export class DeliveriesComponent implements OnInit {
    source = interval(5000);
 
    activeButton(): void {
-      this.intervalSubscription.unsubscribe();
+      this.disableInterval();
       this.searchGet();
       this.activeInterval();
    }
+   
    searchGet(): void {
       this.deliveriesService.getDeliveryX()
          .subscribe((deliveries) => this.deliveries = deliveries);
+
+      this.deliveryManService.getUser().subscribe(value => {
+         this.user = value.name;
+         this.wallet = value.wallet;
+      });
    }
    activeInterval(): void {
-      this.intervalSubscription = this.source.subscribe(() =>
-         this.deliveriesService.getDeliveryX()
-            .subscribe((deliveries) => this.deliveries = deliveries)
-      );
-   }
+      this.intervalSubscription = this.source.subscribe(() => {
+         this.searchGet();
+      })
+   };
+
    disableInterval(): void {
       this.intervalSubscription.unsubscribe();
    }

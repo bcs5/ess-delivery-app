@@ -13,6 +13,7 @@ import { DeliveriesService } from './Interface/deliveries.service';
 import { ReviewComponent } from './pages/review/review.component';
 import { LoginComponent } from './pages/login/login.component';
 import { HomeComponent } from './pages/home/home.component';
+import { DeliveryManService } from './Interface/delivery-man.service';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,7 @@ import { HomeComponent } from './pages/home/home.component';
       }
     ])
   ],
-  providers: [DeliveriesService],
+  providers: [DeliveriesService, DeliveryManService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

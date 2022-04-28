@@ -10,6 +10,7 @@ export class DeliveriesService {
   ordersService: OrdersService
   deliverymenService: DeliverymenService
 
+  wallet: number = 0;
   deliveries: Delivery[] = []
   idCount = 0
 
@@ -114,5 +115,19 @@ export class DeliveriesService {
 
   byDeliveryman (id: number): Delivery[] {
     return this.deliverymenService.getById(id).deliveries
+  }
+
+  nameDelivery (id: number): string {
+    return this.deliverymenService.getById(id).name
+  }
+
+  walletDelivery (id: number): number {
+    this.wallet = 0;
+    this.deliverymenService.getById(id).deliveries.map(delivery => {
+      if(delivery.status == Status.FINISHED) {
+        this.wallet += delivery.order.payment;
+      }
+    })
+    return this.wallet;
   }
 }
