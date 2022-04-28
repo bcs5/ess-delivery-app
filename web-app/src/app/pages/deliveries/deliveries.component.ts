@@ -5,6 +5,7 @@ import { Delivery } from '../../Interface/delivery';
 import { DeliveriesService } from '../../Interface/deliveries.service';
 import { interval } from 'rxjs';
 import { Subscription } from 'rxjs';
+import { DeliveryManService } from 'src/app/Interface/delivery-man.service';
 
 @Component({
    selector: 'app-root',
@@ -12,7 +13,7 @@ import { Subscription } from 'rxjs';
    styleUrls: ['./deliveries.component.css']
 })
 export class DeliveriesComponent implements OnInit {
-   constructor(private deliveriesService: DeliveriesService) { }
+   constructor(private deliveriesService: DeliveriesService, private deliveryManService: DeliveryManService) { }
 
    user: string;
    wallet: number;
@@ -33,7 +34,7 @@ export class DeliveriesComponent implements OnInit {
       this.deliveriesService.getDeliveryX()
          .subscribe((deliveries) => this.deliveries = deliveries);
 
-      this.deliveriesService.getUser().subscribe(value => {
+      this.deliveryManService.getUser().subscribe(value => {
          this.user = value.name;
          this.wallet = value.wallet;
       });

@@ -21,10 +21,6 @@ export class DeliveriesService {
     return this.http.get<Delivery[]>(this.taURL + "/orders", {headers: this.headers});
   }
 
-  getUser(): Observable<any> {
-    return this.http.get<any>(this.taURL + "/getUser", {headers: this.headers});
-  }
-
   getDeliveries(): Promise<Delivery[]> {
     const options: any = {headers: this.headers};
 

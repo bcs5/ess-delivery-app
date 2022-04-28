@@ -116,7 +116,7 @@ app.get('/orders/', function (req, res) {
   }
 })
 
-app.get('/getUser/', function (req, res) {
+app.get('/user/', function (req, res) {
   try {
     const [username, password] = extractCredentials(req, res)
     deliverymenService.auth(Number(username), password)
