@@ -26,7 +26,7 @@ export class DeliverymenService {
   auth (username: number, password: string) {
     const stored = this.getById(username).password
     if ((stored || '') != password) {
-      throw 'auth failed'
+      throw Error('auth failed')
     }
   }
 }

@@ -163,8 +163,8 @@ describe('O servico de pedidos', () => {
       expect(deliveriesService.deliveries.length).toBe(0)
       expect(result.order).toBe(order)
       expect(result.status).toBe('collected')
-      expect(result.created_at.getTime()).toBe(FIVE_MIN_BEFORE.getTime())
-      expect(result.collected_at.getTime()).toBe(NOW.getTime())
+      expect(result.createdAt.getTime()).toBe(FIVE_MIN_BEFORE.getTime())
+      expect(result.collectedAt.getTime()).toBe(NOW.getTime())
     })
 
     it('finalizar pedido, status finished, adicionar payment a carteira do entregador', () => {
@@ -184,9 +184,9 @@ describe('O servico de pedidos', () => {
       expect(deliveriesService.deliveries.length).toBe(0)
       expect(result.order).toBe(order)
       expect(result.status).toBe('finished')
-      expect(result.created_at.getTime()).toBe(FIVE_MIN_BEFORE.getTime())
-      expect(result.collected_at.getTime()).toBe(ONE_MIN_BEFORE.getTime())
-      expect(result.finished_at.getTime()).toBe(NOW.getTime())
+      expect(result.createdAt.getTime()).toBe(FIVE_MIN_BEFORE.getTime())
+      expect(result.collectedAt.getTime()).toBe(ONE_MIN_BEFORE.getTime())
+      expect(result.finishedAt.getTime()).toBe(NOW.getTime())
       expect(deliverymenService.getById(deliveryman.id).wallet).toBe(order.payment)
     })
 

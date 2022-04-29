@@ -6,15 +6,15 @@ export class Delivery {
   order: Order
   deliveryman: Deliveryman
   blocklist: Set<number>
-  created_at: Date
-  collected_at: Date
-  finished_at: Date
+  createdAt: Date
+  collectedAt: Date
+  finishedAt: Date
   status: Status
 
   constructor (delivery: Delivery) {
     this.order = delivery.order
     this.deliveryman = delivery.deliveryman
-    this.created_at = delivery.created_at ? delivery.created_at : new Date()
+    this.createdAt = delivery.createdAt ? delivery.createdAt : new Date()
     this.blocklist = delivery.blocklist ? delivery.blocklist : new Set<number>()
     this.status = Status.PENDING
   }
@@ -25,12 +25,12 @@ export class Delivery {
 
   collect () {
     this.status = Status.COLLECTED
-    this.collected_at = new Date()
+    this.collectedAt = new Date()
   }
 
   finish () {
     this.status = Status.FINISHED
-    this.finished_at = new Date()
+    this.finishedAt = new Date()
     this.deliveryman.addBalance(this.order.payment)
   }
 

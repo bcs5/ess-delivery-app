@@ -2,6 +2,11 @@
   "extends": "standard-with-typescript",
   "parserOptions": {"project": "./tsconfig.json"},
   "rules": {
-    "@typescript-eslint/strict-boolean-expressions": "off"
+    "@typescript-eslint/strict-boolean-expressions": "off",
+    "@typescript-eslint/restrict-plus-operands": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/consistent-type-assertions": "off",
+    "eqeqeq": "off",
+    "no-return-assign": "off"
   }
 }

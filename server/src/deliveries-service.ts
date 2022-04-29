@@ -27,7 +27,7 @@ export class DeliveriesService {
 
   process () {
     const now = new Date().getTime()
-    let expired = this.deliveries.filter(({ status, created_at }) => status == 'pending' && now - created_at.getTime() > TIMELIMIT)
+    let expired = this.deliveries.filter(({ status, createdAt }) => status == 'pending' && now - createdAt.getTime() > TIMELIMIT)
     expired.forEach(delivery => {
       delivery.expire()
     })
@@ -39,7 +39,7 @@ export class DeliveriesService {
       if (deliveryman) {
         const order = expired[i].order
         const blocklist = expired[i].blocklist
-        const delivery: Delivery = new Delivery(<Delivery>{ order: order, deliveryman: deliveryman, blocklist: blocklist, created_at: new Date() })
+        const delivery: Delivery = new Delivery(<Delivery>{ order: order, deliveryman: deliveryman, blocklist: blocklist, createdAt: new Date() })
         deliveryman.addDelivery(delivery)
         this.deliveries.push(delivery)
         this.removeDelivery(expired[i])
@@ -50,51 +50,51 @@ export class DeliveriesService {
   takeAction (deliverymanId: number, orderId: number, action: Action): Delivery {
     const deliveryman = this.deliverymenService.getById(deliverymanId)
     if (!deliveryman) {
-      throw 'no deliveryman'
+      throw Error('no deliveryman')
     }
     if (!deliveryman.deliveries) {
-      throw 'not performed'
+      throw Error('not performed')
     }
     const delivery = deliveryman.deliveries[0]
     if (delivery.order.id != orderId) {
-      throw 'not performed'
+      throw Error('not performed')
     }
 
     switch (action) {
       case Action.ACCEPT:
         if (delivery.status != Status.PENDING) {
-          throw 'invalid state'
+          throw Error('invalid state')
         }
         delivery.accept()
         this.removeDelivery(delivery)
         break
       case Action.REJECT:
         if (delivery.status != Status.PENDING) {
-          throw 'invalid state'
+          throw Error('invalid state')
         }
         delivery.reject()
         break
       case Action.COLLECT:
         if (delivery.status != Status.IN_PROGRESS) {
-          throw 'invalid state'
+          throw Error('invalid state')
         }
         delivery.collect()
         break
       case Action.FINISH:
         if (delivery.status != Status.COLLECTED) {
-          throw 'invalid state'
+          throw Error('invalid state')
         }
         delivery.finish()
         break
       default:
-        throw 'invalid action'
+        throw Error('invalid action')
     }
     return delivery
   }
 
   addOrder (orderId: number) {
     const order = this.ordersService.getById(orderId)
-    const delivery = new Delivery(<Delivery>{ order: order, created_at: new Date(0) })
+    const delivery = new Delivery(<Delivery>{ order: order, createdAt: new Date(0) })
     this.deliveries.push(delivery)
     return delivery
   }

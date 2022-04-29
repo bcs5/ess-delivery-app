@@ -79,7 +79,7 @@ app.get('/order/:orderId', function (req, res) {
     const delivery = deliveriesService.byDeliveryman(Number(username)).find(({ order }) => req.params.orderId == order.id)
     return res.send(deliveryMapper.toJson(delivery))
   } catch (e) {
-    if (e == 'auth failed') {
+    if (e.message == 'auth failed') {
       return res.status(401).send(e)
     }
     return res.status(500).send(e)
@@ -94,7 +94,7 @@ app.get('/order/:orderId/:action', function (req, res) {
     const delivery = deliveriesService.takeAction(Number(username), Number(req.params.orderId), <Action>(req.params.action))
     return res.send(deliveryMapper.toJson(delivery))
   } catch (e) {
-    if (e == 'auth failed') {
+    if (e.message == 'auth failed') {
       return res.status(401).send(e)
     }
     return res.status(500).send(e)
@@ -109,7 +109,7 @@ app.get('/orders/', function (req, res) {
     const ans = deliveriesService.byDeliveryman(Number(username)).map(delivery => deliveryMapper.toJsonMinimal(delivery))
     return res.status(200).send(ans)
   } catch (e) {
-    if (e == 'auth failed') {
+    if (e.message == 'auth failed') {
       return res.status(401).send(e)
     }
     return res.status(500).send(e)
@@ -123,7 +123,7 @@ app.get('/user/', function (req, res) {
     const deliveryman = deliverymenService.getById(Number(username))
     return res.status(200).send({ name: deliveryman.name, wallet: deliveryman.wallet })
   } catch (e) {
-    if (e == 'auth failed') {
+    if (e.message == 'auth failed') {
       return res.status(401).send(e)
     }
     return res.status(500).send(e)

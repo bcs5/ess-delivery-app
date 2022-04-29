@@ -10,16 +10,16 @@ export class DeliveryMapper {
       restaurant: delivery.order.restaurant.name,
       payment: delivery.order.payment,
       status: delivery.status,
-      created_at: delivery.collected_at
+      created_at: delivery.collectedAt
     }
   }
 
   toJson (delivery: Delivery) {
     const json: any = this.orderToJson(delivery.order)
-    json.created_at = delivery.created_at
+    json.created_at = delivery.createdAt
     json.status = delivery.status
-    if (delivery.collected_at) {
-      json.created_at = delivery.collected_at
+    if (delivery.collectedAt) {
+      json.created_at = delivery.collectedAt
     } else {
       delete json.client
     }
