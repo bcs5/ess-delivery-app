@@ -101,7 +101,7 @@ describe('O servico de pedidos', () => {
     expect(resultB[0].deliveryman).toBe(deliverymanB)
   })
 
-  it('pedido expirado', () => {
+  it('pedido expirado, status expired, entregador na blocklist', () => {
     const order = ordersService.add(order0)
     const deliveryman = deliverymenService.add(deliveryman0)
     jasmine.clock().mockDate(TLED)
@@ -118,7 +118,7 @@ describe('O servico de pedidos', () => {
   })
 
   describe('recebe resposta do entregador', () => {
-    it('aceitar pedido', () => {
+    it('aceitar pedido, status in_progress', () => {
       const order = ordersService.add(order0)
       const deliveryman = deliverymenService.add(deliveryman0)
       deliveriesService.addOrderDeliveryman(order.id, deliveryman.id)
@@ -133,7 +133,7 @@ describe('O servico de pedidos', () => {
       expect(result[0].deliveryman).toBe(deliveryman)
     })
 
-    it('rejeitar pedido', () => {
+    it('rejeitar pedido, status rejected, entregador na blocklist', () => {
       const order = ordersService.add(order0)
       const deliveryman = deliverymenService.add(deliveryman0)
 
@@ -148,7 +148,7 @@ describe('O servico de pedidos', () => {
       expect(result.blocklist).toContain(deliveryman.id)
     })
 
-    it('coletar pedido', () => {
+    it('coletar pedido, status collected', () => {
       const order = ordersService.add(order0)
       const deliveryman = deliverymenService.add(deliveryman0)
 
@@ -167,7 +167,7 @@ describe('O servico de pedidos', () => {
       expect(result.collected_at.getTime()).toBe(NOW.getTime())
     })
 
-    it('finalizar pedido', () => {
+    it('finalizar pedido, status finished, adicionar payment a carteira do entregador', () => {
       const order = ordersService.add(order0)
       const deliveryman = deliverymenService.add(deliveryman0)
 
@@ -187,6 +187,7 @@ describe('O servico de pedidos', () => {
       expect(result.created_at.getTime()).toBe(FIVE_MIN_BEFORE.getTime())
       expect(result.collected_at.getTime()).toBe(ONE_MIN_BEFORE.getTime())
       expect(result.finished_at.getTime()).toBe(NOW.getTime())
+      expect(deliverymenService.getById(deliveryman.id).wallet).toBe(order.payment)
     })
 
     it('pedido assinalado para entregador', () => {

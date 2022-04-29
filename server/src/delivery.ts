@@ -31,6 +31,7 @@ export class Delivery {
   finish () {
     this.status = Status.FINISHED
     this.finished_at = new Date()
+    this.deliveryman.addBalance(this.order.payment)
   }
 
   reject () {

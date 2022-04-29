@@ -12,6 +12,7 @@ const deliverymanUrl = `${baseUrl}/deliveryman/`
 const orderUrl = `${baseUrl}/order/`
 const ordersUrl = `${baseUrl}/orders/`
 const processUrl = `${baseUrl}/process/`
+const userUrl = `${baseUrl}/user/`
 
 describe('O servidor', () => {
   let server: any
@@ -73,6 +74,23 @@ describe('O servidor', () => {
     return request(options)
       .then(body => {
         const res = <Deliveryman>(body)
+        expect(res.name).toBe(deliveryman.name)
+        expect(res.wallet).toBe(0.0)
+      })
+  })
+  it('checar dados entregador', () => {
+    const options = {
+      method: 'GET',
+      uri: (userUrl),
+      auth: {
+        user: '0',
+        pass: ''
+      },
+      json: true
+    }
+    return request(options)
+      .then(body => {
+        const res = body
         expect(res.name).toBe(deliveryman.name)
         expect(res.wallet).toBe(0.0)
       })
@@ -193,6 +211,74 @@ describe('O servidor', () => {
     }).catch(({ statusCode }) => {
       expect(statusCode).toBe(200)
     })
+  })
+
+  it('coletar pedido', () => {
+    request.get(processUrl)
+      .catch(({ statusCode }) => {
+        expect(statusCode).toBe(200)
+      })
+
+    const uri = orderUrl + 1 + '/collect'
+    const options = {
+      method: 'GET',
+      uri: (uri),
+      auth: {
+        user: '0',
+        pass: ''
+      },
+      json: true
+    }
+    return request(options)
+      .then(body => {
+        expect(body.status).toBe('collected')
+      })
+      .catch(({ statusCode }) => {
+        expect(statusCode).toBe(200)
+      })
+  })
+
+  it('finalizar pedido', () => {
+    request.get(processUrl)
+      .catch(({ statusCode }) => {
+        expect(statusCode).toBe(200)
+      })
+
+    const uri = orderUrl + 1 + '/finish'
+    const options = {
+      method: 'GET',
+      uri: (uri),
+      auth: {
+        user: '0',
+        pass: ''
+      },
+      json: true
+    }
+    return request(options)
+      .then(body => {
+        expect(body.status).toBe('finished')
+      })
+      .catch(({ statusCode }) => {
+        expect(statusCode).toBe(200)
+      })
+  })
+
+  it('checar dados entregador', () => {
+    const options = {
+      method: 'GET',
+      uri: (userUrl),
+      auth: {
+        user: '0',
+        pass: ''
+      },
+      json: true
+    }
+    return request(options)
+      .then(body => {
+        const res = body
+        expect(res.name).toBe(deliveryman.name)
+        expect(res.wallet).toBe(order1.payment)
+      })
   })
 
   it('cadastrar entregador 2', () => {
