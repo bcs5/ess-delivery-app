@@ -17,13 +17,8 @@ export class DeliveriesService {
 
   constructor(private http: HttpClient) {}
 
-  getDeliveryX(): Observable<Delivery[]> {
-    return this.http.get<Delivery[]>(this.taURL + "/orders", {headers: this.headers});
-  }
-
   getDeliveries(): Promise<Delivery[]> {
     const options: any = {headers: this.headers};
-
     return this.http.get(this.taURL + "/orders", options)
     .toPromise()
     .then(res => {
@@ -34,7 +29,6 @@ export class DeliveriesService {
 
   getDelivery(id: number): Promise<Delivery> {
     const options: any = {headers: this.headers};
-
     return this.http.get(this.taURL + "/order/"+id, options)
     .toPromise()
     .then(res => {

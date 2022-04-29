@@ -19,8 +19,8 @@ const allowCrossDomain = function (req: Request, res: Response, next: express.Ne
   next()
 }
 
-app.use(allowCrossDomain);
-app.use(bodyParser.json());
+app.use(allowCrossDomain)
+app.use(bodyParser.json())
 
 const restaurantService: RestaurantsService = new RestaurantsService()
 const clientsService: ClientsService = new ClientsService()
@@ -29,7 +29,7 @@ const ordersService: OrdersService = new OrdersService()
 const deliveriesService: DeliveriesService = new DeliveriesService(ordersService, deliverymenService)
 const deliveryMapper: DeliveryMapper = new DeliveryMapper()
 
-function extractCredentials(req: Request, res: Response): string[] {
+function extractCredentials (req: Request, res: Response): string[] {
   if (!req.headers.authorization || !req.headers.authorization.includes('Basic ')) {
     res.status(401).json({ message: 'Missing Authorization Header' }).send()
   }
@@ -79,7 +79,7 @@ app.get('/order/:orderId', function (req, res) {
     const delivery = deliveriesService.byDeliveryman(Number(username)).find(({ order }) => req.params.orderId == order.id)
     return res.send(deliveryMapper.toJson(delivery))
   } catch (e) {
-    if (e == 'auth failed') {
+    if (e.message == 'auth failed') {
       return res.status(401).send(e)
     }
     return res.status(500).send(e)
@@ -94,7 +94,7 @@ app.get('/order/:orderId/:action', function (req, res) {
     const delivery = deliveriesService.takeAction(Number(username), Number(req.params.orderId), <Action>(req.params.action))
     return res.send(deliveryMapper.toJson(delivery))
   } catch (e) {
-    if (e == 'auth failed') {
+    if (e.message == 'auth failed') {
       return res.status(401).send(e)
     }
     return res.status(500).send(e)
@@ -109,7 +109,7 @@ app.get('/orders/', function (req, res) {
     const ans = deliveriesService.byDeliveryman(Number(username)).map(delivery => deliveryMapper.toJsonMinimal(delivery))
     return res.status(200).send(ans)
   } catch (e) {
-    if (e == 'auth failed') {
+    if (e.message == 'auth failed') {
       return res.status(401).send(e)
     }
     return res.status(500).send(e)
@@ -120,14 +120,10 @@ app.get('/user/', function (req, res) {
   try {
     const [username, password] = extractCredentials(req, res)
     deliverymenService.auth(Number(username), password)
-
-    const nameDelivery = deliveriesService.nameDelivery(Number(username))
-    const walletDelivery = deliveriesService.walletDelivery(Number(username))
-    const ans = { name: nameDelivery, wallet: walletDelivery }
-
-    return res.status(200).send(ans)
+    const deliveryman = deliverymenService.getById(Number(username))
+    return res.status(200).send({ name: deliveryman.name, wallet: deliveryman.wallet })
   } catch (e) {
-    if (e == 'auth failed') {
+    if (e.message == 'auth failed') {
       return res.status(401).send(e)
     }
     return res.status(500).send(e)
@@ -139,7 +135,7 @@ app.get('/process', function (req, res) {
   return res.status(200).send()
 })
 
-function closeServer(): void {
+function closeServer (): void {
   clearInterval(interval)
   server.close()
 }

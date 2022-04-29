@@ -31,10 +31,10 @@ export class DeliveriesComponent implements OnInit {
    }
    
    searchGet(): void {
-      this.deliveriesService.getDeliveryX()
-         .subscribe((deliveries) => this.deliveries = deliveries);
+      this.deliveriesService.getDeliveries()
+         .then((deliveries) => this.deliveries = deliveries);
 
-      this.deliveryManService.getUser().subscribe(value => {
+      this.deliveryManService.getUser().then(value => {
          this.user = value.name;
          this.wallet = value.wallet;
       });

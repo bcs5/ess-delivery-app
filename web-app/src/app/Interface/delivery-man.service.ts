@@ -19,8 +19,18 @@ export class DeliveryManService {
 
   constructor(private http: HttpClient) { }
 
-  getUser(): Observable<any> {
-    return this.http.get<any>(this.taURL + "/user", {headers: this.headers});
+  getUser(): Promise<any> {
+    const options: any = {headers: this.headers};
+    return this.http.get<any>(this.taURL + "/user", options)
+    .toPromise()
+    .then(res => {
+      return res
+    })
+    .catch(this.catch);
   }
 
+  private catch(erro: any): Promise<any>{
+    console.error('Oops, something went wrong',erro);
+    return Promise.reject(erro.message || erro);
+  }
 }
