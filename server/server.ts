@@ -63,12 +63,19 @@ app.post('/deliveryman', function (req, res) {
 })
 
 app.post('/order', function (req, res) {
-  const client = clientsService.getById(req.body.clientId)
-  const restaurant = restaurantService.getById(req.body.restaurantId)
-  const payment = Number(req.body.payment)
-  const order = ordersService.add(<Order>{ restaurant: restaurant, client: client, payment: payment })
-  deliveriesService.addOrder(order.id)
-  return res.send(order)
+  try {
+    const orderId = req.body.id
+    const client = clientsService.getById(req.body.clientId)
+    const restaurant = restaurantService.getById(req.body.restaurantId)
+    const payment = Number(req.body.payment)
+    if (!client) throw Error('invalid client')
+    if (!restaurant) throw Error('invalid restaurant')
+    const order = ordersService.add(<Order>{ id: orderId, restaurant: restaurant, client: client, payment: payment })
+    deliveriesService.addOrder(order.id)
+    return res.send(order)
+  } catch (e) {
+    return res.status(500).send(e)
+  }
 })
 
 app.get('/order/:orderId', function (req, res) {
@@ -112,6 +119,7 @@ app.get('/orders/', function (req, res) {
     if (e.message == 'auth failed') {
       return res.status(401).send(e)
     }
+    console.log(e)
     return res.status(500).send(e)
   }
 })

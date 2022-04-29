@@ -2,12 +2,20 @@ import { Deliveryman } from './deliveryman'
 
 export class DeliverymenService {
   deliverymen: Deliveryman[] = []
-  idCount = 0
+  idCount = 1
+
+  retrieveId (deliveryman: Deliveryman): void {
+    if (deliveryman.id) {
+      if (this.getById(deliveryman.id)) throw Error('deliveryman id in use')
+      return
+    }
+    deliveryman.id = this.idCount++
+  }
 
   add (deliveryman: Deliveryman): Deliveryman {
-    const newDeliveryman = new Deliveryman(<Deliveryman> { id: this.idCount, ...deliveryman })
+    this.retrieveId(deliveryman)
+    const newDeliveryman = new Deliveryman(deliveryman)
     this.deliverymen.push(newDeliveryman)
-    this.idCount++
     return newDeliveryman
   }
 

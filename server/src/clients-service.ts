@@ -2,12 +2,20 @@ import { Client } from './client'
 
 export class ClientsService {
   clients: Client[] = []
-  idCount = 0
+  idCount = 1
+
+  retrieveId (client: Client): void {
+    if (client.id) {
+      if (this.getById(client.id)) throw Error('client id in use')
+      return
+    }
+    client.id = this.idCount++
+  }
 
   add (client: Client): Client {
-    const newClient = new Client(<Client> { id: this.idCount, ...client })
+    this.retrieveId(client)
+    const newClient = new Client(client)
     this.clients.push(newClient)
-    this.idCount++
     return newClient
   }
 
