@@ -2,12 +2,20 @@ import { Order } from './order'
 
 export class OrdersService {
   orders: Order[] = []
-  idCount = 0
+  idCount = 1
 
-  add (order: Order): Order { // restaurant: Restaurant, client: Client, payment: number
-    const newOrder = new Order(<Order> { id: this.idCount, ...order })
+  retrieveId (order: Order): void {
+    if (order.id) {
+      if (this.getById(order.id)) throw Error('order id in use')
+      return
+    }
+    order.id = this.idCount++
+  }
+
+  add (order: Order): Order {
+    this.retrieveId(order)
+    const newOrder = new Order(order)
     this.orders.push(newOrder)
-    this.idCount++
     return newOrder
   }
 

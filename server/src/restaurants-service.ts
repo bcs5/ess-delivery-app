@@ -2,12 +2,20 @@ import { Restaurant } from './restaurant'
 
 export class RestaurantsService {
   restaurants: Restaurant[] = []
-  idCount = 0
+  idCount = 1
+
+  retrieveId (restaurant: Restaurant): number {
+    if (restaurant.id) {
+      if (this.getById(restaurant.id)) throw Error('restaurant id in use')
+      return
+    }
+    restaurant.id = this.idCount++
+  }
 
   add (restaurant: Restaurant): Restaurant {
-    const newRestaurant = new Restaurant(<Restaurant> { id: this.idCount, ...restaurant })
+    this.retrieveId(restaurant)
+    const newRestaurant = new Restaurant(restaurant)
     this.restaurants.push(newRestaurant)
-    this.idCount++
     return newRestaurant
   }
 

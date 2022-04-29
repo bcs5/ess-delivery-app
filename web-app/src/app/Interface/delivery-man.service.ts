@@ -9,10 +9,10 @@ import { Observable } from 'rxjs';
 })
 export class DeliveryManService {
 
-  //lembrete btoa('0:senha') vai ser substituido futuramente.
+  //lembrete btoa('1:senha') vai ser substituido futuramente.
   private headers = new HttpHeaders({
     'Content-Type': 'application/json',
-    'Authorization': 'Basic ' + btoa('0:senha')
+    'Authorization': 'Basic ' + btoa('1:senha')
   });
 
   private taURL = 'http://localhost:3000';

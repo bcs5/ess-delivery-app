@@ -19,25 +19,31 @@ describe('O servico de pedidos', () => {
   let deliveriesService: DeliveriesService
 
   const restaurant: Restaurant = <Restaurant> {
+    id: 7,
     name: "Bob's Madalena",
     address: 'Av. Eng. Abdias de Carvalho, 365 - Ilha do Retiro, Recife - PE, 50750-257'
   }
   const client: Client = <Client> {
+    id: 8,
     name: 'Bezaliel Silva',
     address: 'Rua Visconde de Barbacena, 329 - Várzea, Recife - PE, 50740-445'
   }
-  const deliveryman0 = <Deliveryman> {
+  const deliveryman1 = <Deliveryman> {
+    id: 1,
     name: 'Jose Cruz'
   }
-  const deliveryman1 = <Deliveryman> {
+  const deliveryman2 = <Deliveryman> {
+    id: 2,
     name: 'Gabriel Mendes'
   }
-  const order0 = <Order> {
+  const order1 = <Order> {
+    id: 3,
     restaurant: restaurant,
     client: client,
     payment: 50.0
   }
-  const order1 = <Order> {
+  const order2 = <Order> {
+    id: 4,
     restaurant: restaurant,
     client: client,
     payment: 25.0
@@ -59,7 +65,7 @@ describe('O servico de pedidos', () => {
   })
 
   it('cadastra pedido', () => {
-    const order = ordersService.add(order0)
+    const order = ordersService.add(order1)
     deliveriesService.addOrder(order.id)
     const result = deliveriesService.deliveries[0]
 
@@ -70,8 +76,8 @@ describe('O servico de pedidos', () => {
   })
 
   it('cadastra pedido com entregador', () => {
-    const order = ordersService.add(order0)
-    const deliverymanA = deliverymenService.add(deliveryman0)
+    const order = ordersService.add(order1)
+    const deliverymanA = deliverymenService.add(deliveryman1)
     deliveriesService.addOrderDeliveryman(order.id, deliverymanA.id)
     const result = deliveriesService.deliveries[0]
 
@@ -82,10 +88,10 @@ describe('O servico de pedidos', () => {
   })
 
   it('buscar pedido por entregador', () => {
-    const deliverymanA = deliverymenService.add(deliveryman0)
-    const deliverymanB = deliverymenService.add(deliveryman1)
-    const orderA = ordersService.add(order0)
-    const orderB = ordersService.add(order1)
+    const deliverymanA = deliverymenService.add(deliveryman1)
+    const deliverymanB = deliverymenService.add(deliveryman2)
+    const orderA = ordersService.add(order1)
+    const orderB = ordersService.add(order2)
     deliveriesService.addOrderDeliveryman(orderA.id, deliverymanA.id)
     deliveriesService.addOrderDeliveryman(orderB.id, deliverymanB.id)
 
@@ -102,8 +108,8 @@ describe('O servico de pedidos', () => {
   })
 
   it('pedido expirado, status expired, entregador na blocklist', () => {
-    const order = ordersService.add(order0)
-    const deliveryman = deliverymenService.add(deliveryman0)
+    const order = ordersService.add(order1)
+    const deliveryman = deliverymenService.add(deliveryman1)
     jasmine.clock().mockDate(TLED)
     deliveriesService.addOrderDeliveryman(order.id, deliveryman.id)
     jasmine.clock().mockDate(NOW)
@@ -119,8 +125,8 @@ describe('O servico de pedidos', () => {
 
   describe('recebe resposta do entregador', () => {
     it('aceitar pedido, status in_progress', () => {
-      const order = ordersService.add(order0)
-      const deliveryman = deliverymenService.add(deliveryman0)
+      const order = ordersService.add(order1)
+      const deliveryman = deliverymenService.add(deliveryman1)
       deliveriesService.addOrderDeliveryman(order.id, deliveryman.id)
       deliveriesService.takeAction(deliveryman.id, order.id, Action.ACCEPT)
 
@@ -134,8 +140,8 @@ describe('O servico de pedidos', () => {
     })
 
     it('rejeitar pedido, status rejected, entregador na blocklist', () => {
-      const order = ordersService.add(order0)
-      const deliveryman = deliverymenService.add(deliveryman0)
+      const order = ordersService.add(order1)
+      const deliveryman = deliverymenService.add(deliveryman1)
 
       deliveriesService.addOrderDeliveryman(order.id, deliveryman.id)
       deliveriesService.takeAction(deliveryman.id, order.id, Action.REJECT)
@@ -149,8 +155,8 @@ describe('O servico de pedidos', () => {
     })
 
     it('coletar pedido, status collected', () => {
-      const order = ordersService.add(order0)
-      const deliveryman = deliverymenService.add(deliveryman0)
+      const order = ordersService.add(order1)
+      const deliveryman = deliverymenService.add(deliveryman1)
 
       jasmine.clock().mockDate(FIVE_MIN_BEFORE)
       deliveriesService.addOrderDeliveryman(order.id, deliveryman.id)
@@ -168,8 +174,8 @@ describe('O servico de pedidos', () => {
     })
 
     it('finalizar pedido, status finished, adicionar payment a carteira do entregador', () => {
-      const order = ordersService.add(order0)
-      const deliveryman = deliverymenService.add(deliveryman0)
+      const order = ordersService.add(order1)
+      const deliveryman = deliverymenService.add(deliveryman1)
 
       jasmine.clock().mockDate(FIVE_MIN_BEFORE)
       deliveriesService.addOrderDeliveryman(order.id, deliveryman.id)
@@ -191,8 +197,8 @@ describe('O servico de pedidos', () => {
     })
 
     it('pedido assinalado para entregador', () => {
-      const order = ordersService.add(order0)
-      const deliveryman = deliverymenService.add(deliveryman0)
+      const order = ordersService.add(order1)
+      const deliveryman = deliverymenService.add(deliveryman1)
 
       deliveriesService.addOrder(order.id)
       deliveriesService.process()
@@ -205,11 +211,11 @@ describe('O servico de pedidos', () => {
     })
 
     it('pedido rejeitado por entregador, assinala proximo', () => {
-      const order = ordersService.add(order0)
-      const deliveryman = deliverymenService.add(deliveryman0)
+      const order = ordersService.add(order1)
+      const deliveryman = deliverymenService.add(deliveryman1)
       deliveriesService.addOrder(order.id)
       deliveriesService.process()
-      const extraDeliveryman = deliverymenService.add(deliveryman1)
+      const extraDeliveryman = deliverymenService.add(deliveryman2)
       deliveriesService.takeAction(deliveryman.id, order.id, Action.REJECT)
       deliveriesService.process()
 
