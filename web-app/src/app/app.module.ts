@@ -14,6 +14,8 @@ import { ReviewComponent } from './pages/review/review.component';
 import { LoginComponent } from './pages/login/login.component';
 import { HomeComponent } from './pages/home/home.component';
 import { DeliveryManService } from './Interface/delivery-man.service';
+import { RegisterComponent } from './pages/register/register.component';
+
 
 @NgModule({
   declarations: [
@@ -23,7 +25,8 @@ import { DeliveryManService } from './Interface/delivery-man.service';
     DeliveryComponent,
     HomeComponent,
     ReviewComponent,
-    LoginComponent
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
@@ -50,6 +53,10 @@ import { DeliveryManService } from './Interface/delivery-man.service';
       {
         path: 'delivery/:id',
         component: DeliveryComponent
+      },
+      {
+        path: 'register',
+        component: RegisterComponent
       }
     ])
   ],
