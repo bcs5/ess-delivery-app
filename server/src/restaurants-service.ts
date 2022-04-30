@@ -26,4 +26,8 @@ export class RestaurantsService {
   getById (restaurantId: number): Restaurant {
     return this.restaurants.find(({ id }) => id == restaurantId)
   }
+
+  addScore (clientId: number, value: number) {
+    return this.getById(clientId).addScore(value)
+  }
 }

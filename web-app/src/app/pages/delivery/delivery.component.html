@@ -14,3 +14,19 @@
   <p>{{delivery.client.address}}</p>
   <button *ngIf="!isFinished()" id="finished-{{delivery.id}}" (click)="finish(delivery.id)">Finalizado</button>
 </div>
+<div *ngIf="isFinished()">
+
+<form>
+  <br> Avalie o Cliente:
+  <input type="range" name="amountRange" min="0" max="5" value="5" oninput="this.form.amountInput.value=this.value" />
+  <input type="number" #cScore name="amountInput" min="0" max="5" value="5" oninput="this.form.amountRange.value=this.value" />
+</form>
+
+<form>
+  <br> Avalie o Restaurante:
+  <input type="range" name="amountRange" min="0" max="5" value="5" oninput="this.form.amountInput.value=this.value" />
+  <input type="number" #rScore name="amountInput" min="0" max="5" value="5" oninput="this.form.amountRange.value=this.value" />
+</form>
+  <button id="accepted-{{delivery.id}}" (click)="evaluation(cScore.value, rScore.value)">Enviar</button>
+</div>
+<button id="accepted-{{delivery.id}}" (click)="btnClick()">Sair</button>

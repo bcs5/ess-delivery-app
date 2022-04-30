@@ -77,6 +77,17 @@ export class DeliveriesService {
     .catch(this.catch);
   }
 
+  evaluation(id: number, rScore:number, cScore: number): Promise<Delivery> {
+    const options: any = {headers: this.headers};
+    const body: any = {id:id,restaurantScore: rScore,  clientScore: cScore}
+    return this.http.post(this.taURL + "/evaluation", body, options)
+    .toPromise()
+    .then(res => {
+      return res
+    })
+    .catch(this.catch);
+  }
+
   private catch(erro: any): Promise<any>{
     console.error('Oops, something went wrong',erro);
     return Promise.reject(erro.message || erro);

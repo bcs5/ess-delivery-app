@@ -4,18 +4,25 @@ import { Status } from './delivery-status'
 import { Deliveryman } from './deliveryman'
 import { DeliverymenService } from './deliverymen-service'
 import { OrdersService } from './orders-service'
+import { ClientsService } from './clients-service'
+import { RestaurantsService } from './restaurants-service'
 
-const TIMELIMIT = 60 * 1000
+const TIMELIMIT = 600 * 1000
 export class DeliveriesService {
   ordersService: OrdersService
   deliverymenService: DeliverymenService
+  clientService: ClientsService
+  restaurantService: RestaurantsService
 
   deliveries: Delivery[] = []
   idCount = 0
 
-  constructor (ordersService: OrdersService, deliverymenService: DeliverymenService) {
+  constructor (ordersService: OrdersService, deliverymenService: DeliverymenService, clientService: ClientsService,  restaurantService: RestaurantsService
+    ) {
     this.ordersService = ordersService
     this.deliverymenService = deliverymenService
+    this.clientService = clientService
+    this.restaurantService = restaurantService
   }
 
   removeDelivery (delivery: Delivery) {
@@ -89,6 +96,27 @@ export class DeliveriesService {
       default:
         throw Error('invalid action')
     }
+    return delivery
+  }
+
+  evaluateOrder (deliverymanId: number, orderId: number, rScore:number, cScore:number): Delivery {
+    const deliveryman = this.deliverymenService.getById(deliverymanId)
+    
+    if (!deliveryman) {
+      throw Error('no deliveryman')
+    }
+    if (!deliveryman.deliveries) {
+      throw Error('not performed')
+    }
+    const delivery = deliveryman.deliveries[0]
+    if (delivery.order.id != orderId) {
+      throw Error('not performed')
+    }
+    this.clientService.addScore(delivery.order.client.id, cScore)
+    this.restaurantService.addScore(delivery.order.restaurant.id, rScore)
+    console.log("Client: "+ Number(delivery.order.client.id)+" score "+ Number(cScore)+" restarante "+ Number(delivery.order.restaurant.id)+" score "+ Number(rScore))
+
+    delivery.evaluate()
     return delivery
   }
 
