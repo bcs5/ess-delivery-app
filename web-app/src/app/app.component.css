@@ -1,0 +1,16 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+body, html {
+    height: 100vh;
+    background-color: rgb(247, 62, 62);
+    /* background-image: linear-gradient(red, white); */
+    box-sizing: border-box;
+}
+.all {
+    height: 100vh;
+    margin: auto;
+    background-color: white;
+    width: 70%;
+}

@@ -14,6 +14,8 @@ import { ReviewComponent } from './pages/review/review.component';
 import { LoginComponent } from './pages/login/login.component';
 import { HomeComponent } from './pages/home/home.component';
 import { DeliveryManService } from './Interface/delivery-man.service';
+import { TopPageComponent } from './pages/top-page/top-page.component';
+import { AboutComponent } from './pages/about/about.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,9 @@ import { DeliveryManService } from './Interface/delivery-man.service';
     DeliveryComponent,
     HomeComponent,
     ReviewComponent,
-    LoginComponent
+    LoginComponent,
+    TopPageComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,
@@ -42,6 +46,10 @@ import { DeliveryManService } from './Interface/delivery-man.service';
       {
         path: "reviews",
         component: ReviewComponent
+      },
+      {
+        path: "about",
+        component: AboutComponent
       },
       {
         path: 'deliveries',
