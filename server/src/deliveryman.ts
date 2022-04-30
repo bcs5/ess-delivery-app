@@ -7,7 +7,7 @@ export class Deliveryman {
   password: string
   phoneNumber: number
   cnh: number
-  birthDate: [number, number, number]
+  birth: Date
   address: string
 
   // company information
@@ -15,16 +15,72 @@ export class Deliveryman {
   wallet = 0.0
   deliveries: Delivery[] = []
 
-  constructor (deliveryman: Deliveryman) {
-    this.name = deliveryman.name
-    this.email = deliveryman.email
-    this.password = deliveryman.password
-    this.phoneNumber = deliveryman.phoneNumber
-    this.cnh = deliveryman.cnh
-    this.birthDate = deliveryman.birthDate
-    this.address = deliveryman.address
+  constructor (id: number, name: string, email: string, password: string, phoneNumber: number, cnh: number, day: number, month: number, year: number, address: string) {
+    this.name = name
+    this.email = email
+    this.password = password
+    this.phoneNumber = phoneNumber
+    this.cnh = cnh
+    this.birth = new Date(year, (month-1), day)
+    this.address = address
 
-    this.id = deliveryman.id
+    this.id = id
+  }
+
+  get Name() {
+    return this.Name;
+  }
+
+  set Name(name: string) {
+    this.name = name;
+  }
+
+  get Email() {
+    return this.email;
+  }
+
+  set Email(email: string) {
+    this.Email = email;
+  }
+
+  get Password() {
+    return this.password;
+  }
+
+  set Password(password: string) {
+    this.password = password;
+  }
+
+  get PhoneNumber() {
+    return this.phoneNumber;
+  }
+
+  set PhoneNumber(phoneNumber: number) {
+    this.phoneNumber = phoneNumber;
+  }
+
+  get CNH() {
+    return this.cnh;
+  }
+
+  set CNH(cnh: number) {
+    this.cnh = cnh;
+  }
+
+  get Birth() {
+    return this.birth;
+  }
+
+  set Birth(birth: Date) {
+    this.birth = birth;
+  }
+
+  get Address() {
+    return this.address;
+  }
+
+  set Address(address: string) {
+    this.address = address;
   }
 
   addBalance (amount: number) {
