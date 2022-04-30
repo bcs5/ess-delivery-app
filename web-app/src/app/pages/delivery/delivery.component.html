@@ -2,6 +2,9 @@
 <p>{{delivery.restaurant.name}}</p>
 <p>{{delivery.restaurant.address}}</p>
 <p>Pagamento {{delivery.payment}}</p>
+<a routerLink = "/deliveries">
+  <button *ngIf="isFinished()" >Back History</button>
+</a>
 <p *ngIf="isPending()">
   <button id="accepted-{{delivery.id}}" (click)="accept(delivery.id)">Aceitar</button>
   <button id="rejected-{{delivery.id}}" (click)="reject(delivery.id)">Rejeitar</button>
