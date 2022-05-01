@@ -1,10 +1,10 @@
 import { Order } from './order'
-import { Deliveryman } from './deliveryman'
+import { Deliverer } from './deliverer'
 import { Status } from './delivery-status'
 
 export class Delivery {
   order: Order
-  deliveryman: Deliveryman
+  deliverer: Deliverer
   blocklist: Set<number>
   createdAt: Date
   collectedAt: Date
@@ -13,7 +13,7 @@ export class Delivery {
 
   constructor (delivery: Delivery) {
     this.order = delivery.order
-    this.deliveryman = delivery.deliveryman
+    this.deliverer = delivery.deliverer
     this.createdAt = delivery.createdAt ? delivery.createdAt : new Date()
     this.blocklist = delivery.blocklist ? delivery.blocklist : new Set<number>()
     this.status = Status.PENDING
@@ -31,23 +31,23 @@ export class Delivery {
   finish () {
     this.status = Status.FINISHED
     this.finishedAt = new Date()
-    this.deliveryman.addBalance(this.order.payment)
+    this.deliverer.addBalance(this.order.payment)
   }
 
   reject () {
     this.status = Status.REJECTED
-    this.blocklist.add(this.deliveryman.id)
+    this.blocklist.add(this.deliverer.ID)
   }
 
   expire () {
     this.status = Status.EXPIRED
-    if (this.deliveryman) {
-      this.blocklist.add(this.deliveryman.id)
+    if (this.deliverer) {
+      this.blocklist.add(this.deliverer.ID)
     }
   }
 
-  isBlocklisted (deliverymanId: number): boolean {
-    return this.blocklist.has(deliverymanId)
+  isBlocklisted (delivererId: number): boolean {
+    return this.blocklist.has(delivererId)
   }
 
   inactive () {
