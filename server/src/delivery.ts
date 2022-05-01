@@ -57,7 +57,7 @@ export class Delivery {
   }
 
   inactive () {
-    return this.incomplete() || this.status == Status.EVALUATED
+    return this.incomplete() || this.status == Status.FINISHED || this.status == Status.EVALUATED
   }
 
   incomplete () {

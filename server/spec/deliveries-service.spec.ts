@@ -3,8 +3,6 @@ import { Client } from '../src/client'
 import { Deliveryman } from '../src/deliveryman'
 import { Order } from '../src/order'
 import { DeliveriesService } from '../src/deliveries-service'
-import { ClientsService } from '../src/clients-service'
-import { RestaurantsService } from '../src/restaurants-service'
 import { Restaurant } from '../src/restaurant'
 import { OrdersService } from '../src/orders-service'
 import { DeliverymenService } from '../src/deliverymen-service'
@@ -19,8 +17,6 @@ describe('O servico de pedidos', () => {
   let ordersService: OrdersService
   let deliverymenService: DeliverymenService
   let deliveriesService: DeliveriesService
-  let clientService: ClientsService
-  let restaurantService: RestaurantsService
 
   const restaurant: Restaurant = <Restaurant> {
     id: 7,
@@ -56,9 +52,7 @@ describe('O servico de pedidos', () => {
   beforeEach(() => {
     ordersService = new OrdersService()
     deliverymenService = new DeliverymenService()
-    clientService = new ClientsService()
-    restaurantService = new RestaurantsService()
-    deliveriesService = new DeliveriesService(ordersService, deliverymenService, clientService, restaurantService)
+    deliveriesService = new DeliveriesService(ordersService, deliverymenService)
     jasmine.clock().install()
   })
 

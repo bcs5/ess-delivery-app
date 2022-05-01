@@ -35,6 +35,10 @@ export class Deliveryman {
     this.deliveries.unshift(delivery)
   }
 
+  getDeliveryById (id: number): Delivery {
+    return this.deliveries.find(({ order }) => order.id == id)
+  }
+
   isFree () {
     return !this.deliveries.length || this.deliveries[0].inactive()
   }

@@ -26,7 +26,7 @@ const restaurantService: RestaurantsService = new RestaurantsService()
 const clientsService: ClientsService = new ClientsService()
 const deliverymenService: DeliverymenService = new DeliverymenService()
 const ordersService: OrdersService = new OrdersService()
-const deliveriesService: DeliveriesService = new DeliveriesService(ordersService, deliverymenService,clientsService,restaurantService)
+const deliveriesService: DeliveriesService = new DeliveriesService(ordersService, deliverymenService)
 const deliveryMapper: DeliveryMapper = new DeliveryMapper()
 
 function extractCredentials (req: Request, res: Response): string[] {
@@ -113,6 +113,7 @@ app.post('/evaluation', function(req, res){
     const [username, password] = extractCredentials(req, res)
     deliverymenService.auth(Number(username), password)
     const delivery = deliveriesService.evaluateOrder(Number(username), Number(req.body.id), Number(req.body.restaurantScore), Number(req.body.clientScore))
+    console.log(delivery)
     return res.send(deliveryMapper.toJson(delivery))
   } catch (e) {
     if (e.message == 'auth failed') {
