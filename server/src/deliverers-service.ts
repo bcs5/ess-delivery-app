@@ -30,6 +30,16 @@ export class DeliverersService {
     return address
   }
 
+  validateCredentials (email: string, password: string): Deliverer {
+    for(let deliverer of this.deliverers) {
+      if (deliverer.Email == email && deliverer.Password == password) {
+        return deliverer;
+      }
+    }
+
+    return null;
+  }
+
   private isNew (cnh: string, email: string): boolean {
     for(let deliverer of this.deliverers) {
       if (deliverer.CNH == cnh || deliverer.Email == email) {
