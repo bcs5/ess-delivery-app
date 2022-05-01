@@ -1,19 +1,32 @@
-<p># Pedido {{delivery.id}} {{delivery.status}}</p>
-<p>{{delivery.restaurant.name}}</p>
-<p>{{delivery.restaurant.address}}</p>
-<p>Pagamento {{delivery.payment}}</p>
-<a routerLink = "/deliveries">
-  <button *ngIf="isFinished()" >Back History</button>
-</a>
-<p *ngIf="isPending()">
-  <button id="accepted-{{delivery.id}}" (click)="accept(delivery.id)">Aceitar</button>
-  <button id="rejected-{{delivery.id}}" (click)="reject(delivery.id)">Rejeitar</button>
-</p>
-<p *ngIf="isInProgress()">
-  <button id="collected-{{delivery.id}}" (click)="collect(delivery.id)">Coletado</button>
-</p>
-<div *ngIf="isCollected()">
-  <p>{{delivery.client.name}}</p>
-  <p>{{delivery.client.address}}</p>
-  <button *ngIf="!isFinished()" id="finished-{{delivery.id}}" (click)="finish(delivery.id)">Finalizado</button>
+<div class="allContext">
+  <h3>Delivery Information</h3>
+
+  <div class="information">
+    <br>
+    <p><b># Delivery: </b> {{delivery.id}} {{delivery.status}}</p>
+    <p><b> Restaurant Name: </b> {{delivery.restaurant.name}}</p>
+    <p><b> Restaurant Address: </b> {{delivery.restaurant.address}}</p>
+    <p><b> Payment: </b> R$ {{delivery.payment}}</p>
+
+    <div *ngIf="isCollected()">
+      <p><b>Client Name: </b>{{delivery.client.name}}</p>
+      <p><b>Client Address: </b>{{delivery.client.address}}</p>
+    </div>
+    
+    <div class="text-center">
+      <a routerLink="/deliveries">
+        <button *ngIf="isFinished()" type="button" class="btn btn-light">Back</button>
+      </a>
+
+      <div *ngIf="isPending()" class="d-grid gap-2 d-md-block">
+        <button id="rejected-{{delivery.id}}" (click)="reject(delivery.id)" class="btn btn-danger"
+          type="button">Reject</button>
+        <button id="accepted-{{delivery.id}}" (click)="accept(delivery.id)" class="text-center" class="btn btn-success"
+          type="button">Accept</button>
+      </div>
+
+      <button *ngIf="isInProgress()" id="collected-{{delivery.id}}" (click)="collect(delivery.id)" type="button" class="btn btn-success">Collected</button>
+      <button *ngIf="!isFinished() && isCollected()" id="finished-{{delivery.id}}" (click)="finish(delivery.id)" type="button" class="btn btn-success">Finished</button>
+    </div>
+  </div>
 </div>
