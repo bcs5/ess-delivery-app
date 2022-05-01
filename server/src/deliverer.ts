@@ -1,7 +1,7 @@
 import { Delivery } from './delivery'
 
 export class Address {
-  zipcode: number;
+  zipcode: string;
   street: string;
   number: number;
   complement: string = "";
@@ -9,7 +9,7 @@ export class Address {
   city: string;
   state: string;
 
-  constructor(zipcode: number, street: string, number: number, neighborhood: string, city: string, state: string, complement: string = "") {
+  constructor(zipcode: string, street: string, number: number, neighborhood: string, city: string, state: string, complement: string = "") {
     this.zipcode = zipcode;
     this.street = street;
     this.number = number;
@@ -25,9 +25,9 @@ export class Deliverer {
   private name: string;
   private email: string;
   private password: string;
-  private phoneNumber: number;
-  private cnh: number;
-  private birth: Date;
+  private phoneNumber: string;
+  private cnh: string;
+  private birth: string;
   private address: Address;
 
   // company information
@@ -35,18 +35,18 @@ export class Deliverer {
   private wallet = 0.0;
   private deliveries: Delivery[] = [];
 
-  constructor (name: string, email: string, password: string, phoneNumber: number, cnh: number, day: number, month: number, year: number, address: Address) {
+  constructor (name: string, email: string, password: string, phoneNumber: string, cnh: string, day: number, month: number, year: number, address: Address) {
     this.name = name;
     this.email = email;
     this.password = password;
     this.phoneNumber = phoneNumber;
     this.cnh = cnh;
-    this.birth = new Date(year, (month-1), day);
+    this.birth = new Date(year, month, day).toLocaleDateString();
     this.address = address;
   }
 
   get Name() {
-    return this.Name;
+    return this.name;
   }
 
   set Name(name: string) {
@@ -73,7 +73,7 @@ export class Deliverer {
     return this.phoneNumber;
   }
 
-  set PhoneNumber(phoneNumber: number) {
+  set PhoneNumber(phoneNumber: string) {
     this.phoneNumber = phoneNumber;
   }
 
@@ -81,7 +81,7 @@ export class Deliverer {
     return this.cnh;
   }
 
-  set CNH(cnh: number) {
+  set CNH(cnh: string) {
     this.cnh = cnh;
   }
 
@@ -89,7 +89,7 @@ export class Deliverer {
     return this.birth;
   }
 
-  set Birth(birth: Date) {
+  set Birth(birth: string) {
     this.birth = birth;
   }
 

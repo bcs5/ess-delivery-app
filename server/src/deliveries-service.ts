@@ -108,9 +108,9 @@ export class DeliveriesService {
     return delivery
   }
 
-  addDeliverer (deliverer: Deliverer) {
-    return this.deliverersService.add(deliverer)
-  }
+  // addDeliverer (deliverer: Deliverer) {
+  //   return this.deliverersService.add(deliverer)
+  // }
 
   byDeliverer (id: number): Delivery[] {
     return this.deliverersService.getById(id).Deliveries

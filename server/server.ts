@@ -12,7 +12,8 @@ import { DeliveryMapper } from './src/delivery-mapper'
 import { Action } from './src/delivery-action'
 
 //Cadastro e Manutenção
-import { Deliverer } from './src/deliverer'
+import e = require('express')
+import { Address, Deliverer } from './src/deliverer'
 
 const app = express()
 
@@ -51,7 +52,7 @@ const interval = setInterval(function () {
 }, 1000)
 
 app.get('/', function (req, res) {
-  return res.send('Hello world!')
+  return res.send('Welcome to CinEntrega Server!')
 })
 
 app.post('/restaurant', function (req, res) {
@@ -62,8 +63,61 @@ app.post('/client', function (req, res) {
   return res.send(clientsService.add(req.body))
 })
 
-app.post('/deliverer', function (req, res) {
-  return res.send(deliverersService.add(req.body))
+app.post('/deliverer/register', function (req: express.Request, res: express.Response) {
+  try { let name = req.body.name
+    let email = req.body.email
+    let password = req.body.password
+    let phoneNumber = req.body.phoneNumber
+    let cnh = req.body.cnh
+    let birthYear = req.body.year
+    let birthMonth = req.body.month
+    let birthDay = req.body.day
+    let zipcode = req.body.zipcode
+    let street = req.body.street
+    let number = req.body.number
+    let complement = req.body.complement
+    let neighborhood = req.body.neighborhood
+    let city = req.body.city
+    let state = req.body.state
+    
+
+    if (name == '' || email == '' || password == '' || phoneNumber == '' || cnh == '' || birthYear == '' || birthMonth == '' || birthDay == '' || zipcode === '' || street === '' || number === '' || neighborhood === '' || city === '' || state === '') {
+      res.send({
+        failure: 'Ops! You forgot to fill one or more of the fields (just \'complemento\' is not mandatory' 
+      })
+    } else {
+      let delivererAddress = deliverersService.createAddress(zipcode, street, number, complement, neighborhood, city, state)
+      let success = deliverersService.addDeliverer(name, email, password, phoneNumber, cnh, birthDay, birthMonth, birthYear, delivererAddress)
+      if (success) {
+        res.send({
+          success: "Welcome to CinEntregas!!"
+        })
+      } else {
+        res.send({
+          failure: "Oh no! Someone is already using this cnh or email, check if this is really your data or go to login!"
+        })
+      }
+    }
+  } catch (e) {
+    if (e.message == 'auth failed') {
+      return res.status(401).send(e)
+    }
+    return res.status(500).send(e)
+  }
+})
+
+// app.post('/deliverer/update', function (req, res) {
+  
+// })
+
+// app.post('/deliverer/login', function (req, res) {
+  
+// })
+
+app.get('/deliverers', function (req, res) {
+  console.log("here")
+  console.log(`${JSON.stringify(deliverersService.Deliverers[0].Birth)} `)
+  res.send(JSON.stringify(Array.from(deliverersService.Deliverers)))
 })
 
 app.post('/order', function (req, res) {

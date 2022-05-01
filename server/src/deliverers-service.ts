@@ -1,4 +1,4 @@
-import { Deliverer } from './deliverer'
+import { Deliverer, Address } from './deliverer'
 
 export class DeliverersService {
   private deliverers: Deliverer[] = [];
@@ -10,12 +10,14 @@ export class DeliverersService {
   }
 
   get Deliverers(): Deliverer[] {
-    return this.deliverers
+    return this.deliverers;
   }
 
-  add (deliverer: Deliverer): boolean {
-    if (this.isNew(deliverer.CNH)) {
-      this.setId;
+  addDeliverer (name: string, email: string, password: string, phoneNumber: string, cnh: string, day: number, month: number, year: number, address: Address): boolean {
+    if (this.isNew(cnh, email)) {
+      let deliverer = new Deliverer(name, email, password, phoneNumber, cnh, day, month, year, address);
+      
+      this.setId(deliverer);
       this.deliverers.push(deliverer);
       return true;
     } else {
@@ -23,9 +25,14 @@ export class DeliverersService {
     }
   }
 
-  private isNew (cnh: number): boolean {
+  createAddress(zipcode: string, street: string, number: number, complement: string, neighborhood: string, city: string, state: string): Address {
+    let address = new Address(zipcode, street, number, neighborhood, city, state, complement)
+    return address
+  }
+
+  private isNew (cnh: string, email: string): boolean {
     for(let deliverer of this.deliverers) {
-      if (deliverer.CNH == cnh) {
+      if (deliverer.CNH == cnh || deliverer.Email == email) {
         return false;
       }
     }
