@@ -11,13 +11,13 @@ import { Delivery } from 'src/app/Interface/delivery';
 })
 export class DeliveryComponent implements OnInit {
   delivery: Delivery = new Delivery();
+  
+  creationTime: Date;
+  start: any;
   id: number;
+  seconds: number;
 
-<<<<<<< HEAD
    constructor(private route: ActivatedRoute, private deliveryService: DeliveriesService, private router: Router) {}
-=======
-  constructor(private route: ActivatedRoute, private deliveryService: DeliveriesService) { }
->>>>>>> f58ef51 (Correção de bugs da interface deliveries)
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
@@ -26,10 +26,35 @@ export class DeliveryComponent implements OnInit {
     });
   }
 
+  createTimer() {
+    this.pause();
+    this.start = setInterval(() => {this.timerCall(); }, 1000);
+  }
+
+  pause() {
+    clearInterval(this.start);
+  }
+
+  timerCall() {
+    let endSeconds = this.creationTime.getSeconds();
+    let endMinutes = this.creationTime.getMinutes() + 1;
+
+    let currentSeconds = new Date().getSeconds();
+    let currentMinutes = new Date().getMinutes();
+
+    if(currentMinutes < endMinutes || (currentMinutes == endMinutes && currentSeconds <= endSeconds)){
+      this.seconds = (endMinutes - currentMinutes) * 60 + endSeconds - currentSeconds;
+    } else {
+      this.pause();
+    }
+  }
+
   find() {
     this.deliveryService.getDelivery(this.id)
       .then(delivery => { 
         this.delivery = delivery;
+        this.creationTime = new Date(delivery.created_at);
+        this.createTimer();
       })
       .catch(erro => alert(erro));
   }
@@ -53,7 +78,6 @@ export class DeliveryComponent implements OnInit {
       .then(delivery => this.delivery = delivery)
       .catch(erro => alert(erro));
   }
-<<<<<<< HEAD
   evaluation(cScore: number, rScore:number){
     this.deliveryService.evaluation(this.id,rScore,cScore)
     .then(delivery => this.delivery = delivery)
@@ -63,9 +87,6 @@ export class DeliveryComponent implements OnInit {
     this.router.navigateByUrl('/deliveries');
   }
   isPending () {
-=======
-  isPending() {
->>>>>>> f58ef51 (Correção de bugs da interface deliveries)
     return this.delivery.status == "pending";
   }
   isInProgress() {
