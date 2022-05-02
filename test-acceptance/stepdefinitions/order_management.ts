@@ -26,8 +26,8 @@ defineSupportCode(function ({ Given, When, Then }) {
   })
 
   Given(/^I'm on the page "([^\"]*)"$/, async (name) => {
-    await browser.get("http://localhost:4200/deliveries");
-    await expect(browser.getTitle()).to.eventually.equal(name);
+    await browser.get("http://localhost:4200/"+name);
+    await expect(browser.getTitle()).to.eventually.equal("Cin Delivery "+name);
   })
 
   When(/^I create a restaurant with name "([^\"]*)", address "([^\"]*)", id "(\d*)"$/, async (name, address, id) => {
@@ -63,11 +63,11 @@ defineSupportCode(function ({ Given, When, Then }) {
     expect(lastResponse.status.toString()).to.equal(statusCode)
   })
 
-  Then(/^the order "(\d*)" appears on list$/, async (orderId) => {
+  Then(/^the order "(\d*)" appears on list with status "([^\"]*)"$/, async (orderId, status) => {
     await sleep(100)
     await element(by.id("refresh")).click();
     await sleep(500)
-    expect((await element.all(by.id(`delivery-${orderId}`))).length).to.equal(1);
+    expect((await element.all(by.id(`delivery-${orderId}-${status}`))).length).to.equal(1);
   })
 
   Then(/^I receive a response with field "([^\"]*)" value "([^\"]*)"$/, async (field, value) => {

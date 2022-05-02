@@ -23,7 +23,7 @@ Feature: As system manager
     And I receive a response with field "name" value "Jose Cruz"
   Scenario: create a order to deliveryman
     Given server is up
-    Given I'm on the page "CinDelivery"
+    Given I'm on the page "deliveries"
     When I create a order from client "14", to restaurant "13", to deliveryman "1", payment "10", id "33"
     Then I receive code "200"
-    And the order "33" appears on list
+    And the order "33" appears on list with status "pending"

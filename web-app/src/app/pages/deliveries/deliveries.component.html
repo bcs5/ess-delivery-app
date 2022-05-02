@@ -25,7 +25,7 @@
    </thead>
    <tbody>
       <tr *ngFor="let delivery of deliveries">
-         <th scope="row" id="delivery-{{delivery.id}}">{{delivery.id}}</th>
+         <th scope="row" id="delivery-{{delivery.id}}-{{delivery.status}}">{{delivery.id}}</th>
          <td>{{delivery.restaurant}}</td>
          <td>{{delivery.payment}}</td>
          <td>{{delivery.status}}</td>
