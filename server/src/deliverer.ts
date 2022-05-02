@@ -27,7 +27,7 @@ export class Deliverer {
   private password: string;
   private phoneNumber: string;
   private cnh: string;
-  private birth: string;
+  private birth: Date;
   private address: Address;
 
   // company information
@@ -35,13 +35,13 @@ export class Deliverer {
   private wallet = 0.0;
   private deliveries: Delivery[] = [];
 
-  constructor (name: string, email: string, password: string, phoneNumber: string, cnh: string, day: number, month: number, year: number, address: Address) {
+  constructor (name: string, email: string, password: string, phoneNumber: string, cnh: string, birth: Date, address: Address) {
     this.name = name;
     this.email = email;
     this.password = password;
     this.phoneNumber = phoneNumber;
     this.cnh = cnh;
-    this.birth = new Date(year, month, day).toLocaleDateString();
+    this.birth = birth;
     this.address = address;
   }
 
@@ -89,7 +89,7 @@ export class Deliverer {
     return this.birth;
   }
 
-  set Birth(birth: string) {
+  set Birth(birth: Date) {
     this.birth = birth;
   }
 
@@ -109,23 +109,23 @@ export class Deliverer {
     this.id = id;
   }
 
-  get Wallet () {
+  get Wallet() {
     return this.wallet;
   }
 
-  addBalance (amount: number) {
+  addBalance(amount: number) {
     this.wallet += amount;
   }
 
-  get Deliveries () {
+  get Deliveries() {
     return this.deliveries;
   }
 
-  addDelivery (delivery: Delivery) {
+  addDelivery(delivery: Delivery) {
     this.deliveries.unshift(delivery);
   }
 
-  isAvailable (): boolean {
+  isAvailable(): boolean {
     return (this.deliveries.length == 0) || this.deliveries[0].inactive();
   }
 }

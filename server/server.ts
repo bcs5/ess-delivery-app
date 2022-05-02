@@ -64,43 +64,44 @@ const interval = setInterval(function () {
   deliveriesService.process();
 }, 1000)
 
-app.get('/', function (req, res) {
+app.get('/', function (req: express.Request, res: express.Response) {
   return res.status(200).send('Welcome to CinEntrega Server!');
 })
 
-app.post('/restaurant', function (req, res) {
+app.post('/restaurant', function (req: express.Request, res: express.Response) {
   return res.status(201).send(restaurantService.add(req.body));
 })
 
-app.post('/client', function (req, res) {
+app.post('/client', function (req: express.Request, res: express.Response) {
   return res.status(201).send(clientsService.add(req.body));
 })
 
-app.post('/deliverer/register', function (req: express.Request, res: express.Response) {
+app.get('/user/', function (req: express.Request, res: express.Response) {
+  try {
+    const [username, password] = extractCredentials(req, res);
+    deliverersService.auth(Number(username), password);
+    const deliverer = deliverersService.getById(Number(username));
+    return res.status(200).send({ name: deliverer.Name, wallet: deliverer.Wallet });
+  } catch (e) {
+    if (e.message == 'auth failed') {
+      return res.status(401).send(e);
+    }
+    return res.status(500).send(e);
+  }
+})
+
+
+//Deliverers
+app.post('/deliverer/', function (req: express.Request, res: express.Response) {
   try { 
-    let name = req.body.name;
-    let email = req.body.email;
-    let password = req.body.password;
-    let phoneNumber = req.body.phoneNumber;
-    let cnh = req.body.cnh;
-    let birthYear = req.body.year;
-    let birthMonth = req.body.month;
-    let birthDay = req.body.day;
-    let zipcode = req.body.zipcode;
-    let street = req.body.street;
-    let number = req.body.number;
-    let complement = req.body.complement;
-    let neighborhood = req.body.neighborhood;
-    let city = req.body.city;
-    let state = req.body.state;
-    
-    if (name == '' || email == '' || password == '' || phoneNumber == '' || cnh == '' || birthYear == '' || birthMonth == '' || birthDay == '' || zipcode === '' || street === '' || number === '' || neighborhood === '' || city === '' || state === '') {
+    let deliverer = <Deliverer>(req.body)
+    console.log(`${JSON.stringify(deliverer)}`)
+    if (!deliverer) {
       res.status(400).send({
         failure: 'Ops! You forgot to fill one or more fields (just \'complemento\' is not mandatory)'
       });
     } else {
-      let delivererAddress = deliverersService.createAddress(zipcode, street, number, complement, neighborhood, city, state)
-      let success = deliverersService.addDeliverer(name, email, password, phoneNumber, cnh, birthDay, birthMonth, birthYear, delivererAddress)
+      let success = deliverersService.addDeliverer(deliverer)
       if (success) {
         res.status(201).send({
           success: "Welcome to CinEntregas!!"
@@ -119,11 +120,35 @@ app.post('/deliverer/register', function (req: express.Request, res: express.Res
   }
 })
 
-// app.post('/deliverer/update', function (req, res) {
-  
-// })
+app.put('/deliverer/', function (req: express.Request, res: express.Response) {
+  try { 
+    if (delivererLogged != null){  const deliverer: Deliverer = <Deliverer> req.body;
+      const delivererUpdated = deliverersService.updateInfos(deliverer, delivererLogged.ID);
 
-app.post('/deliverer/login', function (req, res) {
+      if (delivererUpdated) {
+        res.status(404).send({
+          success: 'Deliverer infos updated with success!'
+        });
+      } else {
+        res.status(404).send({
+          failure: 'Sorry but we could not update your infos!'
+        });
+      }
+    } else {
+      res.status(400).send({
+        failure: 'Você precisa estar logado na sua conta para que seja possível a atualização dos dados!'
+      });
+    }
+    
+  } catch (e) {
+    if (e.message == 'auth failed') {
+      return res.status(401).send(e);
+    }
+    return res.status(500).send(e);
+  }
+})
+
+app.post('/deliverer/login/', function (req: express.Request, res: express.Response) {
   try { 
     let email = req.body.email;
     let password = req.body.password;
@@ -157,7 +182,7 @@ app.post('/deliverer/login', function (req, res) {
   }
 })
 
-app.post('/deliverer/logout', function (req, res) {
+app.post('/deliverer/logout/', function (req: express.Request, res: express.Response) {
   try { 
     delivererLogged = null;
     
@@ -174,11 +199,24 @@ app.post('/deliverer/logout', function (req, res) {
   }
 })
 
-app.get('/deliverers', function (req, res) {
-  res.status(200).send(JSON.stringify(Array.from(deliverersService.Deliverers)));
+app.get('/deliverers/', function (req: express.Request, res: express.Response) {
+   try { 
+     let deliverers = deliverersService.Deliverers;
+     if (deliverers == []) {
+      res.status(404).send('Ops! I think we need to have some deliverers registered first!');
+     } else {
+      res.status(200).send(JSON.stringify(Array.from(deliverers)));
+     }
+   } catch (e) {
+    if (e.message == 'auth failed') {
+      return res.status(401).send(e);
+    }
+    return res.status(500).send(e);
+  }
 })
 
-app.post('/order', function (req, res) {
+//Orders
+app.post('/order', function (req: express.Request, res: express.Response) {
   try {
     const orderId = req.body.id;
     const client = clientsService.getById(req.body.clientId);
@@ -194,7 +232,7 @@ app.post('/order', function (req, res) {
   }
 })
 
-app.get('/order/:orderId', function (req, res) {
+app.get('/order/:orderId', function (req: express.Request, res: express.Response) {
   try {
     const [username, password] = extractCredentials(req, res);
     deliverersService.auth(Number(username), password);
@@ -209,7 +247,7 @@ app.get('/order/:orderId', function (req, res) {
   }
 })
 
-app.get('/order/:orderId/:action', function (req, res) {
+app.get('/order/:orderId/:action', function (req: express.Request, res: express.Response) {
   try {
     const [username, password] = extractCredentials(req, res)
     deliverersService.auth(Number(username), password);
@@ -224,7 +262,7 @@ app.get('/order/:orderId/:action', function (req, res) {
   }
 })
 
-app.get('/orders/', function (req, res) {
+app.get('/orders/', function (req: express.Request, res: express.Response) {
   try {
     const [username, password] = extractCredentials(req, res);
     deliverersService.auth(Number(username), password);
@@ -240,21 +278,7 @@ app.get('/orders/', function (req, res) {
   }
 })
 
-app.get('/user/', function (req, res) {
-  try {
-    const [username, password] = extractCredentials(req, res);
-    deliverersService.auth(Number(username), password);
-    const deliverer = deliverersService.getById(Number(username));
-    return res.status(200).send({ name: deliverer.Name, wallet: deliverer.Wallet });
-  } catch (e) {
-    if (e.message == 'auth failed') {
-      return res.status(401).send(e);
-    }
-    return res.status(500).send(e);
-  }
-})
-
-app.get('/process', function (req, res) {
+app.get('/process', function (req: express.Request, res: express.Response) {
   deliveriesService.process();
   return res.status(200).send();
 })
