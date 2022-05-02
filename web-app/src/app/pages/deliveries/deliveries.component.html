@@ -1,8 +1,3 @@
-<div *ngIf="user != null && deliveries.length == 0">
-   <h1>You do not have an order record, please wait for new orders.</h1>
-   <img class="rounded mx-auto d-block" src="assets/img/wait.png" alt="waiting">
-</div>
-
 <div *ngIf="user == null">
    <h2>You delivery is not logged in, please login to use the system.</h2>
    <img class="rounded mx-auto d-block" src="assets/img/login.png" alt="login waiting">
@@ -13,6 +8,14 @@
    <h3>User: {{user}} </h3>
 </div>
 <button id="refresh" (click)="activeButton() "> Refresh Data </button>
+
+<div *ngIf="user != null && deliveries.length == 0">
+   <br>
+   <h2 class="text-center">You do not have an order record, please wait for first order.</h2>
+   <br>
+   <img class="rounded mx-auto d-block" src="assets/img/wait.jpg" alt="waiting for deliveriy">
+</div>
+
 <table class="table">
    <thead>
       <tr *ngIf="deliveries.length > 0">
@@ -27,7 +30,7 @@
       <tr *ngFor="let delivery of deliveries">
          <th scope="row" id="delivery-{{delivery.id}}-{{delivery.status}}">{{delivery.id}}</th>
          <td>{{delivery.restaurant}}</td>
-         <td>{{delivery.payment}}</td>
+         <td>R$  {{delivery.payment}}</td>
          <td>{{delivery.status}}</td>
          <td><a [routerLink]="['/delivery', delivery.id]">details</a></td>
       </tr>
