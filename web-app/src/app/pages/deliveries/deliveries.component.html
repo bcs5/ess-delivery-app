@@ -7,6 +7,7 @@
    <h3>Wallet: R$ {{wallet}} </h3>
    <h3>User: {{user}} </h3>
 </div>
+<button id="refresh" (click)="activeButton() "> Refresh Data </button>
 
 <div *ngIf="user != null && deliveries.length == 0">
    <br>
@@ -23,12 +24,11 @@
          <th scope="col">Payment</th>
          <th scope="col">Status</th>
          <th scope="col">details</th>
-         <button (click)="activeButton() "> Refresh Data </button>
       </tr>
    </thead>
    <tbody>
       <tr *ngFor="let delivery of deliveries">
-         <th scope="row" id="delivery-{{delivery.id}">{{delivery.id}}</th>
+         <th scope="row" id="delivery-{{delivery.id}}-{{delivery.status}}">{{delivery.id}}</th>
          <td>{{delivery.restaurant}}</td>
          <td>R$  {{delivery.payment}}</td>
          <td>{{delivery.status}}</td>
