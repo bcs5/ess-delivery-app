@@ -86,7 +86,7 @@ export class DeliveryComponent implements OnInit {
   btnClick () {
     this.router.navigateByUrl('/deliveries');
   }
-  isPending () {
+  isPending() {
     return this.delivery.status == "pending";
   }
   isInProgress() {
