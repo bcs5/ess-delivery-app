@@ -11,41 +11,72 @@ import { Delivery } from 'src/app/Interface/delivery';
 })
 export class DeliveryComponent implements OnInit {
   delivery: Delivery = new Delivery();
-   id: number;
+  
+  creationTime: Date;
+  start: any;
+  id: number;
+  seconds: number;
 
    constructor(private route: ActivatedRoute, private deliveryService: DeliveriesService, private router: Router) {}
 
-   ngOnInit(): void {
+  ngOnInit(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.id = +params.get('id');
       this.find();
     });
-   }
+  }
+
+  createTimer() {
+    this.pause();
+    this.start = setInterval(() => {this.timerCall(); }, 1000);
+  }
+
+  pause() {
+    clearInterval(this.start);
+  }
+
+  timerCall() {
+    let endSeconds = this.creationTime.getSeconds();
+    let endMinutes = this.creationTime.getMinutes() + 1;
+
+    let currentSeconds = new Date().getSeconds();
+    let currentMinutes = new Date().getMinutes();
+
+    if(currentMinutes < endMinutes || (currentMinutes == endMinutes && currentSeconds <= endSeconds)){
+      this.seconds = (endMinutes - currentMinutes) * 60 + endSeconds - currentSeconds;
+    } else {
+      this.pause();
+    }
+  }
 
   find() {
     this.deliveryService.getDelivery(this.id)
-    .then(delivery => this.delivery = delivery)
-    .catch(erro => alert(erro));
+      .then(delivery => { 
+        this.delivery = delivery;
+        this.creationTime = new Date(delivery.created_at);
+        this.createTimer();
+      })
+      .catch(erro => alert(erro));
   }
-  accept () {
+  accept() {
     this.deliveryService.accept(this.id)
-    .then(delivery => this.delivery = delivery)
-    .catch(erro => alert(erro));
+      .then(delivery => this.delivery = delivery)
+      .catch(erro => alert(erro));
   }
-  reject () {
+  reject() {
     this.deliveryService.reject(this.id)
-    .then(delivery => this.delivery = delivery)
-    .catch(erro => alert(erro));
+      .then(delivery => this.delivery = delivery)
+      .catch(erro => alert(erro));
   }
-  collect () {
+  collect() {
     this.deliveryService.collect(this.id)
-    .then(delivery => this.delivery = delivery)
-    .catch(erro => alert(erro));
+      .then(delivery => this.delivery = delivery)
+      .catch(erro => alert(erro));
   }
-  finish () {
+  finish() {
     this.deliveryService.finish(this.id)
-    .then(delivery => this.delivery = delivery)
-    .catch(erro => alert(erro));
+      .then(delivery => this.delivery = delivery)
+      .catch(erro => alert(erro));
   }
   evaluation(cScore: number, rScore:number){
     this.deliveryService.evaluation(this.id,rScore,cScore)
@@ -55,16 +86,16 @@ export class DeliveryComponent implements OnInit {
   btnClick () {
     this.router.navigateByUrl('/deliveries');
   }
-  isPending () {
+  isPending() {
     return this.delivery.status == "pending";
   }
-  isInProgress () {
+  isInProgress() {
     return this.delivery.status == "in_progress";
   }
-  isCollected () {
+  isCollected() {
     return this.delivery.status == "collected";
   }
-  isFinished () {
+  isFinished() {
     return this.delivery.status == "finished";
   }
   isEvaluated () {

@@ -4,5 +4,6 @@ export class Delivery {
   client: object;
   payment: number;
   status: string;
+  created_at: Date;
   constructor() { }
 }

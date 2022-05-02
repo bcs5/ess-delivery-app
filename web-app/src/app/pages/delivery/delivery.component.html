@@ -4,6 +4,7 @@
   <div class="information">
     <br>
     <p><b># Delivery: </b> {{delivery.id}} {{delivery.status}}</p>
+    <p *ngIf="isPending() && seconds != 0"><b> Order expiration time:</b> {{seconds}} seconds</p>
     <p><b> Restaurant Name: </b> {{delivery.restaurant.name}}</p>
     <p><b> Restaurant Address: </b> {{delivery.restaurant.address}}</p>
     <p><b> Payment: </b> R$ {{delivery.payment}}</p>
