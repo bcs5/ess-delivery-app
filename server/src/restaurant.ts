@@ -13,6 +13,6 @@ export class Restaurant {
   }
 
   addScore (value: number): void {
-    this.score = (this.score + value)/2
+    this.score = (this.score + value) / 2
   }
 }

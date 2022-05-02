@@ -5,7 +5,6 @@ import { Restaurant } from './restaurant'
 
 export class DeliveryMapper {
   toJsonMinimal (delivery: Delivery) {
-    console.log(delivery)
     return {
       id: delivery.order.id,
       restaurant: delivery.order.restaurant.name,

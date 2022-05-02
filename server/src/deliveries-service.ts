@@ -13,7 +13,7 @@ export class DeliveriesService {
   deliveries: Delivery[] = []
   idCount = 0
 
-  constructor (ordersService: OrdersService, deliverymenService: DeliverymenService  ) {
+  constructor (ordersService: OrdersService, deliverymenService: DeliverymenService) {
     this.ordersService = ordersService
     this.deliverymenService = deliverymenService
   }
@@ -92,10 +92,10 @@ export class DeliveriesService {
     return delivery
   }
 
-  evaluateOrder (deliverymanId: number, orderId: number, rScore:number, cScore:number): Delivery {
+  evaluateOrder (deliverymanId: number, orderId: number, rScore: number, cScore: number): Delivery {
     const deliveryman = this.deliverymenService.getById(deliverymanId)
     const delivery = deliveryman.getDeliveryById(orderId)
-    if (delivery.deliveryman && delivery.deliveryman.id != deliverymanId) throw Error("invalid delivery for deliveryman")
+    if (delivery.deliveryman && delivery.deliveryman.id != deliverymanId) throw Error('invalid delivery for deliveryman')
     delivery.order.restaurant.addScore(rScore)
     delivery.order.client.addScore(cScore)
     delivery.evaluate()
@@ -125,6 +125,4 @@ export class DeliveriesService {
   byDeliveryman (id: number): Delivery[] {
     return this.deliverymenService.getById(id).deliveries
   }
-
-  
 }

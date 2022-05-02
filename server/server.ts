@@ -108,12 +108,11 @@ app.get('/order/:orderId/:action', function (req, res) {
   }
 })
 
-app.post('/evaluation', function(req, res){
+app.post('/evaluation', function (req, res) {
   try {
     const [username, password] = extractCredentials(req, res)
     deliverymenService.auth(Number(username), password)
     const delivery = deliveriesService.evaluateOrder(Number(username), Number(req.body.id), Number(req.body.restaurantScore), Number(req.body.clientScore))
-    console.log(delivery)
     return res.send(deliveryMapper.toJson(delivery))
   } catch (e) {
     if (e.message == 'auth failed') {
@@ -134,7 +133,6 @@ app.get('/orders/', function (req, res) {
     if (e.message == 'auth failed') {
       return res.status(401).send(e)
     }
-    console.log(e)
     return res.status(500).send(e)
   }
 })
