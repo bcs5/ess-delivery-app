@@ -1,0 +1,16 @@
+
+.top-header {
+    position: float;
+    padding-top: 3%;
+    padding-bottom: 3%;
+    padding-left: 10%;
+}
+img {
+    width: 25%;
+}
+p {
+    color: red;
+    float: right;
+    padding-top: 2.5%;
+    padding-right: 50%;
+}
