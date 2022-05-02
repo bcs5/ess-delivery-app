@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgModule } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap , Router} from '@angular/router';
 import { DeliveriesService } from 'src/app/Interface/deliveries.service';
 import { Delivery } from 'src/app/Interface/delivery';
 
@@ -13,7 +13,7 @@ export class DeliveryComponent implements OnInit {
   delivery: Delivery = new Delivery();
    id: number;
 
-   constructor(private route: ActivatedRoute, private deliveryService: DeliveriesService) {}
+   constructor(private route: ActivatedRoute, private deliveryService: DeliveriesService, private router: Router) {}
 
    ngOnInit(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
@@ -47,6 +47,14 @@ export class DeliveryComponent implements OnInit {
     .then(delivery => this.delivery = delivery)
     .catch(erro => alert(erro));
   }
+  evaluation(cScore: number, rScore:number){
+    this.deliveryService.evaluation(this.id,rScore,cScore)
+    .then(delivery => this.delivery = delivery)
+    .catch(erro => alert(erro));
+  }
+  btnClick () {
+    this.router.navigateByUrl('/deliveries');
+  }
   isPending () {
     return this.delivery.status == "pending";
   }
@@ -58,5 +66,8 @@ export class DeliveryComponent implements OnInit {
   }
   isFinished () {
     return this.delivery.status == "finished";
+  }
+  isEvaluated () {
+    return this.delivery.status == "evaluated";
   }
 }

@@ -27,6 +27,19 @@
 
       <button *ngIf="isInProgress()" id="collected-{{delivery.id}}" (click)="collect(delivery.id)" type="button" class="btn btn-success">Collected</button>
       <button *ngIf="!isFinished() && isCollected()" id="finished-{{delivery.id}}" (click)="finish(delivery.id)" type="button" class="btn btn-success">Finished</button>
+
+      <div *ngIf="isFinished()">
+        <form>
+          <br> Avalie o Cliente:
+          <input type="number" #cScore name="cScore" min="0" max="5" value="5" />
+        </form>
+
+        <form>
+          <br> Avalie o Restaurante:
+          <input type="number" #rScore name="rScore" min="0" max="5" value="5" />
+        </form>
+        <button id="accepted-{{delivery.id}}" (click)="evaluation(cScore.value, rScore.value)">Enviar</button>
+      </div>
     </div>
   </div>
 </div>
