@@ -11,7 +11,7 @@ export class DeliveriesService {
   deliverymenService: DeliverymenService
 
   deliveries: Delivery[] = []
-  idCount = 0
+  idCount = 1
 
   constructor (ordersService: OrdersService, deliverymenService: DeliverymenService) {
     this.ordersService = ordersService
@@ -102,19 +102,18 @@ export class DeliveriesService {
     return delivery
   }
 
-  addOrder (orderId: number) {
+  addOrder (orderId: number, deliverymanId?: number) {
     const order = this.ordersService.getById(orderId)
     const delivery = new Delivery(<Delivery>{ order: order, createdAt: new Date(0) })
+    if (deliverymanId) {
+      const deliveryman = this.deliverymenService.getById(deliverymanId)
+      if (deliveryman?.isFree()) {
+        delivery.deliveryman = deliveryman
+        delivery.createdAt = new Date()
+        deliveryman.addDelivery(delivery)
+      }
+    }
     this.deliveries.push(delivery)
-    return delivery
-  }
-
-  addOrderDeliveryman (orderId: number, deliverymanId: number) {
-    const order = this.ordersService.getById(orderId)
-    const deliveryman = this.deliverymenService.getById(deliverymanId)
-    const delivery = new Delivery(<Delivery>{ order: order, deliveryman: deliveryman })
-    this.deliveries.push(delivery)
-    deliveryman.addDelivery(delivery)
     return delivery
   }
 

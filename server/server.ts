@@ -67,11 +67,12 @@ app.post('/order', function (req, res) {
     const orderId = req.body.id
     const client = clientsService.getById(req.body.clientId)
     const restaurant = restaurantService.getById(req.body.restaurantId)
+    const deliveryman = req.body.deliverymanId
     const payment = Number(req.body.payment)
     if (!client) throw Error('invalid client')
     if (!restaurant) throw Error('invalid restaurant')
     const order = ordersService.add(<Order>{ id: orderId, restaurant: restaurant, client: client, payment: payment })
-    deliveriesService.addOrder(order.id)
+    deliveriesService.addOrder(order.id, deliveryman)
     return res.send(order)
   } catch (e) {
     return res.status(500).send(e)
