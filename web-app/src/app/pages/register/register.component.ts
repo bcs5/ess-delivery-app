@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from "@angular/forms";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -12,7 +13,7 @@ export class RegisterComponent implements OnInit {
     form;
     message = "";
 
-    constructor(private formBuilder:FormBuilder) {
+    constructor(private formBuilder:FormBuilder, private router:Router) {
 
         this.buildForm();
 
@@ -46,6 +47,10 @@ export class RegisterComponent implements OnInit {
     register() {
         this.message = 'Your order has been submitted '+ this.form.get('name').value;
         console.warn('Your order has been submitted', this.form.value);
+    }
+
+    goToLogin() {
+        this.router.navigate(['/login'])
     }
   
   }

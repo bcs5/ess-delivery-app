@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from "@angular/forms";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -11,7 +12,7 @@ export class LoginComponent implements OnInit {
   formLogin;
   message;
 
-  constructor(private formBuilder:FormBuilder) {
+  constructor(private formBuilder:FormBuilder, private router: Router) {
 
       this.buildForm();
 
@@ -31,7 +32,10 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    
+    this.message = "loginnnn"
+  }
+  goToRegister(){
+    this.router.navigate(['register'])
   }
 
 }
