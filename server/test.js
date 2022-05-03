@@ -9,5 +9,5 @@ function getConfig(file) {
     return readJsonFileSync(filepath);
 }
 //assume that config.json is in application root
-json = getConfig('deliveryman-sample.json');
+json = getConfig('deliverer-sample.json');
 console.log(json);

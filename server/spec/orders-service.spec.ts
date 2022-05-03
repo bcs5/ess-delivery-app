@@ -39,6 +39,6 @@ describe('O servico de pedidos', () => {
     expect(result.restaurant).toBe(restaurant)
     expect(result.client).toBe(client)
     expect(result.payment).toBe(50.0)
-    expect(result.deliveryman).toBeUndefined()
+    expect(result.deliverer).toBeUndefined()
   })
 })
