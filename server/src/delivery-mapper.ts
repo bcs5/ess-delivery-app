@@ -5,13 +5,13 @@ import { Restaurant } from './restaurant'
 
 export class DeliveryMapper {
   toJsonMinimal (delivery: Delivery) {
-    console.log(delivery)
     return {
       id: delivery.order.id,
       restaurant: delivery.order.restaurant.name,
+      restaurantScore: delivery.order.restaurant.score,
       payment: delivery.order.payment,
       status: delivery.status,
-      created_at: delivery.collectedAt
+      created_at: delivery.createdAt
     }
   }
 

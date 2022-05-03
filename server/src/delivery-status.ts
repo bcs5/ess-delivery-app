@@ -5,5 +5,6 @@ export enum Status {
   COLLECTED = 'collected',
   FINISHED = 'finished',
   REJECTED = 'rejected',
-  EXPIRED = 'expired'
+  EXPIRED = 'expired',
+  EVALUATED = 'evaluated'
 }
