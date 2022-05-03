@@ -1,7 +1,6 @@
 div {
     display: grid;
-    grid-template-columns: 12.5% 15% 15% 15% 15% 15% 12.5%;
-    padding-bottom: 2%;
+    grid-template-columns: repeat(6, 1fr);
   }
   
 a {
@@ -13,7 +12,7 @@ a {
 }
 
 #start {
-    grid-column-start: 2;
+    grid-column-start: 1;
 }
 br {
     border: solid 2px black;
