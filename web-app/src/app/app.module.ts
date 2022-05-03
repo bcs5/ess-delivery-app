@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule }   from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -16,6 +16,8 @@ import { HomeComponent } from './pages/home/home.component';
 import { DeliveryManService } from './Interface/delivery-man.service';
 import { TopPageComponent } from './pages/top-page/top-page.component';
 import { AboutComponent } from './pages/about/about.component';
+import { RegisterComponent } from './pages/register/register.component';
+
 
 @NgModule({
   declarations: [
@@ -27,12 +29,14 @@ import { AboutComponent } from './pages/about/about.component';
     ReviewComponent,
     LoginComponent,
     TopPageComponent,
-    AboutComponent
+    AboutComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     RouterModule.forRoot([
       {
@@ -58,6 +62,10 @@ import { AboutComponent } from './pages/about/about.component';
       {
         path: 'delivery/:id',
         component: DeliveryComponent
+      },
+      {
+        path: 'register',
+        component: RegisterComponent
       }
     ])
   ],
