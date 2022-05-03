@@ -10,8 +10,8 @@
     <p><b> Payment: </b> R$ {{delivery.payment}}</p>
 
     <div *ngIf="isCollected()">
-      <p><b>Client Name: </b>{{delivery.client.name}}</p>
-      <p><b>Client Address: </b>{{delivery.client.address}}</p>
+      <p><b>Client Name: </b><span id="client-name">{{delivery.client.name}}</span></p>
+      <p><b>Client Address: </b><span id="client-address">{{delivery.client.address}}</span></p>
     </div>
     
     <div class="text-center">

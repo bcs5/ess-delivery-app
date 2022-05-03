@@ -42,16 +42,19 @@ Feature: Order Management
     When I click to see details from order "22" with status "pending"
     And I accept the order "22"
     Then the order has status "in_progress"
+    And I don't see client address
   Scenario: collect second order
     Given I'm on the page "deliveries"
     When I click to see details from order "22" with status "in_progress"
     And I collect the order "22"
     Then the order has status "collected"
+    And I see client address "Rua Visconde de Barbacena, 329 - Varzea, Recife - PE"
   Scenario: finish second order
     Given I'm on the page "deliveries"
     When I click to see details from order "22" with status "collected"
     And I finish the order "22"
     Then the order has status "finished"
+    And I don't see client address
   Scenario: check wallet after finished order
     Given I'm on the page "deliveries"
     Then deliveryman wallet has "23"

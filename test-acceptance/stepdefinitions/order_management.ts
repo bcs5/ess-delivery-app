@@ -100,4 +100,12 @@ defineSupportCode(function ({ Given, When, Then }) {
   Then(/^the order has status "([^\"]*)"$/, async (status) => {
     await expect(element(by.id(`delivery-status`)).getText()).to.eventually.equal(status)
   })
+
+  Then(/^I don't see client address$/, async () => {
+    expect((await element.all(by.id(`client-address`))).length).to.equal(0)
+  })
+  
+  Then(/^I see client address "([^\"]*)"$/, async (address) => {
+    await expect(element(by.id(`client-address`)).getText()).to.eventually.equal(address)
+  })
 })
