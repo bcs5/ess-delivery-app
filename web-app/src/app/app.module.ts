@@ -14,10 +14,9 @@ import { ReviewComponent } from './pages/review/review.component';
 import { LoginComponent } from './pages/login/login.component';
 import { HomeComponent } from './pages/home/home.component';
 import { DeliveryManService } from './Interface/delivery-man.service';
+import { RegisterComponent } from './pages/register/register.component';
 import { TopPageComponent } from './pages/top-page/top-page.component';
 import { AboutComponent } from './pages/about/about.component';
-import { RegisterComponent } from './pages/register/register.component';
-
 
 @NgModule({
   declarations: [
@@ -28,9 +27,9 @@ import { RegisterComponent } from './pages/register/register.component';
     HomeComponent,
     ReviewComponent,
     LoginComponent,
+    RegisterComponent,
     TopPageComponent,
     AboutComponent,
-    RegisterComponent
   ],
   imports: [
     BrowserModule,

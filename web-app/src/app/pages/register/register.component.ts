@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from "@angular/forms";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -12,7 +13,7 @@ export class RegisterComponent implements OnInit {
     form;
     message = "";
 
-    constructor(private formBuilder:FormBuilder) {
+    constructor(private formBuilder:FormBuilder, private router:Router) {
 
         this.buildForm();
 
@@ -22,7 +23,7 @@ export class RegisterComponent implements OnInit {
 
         this.form = this.formBuilder.group({
 
-            name: ['', Validators.required, Validators.name],
+            name: ['', Validators.required],
             cnh: ['', Validators.required],
             birthDate: ['', Validators.required],
             phone: ['', Validators.required],
@@ -44,8 +45,13 @@ export class RegisterComponent implements OnInit {
     }
 
     register() {
-        this.message = 'Your order has been submitted '+ this.form.get('name').value;
-        console.warn('Your order has been submitted', this.form.value);
+        this.message = 'Cadastro realizado '+ this.form.get('name').value + ', faça login para continuar';
+        alert(this.message)
+        this.router.navigate(['/login'])
+    }
+
+    goToLogin() {
+        this.router.navigate(['/login'])
     }
   
   }

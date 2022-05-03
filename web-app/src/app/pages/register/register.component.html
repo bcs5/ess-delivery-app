@@ -1,7 +1,6 @@
-<section class="registerView">
-    <div class="justify-content-center align-items-center col-sm-6">
-<h1 class="registerTitle">Cadastro</h1>
-<div>
+<section class="registerView col-md-6 offset-md-3">
+    <div class="container justify-content-center align-items-center">
+        <h1 class="registerTitle">Cadastro</h1>
 
     <form [formGroup]="form" (ngSubmit)= "register()">
         <h6 class="sectionTitle">Informações pessoais</h6>
@@ -27,11 +26,11 @@
 
         <div class="form-group">
             <label for="email">Email </label>
-            <input id="email" type="email" class="form-control" formControlName="email">
+            <input id="email" type="email" class="form-control" formControlName="email" equiredminlength="5">
         </div>
         <div class="form-group">
             <label for="password">Senha </label>
-            <input id="password" type="password" class="form-control" formControlName="password">
+            <input id="password" type="password" class="form-control" formControlName="password" equiredminlength="8">
         </div>
 
         <br>
@@ -66,17 +65,13 @@
             <label for="state">Estado </label>
             <input id="state" type="text" class="form-control" formControlName="state">
         </div>
-        
         <div class="form-group">
-            <button class="btn btn-success" type="submit" [disabled]="!form.valid">Criar conta</button>
+            <button class="btn btn btn-outline-danger" type="submit" (click)="goToLogin()">Cancelar</button>
+            <button class="btn btn-danger" type="submit" [disabled]="!form.valid">Criar conta</button>
          <!--   <p *ngIf='mensagem != ""' class="alert alert-primary mt-2">{{ message }}</p> -->
         </div>
-        <div class="form-group">
-            <button class="btn btn btn-outline-danger" type="reset">Cancelar</button>
-        </div>
-
     </form>
-</div>
+
 </div>
 
 </section>
