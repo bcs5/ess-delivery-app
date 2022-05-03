@@ -1,14 +1,16 @@
 import 'jasmine'
 import request = require('request-promise')
 import { Client } from '../src/client'
-import { Deliveryman } from '../src/deliveryman'
 import { Order } from '../src/order'
 import { Restaurant } from '../src/restaurant'
 
 const baseUrl = 'http://localhost:3000'
 const restaurantUrl = `${baseUrl}/restaurant/`
 const clientUrl = `${baseUrl}/client/`
-const deliverymanUrl = `${baseUrl}/deliveryman/`
+const deliverersUrl = `${baseUrl}/deliverers/`
+const delivererLoginUrl = `${baseUrl}/deliverer/login/`
+const delivererLogoutUrl = `${baseUrl}/deliverer/logout/`
+const delivererDeleteUrl = `${baseUrl}/deliverer/delete/`
 const orderUrl = `${baseUrl}/order/`
 const ordersUrl = `${baseUrl}/orders/`
 const processUrl = `${baseUrl}/process/`
@@ -16,24 +18,77 @@ const userUrl = `${baseUrl}/user/`
 
 describe('O servidor', () => {
   let server: any
-  const restaurant = <Restaurant> {
+  const restaurant = <Restaurant>{
     id: 7,
     name: "Bob's Madalena",
     address: 'Av. Eng. Abdias de Carvalho, 365 - Ilha do Retiro, Recife - PE, 50750-257'
   }
-  const deliveryman1 = <Deliveryman> {
-    id: 2,
-    name: 'Gabriel Mendes',
-    password: 'mendao'
+
+  const deliverer1 = {
+    name: 'João da Silva',
+    email: 'js@email.com',
+    password: '1234',
+    phoneNumber: '(85)8682-7970',
+    cnh: '25769318041',
+    birth: new Date(4, 12, 1995),
+    zipcode: '69059-422',
+    street: 'Rua Tanna Holanda',
+    number: 92,
+    neighborhood: 'Jardim Arapongas',
+    city: 'Manaus',
+    state: 'AM',
+    complement: '342C'
   }
 
-  const deliveryman2 = <Deliveryman> {
-    id: 3,
-    name: 'Jose Cruz',
-    password: 'casa'
+  const deliverer1Update = {
+    name: 'João Chicó da Silva',
+    email: 'jcs@email.com',
+    password: 'newpassword',
+    phoneNumber: '(85)8682-7970',
+    cnh: '25769318041',
+    birth: new Date(4, 12, 1995),
+    zipcode: '69059-422',
+    street: 'Rua Tanna Holanda',
+    number: 92,
+    neighborhood: 'Jardim Arapongas',
+    city: 'Manaus',
+    state: 'AM',
+    complement: ''
   }
 
-  const client = <Client> {
+  const deliverer2 = {
+    name: 'Ágatha Santos Barbosa',
+    email: 'AgathaSantosBarbosa@rhyta.com',
+    password: '4539',
+    phoneNumber: '(11)9233-3706',
+    cnh: '59603923567',
+    birth: new Date(10, 26, 1988),
+    zipcode: '45810-000',
+    street: 'Ladeira do Aeroporto',
+    number: 317,
+    neighborhood: 'Aeroporto',
+    city: 'Porto Seguro',
+    state: 'BA',
+    complement: ''
+  }
+
+  const deliverer3 = {
+    name: 'João da Silva',
+    email: 'js@email.com',
+    password: '1234',
+    phoneNumber: '(85)8682-7970',
+    cnh: '',
+    birth: new Date(4, 12, 1995),
+    zipcode: '69059-422',
+    street: 'Rua Tanna Holanda',
+    number: 92,
+    neighborhood: 'Jardim Arapongas',
+    city: 'Manaus',
+    state: 'AM',
+    complement: '342C'
+  }
+
+  const client = <Client>{
     id: 4,
     name: 'Bezaliel Silva',
     address: 'Rua Visconde de Barbacena, 329 - Várzea, Recife - PE, 50740-445'
@@ -68,7 +123,12 @@ describe('O servidor', () => {
   })
 
   it('cadastra cliente', () => {
-    const options = { method: 'POST', uri: (clientUrl), body: client, json: true }
+    const options = { 
+      method: 'POST', 
+      uri: (clientUrl), 
+      body: client, 
+      json: true 
+    }
     return request(options)
       .then(body => {
         const res = <Client>(body)
@@ -78,30 +138,140 @@ describe('O servidor', () => {
       })
   })
 
-  it('cadastra entregador', () => {
-    const options = { method: 'POST', uri: (deliverymanUrl), body: deliveryman1, json: true }
+  it('Cadastra Entregador 1 com Sucesso', () => {
+    const options = { 
+      method: 'POST', 
+      uri: (deliverersUrl), 
+      body: deliverer1, 
+      json: true }
+
+    return request(options).catch( ({statusCode}) => {
+      expect(statusCode).toBe(201);
+    })   
+  })
+
+  it('Cadastra Entregador 2 com Sucesso', () => {
+    const options = { 
+      method: 'POST', 
+      uri: (deliverersUrl),
+      body: deliverer2, 
+      json: true }
+
+    return request(options).catch( ({statusCode}) => {
+      expect(statusCode).toBe(201);
+    })  
+  })
+
+  it('Nao Cadastra Entregador 1 Novamente', () => {
+    const options = { 
+      method: 'POST', 
+      uri: (deliverersUrl), 
+      body: deliverer2, 
+      json: true }
+
+    return request(options).catch( ({statusCode}) => {
+      expect(statusCode).toBe(409);
+    })  
+  })
+
+  it('Nao Cadastra Entregador Com Dados Obrigatórios Ausentes', () => {
+    const options = { 
+      method: 'POST', 
+      uri: (deliverersUrl), 
+      body: deliverer3, 
+      json: true }
+
+    return request(options).catch( ({statusCode}) => {
+      expect(statusCode).toBe(400);
+    })  
+  })
+
+  it('Requisita entregadores cadastrados', () => {
+    const options = {
+      method: 'GET',
+      uri: (deliverersUrl)
+    }
     return request(options)
       .then(body => {
-        const res = <Deliveryman>(body)
-        expect(res.id).toBe(deliveryman1.id)
-        expect(res.name).toBe(deliveryman1.name)
-        expect(res.wallet).toBe(0.0)
+        const res: string = body
+        
+        expect(res.includes(deliverer1.name))
+        expect(res.includes(deliverer2.name))
+        expect(!res.includes(deliverer3.name))
       })
   })
-  it('checar dados entregador', () => {
+
+  it('Nao Realiza Login do Entregador: Ausência de Email ou Senha', () => {
+    const options = { 
+      method: 'POST', 
+      uri: (delivererLoginUrl), 
+      body: {
+        email: deliverer1.email,
+        password: ''
+      }, 
+      json: true }
+
+    return request(options).catch( ({statusCode}) => {
+      expect(statusCode).toBe(400);
+    })  
+  })
+
+  it('Nao Realiza Login do Entregador: Email ou Senha Incorretos', () => {
+    const options = { 
+      method: 'POST', 
+      uri: (delivererLoginUrl), 
+      body: {
+        email: deliverer1.email,
+        password: 'senhaincorreta'
+      }, 
+      json: true }
+
+    return request(options).catch( ({statusCode}) => {
+      expect(statusCode).toBe(401);
+    })  
+  })
+
+  it('Realiza Login do Entregador 1 Com Sucesso', () => {
+    const options = { 
+      method: 'POST', 
+      uri: (delivererLoginUrl), 
+      body: {
+        email: deliverer1.email,
+        password: deliverer1.password
+      }, 
+      json: true }
+
+    return request(options).catch( ({statusCode}) => {
+      expect(statusCode).toBe(200);
+    })  
+  })
+
+  it('Atualiza dados do entregador', () => {
+    const options = { 
+      method: 'PUT', 
+      uri: deliverersUrl,
+      body: deliverer1Update, 
+      json: true }
+
+    return request(options).catch( ({statusCode}) => {
+      expect(statusCode).toBe(201);
+    })  
+  })
+
+  it('checa dados entregador', () => {
     const options = {
       method: 'GET',
       uri: (userUrl),
       auth: {
-        user: deliveryman1.id.toString(),
-        pass: deliveryman1.password
+        user: String(1),
+        pass: deliverer1Update.password
       },
       json: true
     }
     return request(options)
       .then(body => {
         const res = body
-        expect(res.name).toBe(deliveryman1.name)
+        expect(res.name).toBe(deliverer1Update.name)
         expect(res.wallet).toBe(0.0)
       })
   })
@@ -118,20 +288,20 @@ describe('O servidor', () => {
       })
   })
 
-  it('rejeitar pedido', () => {
+  it('rejeita pedido', () => {
     request.get(processUrl)
       .catch(({ statusCode }) => {
         expect(statusCode).toBe(200)
       })
 
     const uri = orderUrl + order1.id + '/reject'
-
+    
     const options: any = {
       method: 'GET',
       uri: (uri),
       auth: {
-        user: deliveryman1.id.toString(),
-        pass: deliveryman1.password
+        user: String(1),
+        pass: deliverer1Update.password
       }
     }
 
@@ -158,7 +328,7 @@ describe('O servidor', () => {
       })
   })
 
-  it('aceitar pedido id errado', () => {
+  it('aceita pedido id errado', () => {
     request.get(processUrl)
       .catch(({ statusCode }) => {
         expect(statusCode).toBe(200)
@@ -169,8 +339,8 @@ describe('O servidor', () => {
       method: 'GET',
       uri: (uri),
       auth: {
-        user: deliveryman1.id.toString(),
-        pass: deliveryman1.password
+        user: String(1),
+        pass: deliverer1Update.password
       }
     }
     return request(options)
@@ -179,7 +349,7 @@ describe('O servidor', () => {
       })
   })
 
-  it('aceitar pedido', () => {
+  it('aceita pedido', () => {
     request.get(processUrl)
       .catch(({ statusCode }) => {
         expect(statusCode).toBe(200)
@@ -190,8 +360,8 @@ describe('O servidor', () => {
       method: 'GET',
       uri: (uri),
       auth: {
-        user: deliveryman1.id.toString(),
-        pass: deliveryman1.password
+        user: String(1),
+        pass: deliverer1Update.password
       },
       json: true
     }
@@ -204,13 +374,13 @@ describe('O servidor', () => {
       })
   })
 
-  it('listar pedidos', () => {
+  it('lista pedidos', () => {
     const options = {
       method: 'GET',
       uri: (ordersUrl),
       auth: {
-        user: deliveryman1.id.toString(),
-        pass: deliveryman1.password
+        user: String(1),
+        pass: deliverer1Update.password
       },
       json: true
     }
@@ -225,7 +395,7 @@ describe('O servidor', () => {
     })
   })
 
-  it('coletar pedido', () => {
+  it('coleta pedido', () => {
     request.get(processUrl)
       .catch(({ statusCode }) => {
         expect(statusCode).toBe(200)
@@ -236,8 +406,8 @@ describe('O servidor', () => {
       method: 'GET',
       uri: (uri),
       auth: {
-        user: deliveryman1.id.toString(),
-        pass: deliveryman1.password
+        user: String(1),
+        pass: deliverer1Update.password
       },
       json: true
     }
@@ -250,7 +420,7 @@ describe('O servidor', () => {
       })
   })
 
-  it('finalizar pedido', () => {
+  it('finaliza pedido', () => {
     request.get(processUrl)
       .catch(({ statusCode }) => {
         expect(statusCode).toBe(200)
@@ -261,8 +431,8 @@ describe('O servidor', () => {
       method: 'GET',
       uri: (uri),
       auth: {
-        user: deliveryman1.id.toString(),
-        pass: deliveryman1.password
+        user: String(1),
+        pass: deliverer1Update.password
       },
       json: true
     }
@@ -275,36 +445,25 @@ describe('O servidor', () => {
       })
   })
 
-  it('checar dados entregador', () => {
+  it('checa dados entregador', () => {
     const options = {
       method: 'GET',
       uri: (userUrl),
       auth: {
-        user: deliveryman1.id.toString(),
-        pass: deliveryman1.password
+        user: String(1),
+        pass: deliverer1Update.password
       },
       json: true
     }
     return request(options)
       .then(body => {
         const res = body
-        expect(res.name).toBe(deliveryman1.name)
+        expect(res.name).toBe(deliverer1Update.name)
         expect(res.wallet).toBe(order2.payment)
       })
   })
 
-  it('cadastrar entregador 2', () => {
-    const options = { method: 'POST', uri: (deliverymanUrl), body: deliveryman2, json: true }
-    return request(options)
-      .then(body => {
-        const res = <Deliveryman>(body)
-        expect(res.id).toBe(deliveryman2.id)
-        expect(res.name).toBe(deliveryman2.name)
-        expect(res.wallet).toBe(0.0)
-      })
-  })
-
-  it('listar pedidos entregador 2 com senha errada', () => {
+  it('lista pedidos entregador 2 com senha errada', () => {
     request.get(processUrl)
       .catch(({ statusCode }) => {
         expect(statusCode).toBe(200)
@@ -314,7 +473,7 @@ describe('O servidor', () => {
       method: 'GET',
       uri: (ordersUrl),
       auth: {
-        user: deliveryman2.id.toString(),
+        user: String(2),
         pass: 'casarao'
       },
       json: true
@@ -335,8 +494,8 @@ describe('O servidor', () => {
       method: 'GET',
       uri: (ordersUrl),
       auth: {
-        user: deliveryman2.id.toString(),
-        pass: deliveryman2.password
+        user: String(2),
+        pass: deliverer2.password
       },
       json: true
     }
@@ -349,7 +508,7 @@ describe('O servidor', () => {
     })
   })
 
-  it('listar pedido rejeitado entregador 1', () => {
+  it('lista pedido rejeitado entregador 1', () => {
     request.get(processUrl)
       .catch(({ statusCode }) => {
         expect(statusCode).toBe(200)
@@ -359,8 +518,8 @@ describe('O servidor', () => {
       method: 'GET',
       uri: (orderUrl + order1.id),
       auth: {
-        user: deliveryman1.id.toString(),
-        pass: deliveryman1.password
+        user: String(1),
+        pass: deliverer1Update.password
       },
       json: true
     }
@@ -371,5 +530,42 @@ describe('O servidor', () => {
     }).catch(({ statusCode }) => {
       expect(statusCode).toBe(200)
     })
+  })
+
+  it('Realiza Logout do Entregador Com Sucesso', () => {
+    const options = { 
+      method: 'POST', 
+      uri: (delivererLogoutUrl)
+    }
+
+    return request(options).catch( ({statusCode}) => {
+      expect(statusCode).toBe(200);
+    })  
+  })
+
+  it('Realiza Login do Entregador 2 Com Sucesso', () => {
+    const options = { 
+      method: 'POST', 
+      uri: (delivererLoginUrl), 
+      body: {
+        email: deliverer2.email,
+        password: deliverer2.password
+      }, 
+      json: true }
+
+    return request(options).catch( ({statusCode}) => {
+      expect(statusCode).toBe(200);
+    })  
+  })
+
+  it('Deleta Conta do Entregador 2 Com Sucesso', () => {
+    const options = { 
+      method: 'PUT', 
+      uri: (delivererDeleteUrl) 
+    }
+
+    return request(options).catch( ({statusCode}) => {
+      expect(statusCode).toBe(200);
+    })  
   })
 })

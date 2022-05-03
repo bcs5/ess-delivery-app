@@ -39,8 +39,8 @@ defineSupportCode(function ({ Given, When, Then }) {
     lastResponse = response
   })
 
-  When(/^I create a deliveryman with name "([^\"]*)", password "([^\"]*)", id "(\d*)"$/, async (name, password, id) => {
-    const response = await serverClient.send(new Request("POST", "/deliveryman", {
+  When(/^I create a deliverer with name "([^\"]*)", password "([^\"]*)", id "(\d*)"$/, async (name, password, id) => {
+    const response = await serverClient.send(new Request("POST", "/deliverer", {
       "id": id,
       "name": name,
       "password": password
@@ -48,13 +48,13 @@ defineSupportCode(function ({ Given, When, Then }) {
     lastResponse = response
   })
 
-  When(/^I create a order from client "([^\"]*)", to restaurant "([^\"]*)", to deliveryman "([^\"]*)", payment "(\d*)", id "(\d*)"$/, async (client, restaurant, deliveryman, payment, id) => {
+  When(/^I create a order from client "([^\"]*)", to restaurant "([^\"]*)", to deliverer "([^\"]*)", payment "(\d*)", id "(\d*)"$/, async (client, restaurant, deliverer, payment, id) => {
     const response = await serverClient.send(new Request("POST", "/order", {
       "id": id,
       "clientId": client,
       "restaurantId": restaurant,
       "payment": payment,
-      "deliverymanId": deliveryman
+      "delivererId": deliverer
     }))
     lastResponse = response
   })
@@ -63,8 +63,8 @@ defineSupportCode(function ({ Given, When, Then }) {
     expect(lastResponse.status.toString()).to.equal(statusCode)
   })
 
-  Then(/^deliveryman wallet has "(\d*)"$/, async (wallet) => {
-    await expect(element(by.id(`deliveryman-wallet`)).getText()).to.eventually.equal(wallet);
+  Then(/^deliverer wallet has "(\d*)"$/, async (wallet) => {
+    await expect(element(by.id(`deliverer-wallet`)).getText()).to.eventually.equal(wallet);
   })
 
   Then(/^the order "(\d*)" appears on list with status "([^\"]*)"$/, async (orderId, status) => {
