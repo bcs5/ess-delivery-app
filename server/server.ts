@@ -207,6 +207,7 @@ app.put('/deliverers/', function (req: express.Request, res: express.Response) {
         });
       }
     } else {
+      
       res.status(400).send({
         failure: 'You need to be logged to update this data!'
       });
@@ -214,6 +215,7 @@ app.put('/deliverers/', function (req: express.Request, res: express.Response) {
 
   } catch (e) {
     if (e.message == 'auth failed') {
+      console.log(e.message)
       return res.status(401).send(e);
     }
     return res.status(500).send(e);
@@ -273,7 +275,7 @@ app.post('/deliverer/login/', function (req: express.Request, res: express.Respo
   try {
     let email = req.body.email;
     let password = req.body.password;
-
+    
     if (email == '' || password == '') {
       res.status(400).send({
         failure: 'Ops! You forgot to fill one or more fields!'
@@ -290,6 +292,7 @@ app.post('/deliverer/login/', function (req: express.Request, res: express.Respo
 
         console.log(`${delivererLogged.Name} is logged!`)
       } else {
+        console.log('E-mail ou senha incorretos!');
         res.status(401).send({
           failure: 'E-mail ou senha incorretos!'
         });
@@ -297,6 +300,7 @@ app.post('/deliverer/login/', function (req: express.Request, res: express.Respo
     }
   } catch (e) {
     if (e.message == 'auth failed') {
+      console.log(e.message);
       return res.status(401).send(e);
     }
     return res.status(500).send(e);

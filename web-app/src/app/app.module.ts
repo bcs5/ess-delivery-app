@@ -12,8 +12,9 @@ import { DeliveryComponent } from './pages/delivery/delivery.component';
 import { DeliveriesService } from './Interface/deliveries.service';
 import { ReviewComponent } from './pages/review/review.component';
 import { LoginComponent } from './pages/login/login.component';
+import { LoginService } from './Interface/login.service'
 import { HomeComponent } from './pages/home/home.component';
-import { DeliveryManService } from './Interface/delivery-man.service';
+import { DelivererService } from './Interface/deliverer.service';
 import { RegisterComponent } from './pages/register/register.component';
 import { TopPageComponent } from './pages/top-page/top-page.component';
 import { AboutComponent } from './pages/about/about.component';
@@ -68,7 +69,7 @@ import { AboutComponent } from './pages/about/about.component';
       }
     ])
   ],
-  providers: [DeliveriesService, DeliveryManService],
+  providers: [DeliveriesService, DelivererService, LoginService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
