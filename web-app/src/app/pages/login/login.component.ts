@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    this.message = "loginnnn"
+    this.router.navigate(['/'])
   }
   goToRegister(){
     this.router.navigate(['register'])

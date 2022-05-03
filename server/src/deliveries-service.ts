@@ -92,7 +92,7 @@ export class DeliveriesService {
     return delivery
   }
 
-  evaluateOrder (deliverymanId: number, orderId: number, rScore: number, cScore: number): Delivery {
+  /*evaluateOrder (deliverymanId: number, orderId: number, rScore: number, cScore: number): Delivery {
     const deliveryman = this.deliverersService.getById(deliverymanId)
     const delivery = deliveryman.getDeliveryById(orderId)
     if (delivery.deliveryman && delivery.deliveryman.id != deliverymanId) throw Error('invalid delivery for deliveryman')
@@ -100,7 +100,7 @@ export class DeliveriesService {
     delivery.order.client.addScore(cScore)
     delivery.evaluate()
     return delivery
-  }
+  }*/
 
   addOrder (orderId: number, deliverymanId?: number) {
     const order = this.ordersService.getById(orderId)
