@@ -94,7 +94,6 @@ app.get('/user/', function (req: express.Request, res: express.Response) {
 //Deliverers
 app.post('/deliverers/', function (req: express.Request, res: express.Response) {
   try {
-
     let name = req.body.name;
     let email = req.body.email;
     let password = req.body.password;
@@ -142,7 +141,7 @@ app.post('/deliverers/', function (req: express.Request, res: express.Response) 
           failure: "Oh no! Someone is already using this cnh or email, check if this is really your data or go to login!"
         });
       } else if (response == RegisterResponse.MISSING_DATA) {
-        res.status(400).send({
+        res.status(401).send({
           failure: 'Ops! You forgot to fill one or more fields!'
         })
       } else {
@@ -197,7 +196,7 @@ app.put('/deliverers/', function (req: express.Request, res: express.Response) {
       const delivererUpdated = deliverersService.updateInfos(deliverer, delivererLogged.ID);
 
       if (delivererUpdated) {
-        delivererLogged = deliverersService.Deliverers[0];
+        delivererLogged = delivererUpdated;
         res.status(201).send({
           success: 'Deliverer infos updated with success!'
         });
