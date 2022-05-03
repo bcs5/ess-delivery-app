@@ -1,6 +1,6 @@
 import { defineSupportCode } from 'cucumber';
-import { browser, $, element, ElementArrayFinder, by } from 'protractor';
-import { HttpClient, Request, sendRequest , Response} from 'selenium-webdriver/http';
+import { browser, by, element } from 'protractor';
+import { HttpClient, Request, Response} from 'selenium-webdriver/http';
 let chai = require('chai').use(require('chai-as-promised'));
 let expect = chai.expect;
 
@@ -63,14 +63,41 @@ defineSupportCode(function ({ Given, When, Then }) {
     expect(lastResponse.status.toString()).to.equal(statusCode)
   })
 
+  Then(/^deliveryman wallet has "(\d*)"$/, async (wallet) => {
+    await expect(element(by.id(`deliveryman-wallet`)).getText()).to.eventually.equal(wallet);
+  })
+
   Then(/^the order "(\d*)" appears on list with status "([^\"]*)"$/, async (orderId, status) => {
-    await sleep(100)
     await element(by.id("refresh")).click();
-    await sleep(500)
     expect((await element.all(by.id(`delivery-${orderId}-${status}`))).length).to.equal(1);
   })
 
   Then(/^I receive a response with field "([^\"]*)" value "([^\"]*)"$/, async (field, value) => {
     expect(JSON.parse(lastResponse.body)[field.toString()]).to.equal(value)
+  })
+
+  Then(/^I click to see details from order "(\d*)" with status "([^\"]*)"$/, async (orderId, status) => {
+    await element(by.id(`delivery-${orderId}-${status}`)).click()
+    await expect(browser.getTitle()).to.eventually.equal("Cin Delivery delivery " + orderId);
+  })
+
+  Then(/^I reject the order "(\d*)"$/, async (orderId) => {
+    await element(by.id(`rejected-${orderId}`)).click()
+  })
+
+  Then(/^I accept the order "(\d*)"$/, async (orderId) => {
+    await element(by.id(`accepted-${orderId}`)).click()
+  })
+
+  Then(/^I collect the order "(\d*)"$/, async (orderId) => {
+    await element(by.id(`collected-${orderId}`)).click()
+  })
+
+  Then(/^I finish the order "(\d*)"$/, async (orderId) => {
+    await element(by.id(`finished-${orderId}`)).click()
+  })
+
+  Then(/^the order has status "([^\"]*)"$/, async (status) => {
+    await expect(element(by.id(`delivery-status`)).getText()).to.eventually.equal(status)
   })
 })

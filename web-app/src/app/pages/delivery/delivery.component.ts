@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { NgModule } from '@angular/core';
+import { Title } from '@angular/platform-browser';
+
 import { ActivatedRoute, ParamMap , Router} from '@angular/router';
 import { DeliveriesService } from 'src/app/Interface/deliveries.service';
 import { Delivery } from 'src/app/Interface/delivery';
@@ -17,11 +18,12 @@ export class DeliveryComponent implements OnInit {
   id: number;
   seconds: number;
 
-   constructor(private route: ActivatedRoute, private deliveryService: DeliveriesService, private router: Router) {}
+  constructor(private route: ActivatedRoute, private deliveryService: DeliveriesService, private titleService: Title, private router: Router) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.id = +params.get('id');
+      this.titleService.setTitle("Cin Delivery delivery " + this.id)
       this.find();
     });
   }

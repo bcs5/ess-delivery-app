@@ -3,7 +3,7 @@
 
   <div class="information">
     <br>
-    <p><b># Delivery: </b> {{delivery.id}} {{delivery.status}}</p>
+    <p><b># Delivery: </b> {{delivery.id}} <span id="delivery-status">{{delivery.status}}</span></p>
     <p *ngIf="isPending() && seconds != 0"><b> Order expiration time:</b> {{seconds}} seconds</p>
     <p><b> Restaurant Name: </b> {{delivery.restaurant.name}}</p>
     <p><b> Restaurant Address: </b> {{delivery.restaurant.address}}</p>

@@ -4,8 +4,8 @@
 </div>
 
 <div *ngIf="user != null">
-   <h3>Wallet: R$ {{wallet}} </h3>
-   <h3>User: {{user}} </h3>
+   <h3>Wallet: R$ <span id="deliveryman-wallet">{{wallet}}</span></h3>
+   <h3>User: <span id="deliveryman-name">{{user}}</span></h3>
 </div>
 <button id="refresh" (click)="activeButton() "> Refresh Data </button>
 
@@ -28,11 +28,11 @@
    </thead>
    <tbody>
       <tr *ngFor="let delivery of deliveries">
-         <th scope="row" id="delivery-{{delivery.id}}-{{delivery.status}}">{{delivery.id}}</th>
+         <th scope="row">{{delivery.id}}</th>
          <td>{{delivery.restaurant}}</td>
          <td>R$  {{delivery.payment}}</td>
          <td>{{delivery.status}}</td>
-         <td><a [routerLink]="['/delivery', delivery.id]">details</a></td>
+         <td><a id="delivery-{{delivery.id}}-{{delivery.status}}" [routerLink]="['/delivery', delivery.id]">details</a></td>
       </tr>
    </tbody>
 </table>

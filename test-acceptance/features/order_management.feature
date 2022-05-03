@@ -1,6 +1,4 @@
-Feature: As system manager
-         I want to mock/create some entities
-         So I can interact with them later
+Feature: Order Management
   Scenario: create client
     Given server is up
     When I create a client with name "Bezaliel Silva", address "Rua Visconde de Barbacena, 329 - Varzea, Recife - PE", id "14"
@@ -21,9 +19,39 @@ Feature: As system manager
     Then I receive code "200"
     And I receive a response with field "id" value "1"
     And I receive a response with field "name" value "Jose Cruz"
+  Scenario: check wallet
+    Given I'm on the page "deliveries"
+    Then deliveryman wallet has "0"
   Scenario: create a order to deliveryman
-    Given server is up
     Given I'm on the page "deliveries"
     When I create a order from client "14", to restaurant "13", to deliveryman "1", payment "10", id "33"
     Then I receive code "200"
     And the order "33" appears on list with status "pending"
+  Scenario: reject order
+    Given I'm on the page "deliveries"
+    When I click to see details from order "33" with status "pending"
+    And I reject the order "33"
+    Then the order has status "rejected"
+  Scenario: create a second order to deliveryman
+    Given I'm on the page "deliveries"
+    When I create a order from client "14", to restaurant "13", to deliveryman "1", payment "23", id "22"
+    Then I receive code "200"
+    And the order "22" appears on list with status "pending"
+  Scenario: accept second order
+    Given I'm on the page "deliveries"
+    When I click to see details from order "22" with status "pending"
+    And I accept the order "22"
+    Then the order has status "in_progress"
+  Scenario: collect second order
+    Given I'm on the page "deliveries"
+    When I click to see details from order "22" with status "in_progress"
+    And I collect the order "22"
+    Then the order has status "collected"
+  Scenario: finish second order
+    Given I'm on the page "deliveries"
+    When I click to see details from order "22" with status "collected"
+    And I finish the order "22"
+    Then the order has status "finished"
+  Scenario: check wallet after finished order
+    Given I'm on the page "deliveries"
+    Then deliveryman wallet has "23"
