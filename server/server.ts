@@ -323,15 +323,16 @@ app.post('/deliverer/logout/', function (req: express.Request, res: express.Resp
 //Orders
 app.post('/order', function (req: express.Request, res: express.Response) {
   try {
-    const orderId = req.body.id;
-    const client = clientsService.getById(req.body.clientId);
-    const restaurant = restaurantService.getById(req.body.restaurantId);
-    const payment = Number(req.body.payment);
-    if (!client) throw Error('invalid client');
-    if (!restaurant) throw Error('invalid restaurant');
-    const order = ordersService.add(<Order>{ id: orderId, restaurant: restaurant, client: client, payment: payment });
-    deliveriesService.addOrder(order.id);
-    return res.status(201).send(order);
+    const orderId = req.body.id
+    const client = clientsService.getById(req.body.clientId)
+    const restaurant = restaurantService.getById(req.body.restaurantId)
+    const deliverer = req.body.delivererId
+    const payment = Number(req.body.payment)
+    if (!client) throw Error('invalid client')
+    if (!restaurant) throw Error('invalid restaurant')
+    const order = ordersService.add(<Order>{ id: orderId, restaurant: restaurant, client: client, payment: payment })
+    deliveriesService.addOrder(order.id, deliverer)
+    return res.send(order)
   } catch (e) {
     return res.status(500).send(e);
   }
@@ -380,6 +381,20 @@ app.get('/orders/', function (req: express.Request, res: express.Response) {
     }
     console.log(e)
     return res.status(500).send(e);
+  }
+})
+
+app.post('/evaluation', function (req, res) {
+  try {
+    const [username, password] = extractCredentials(req, res)
+    deliverersService.auth(Number(username), password)
+    const delivery = deliveriesService.evaluateOrder(Number(username), Number(req.body.id), Number(req.body.restaurantScore), Number(req.body.clientScore))
+    return res.send(deliveryMapper.toJson(delivery))
+  } catch (e) {
+    if (e.message == 'auth failed') {
+      return res.status(401).send(e)
+    }
+    return res.status(500).send(e)
   }
 })
 

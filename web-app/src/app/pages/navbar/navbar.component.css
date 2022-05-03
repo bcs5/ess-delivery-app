@@ -1,0 +1,20 @@
+div {
+    display: grid;
+    grid-template-columns: 12.5% 15% 15% 15% 15% 15% 12.5%;
+    padding-bottom: 2%;
+  }
+  
+a {
+    color: red;
+    font-size: large;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 3%;
+}
+
+#start {
+    grid-column-start: 2;
+}
+br {
+    border: solid 2px black;
+}

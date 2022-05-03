@@ -9,6 +9,7 @@ export class Delivery {
   createdAt: Date
   collectedAt: Date
   finishedAt: Date
+  evaluatedAt: Date
   status: Status
 
   constructor (delivery: Delivery) {
@@ -34,6 +35,11 @@ export class Delivery {
     this.deliverer.addBalance(this.order.payment)
   }
 
+  evaluate () {
+    this.status = Status.EVALUATED
+    this.evaluatedAt = new Date()
+  }
+
   reject () {
     this.status = Status.REJECTED
     this.blocklist.add(this.deliverer.ID)
@@ -51,7 +57,7 @@ export class Delivery {
   }
 
   inactive () {
-    return this.incomplete() || this.status == Status.FINISHED
+    return this.incomplete() || this.status == Status.FINISHED || this.status == Status.EVALUATED
   }
 
   incomplete () {

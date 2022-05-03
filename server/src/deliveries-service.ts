@@ -11,7 +11,7 @@ export class DeliveriesService {
   deliverersService: DeliverersService
 
   deliveries: Delivery[] = []
-  idCount = 0
+  idCount = 1
 
   constructor (ordersService: OrdersService, deliverersService: DeliverersService) {
     this.ordersService = ordersService
@@ -92,19 +92,28 @@ export class DeliveriesService {
     return delivery
   }
 
-  addOrder (orderId: number) {
-    const order = this.ordersService.getById(orderId)
-    const delivery = new Delivery(<Delivery>{ order: order, createdAt: new Date(0) })
-    this.deliveries.push(delivery)
+  evaluateOrder (deliverymanId: number, orderId: number, rScore: number, cScore: number): Delivery {
+    const deliveryman = this.deliverersService.getById(deliverymanId)
+    const delivery = deliveryman.getDeliveryById(orderId)
+    if (delivery.deliverer && delivery.deliverer.ID != deliverymanId) throw Error('invalid delivery for deliveryman')
+    delivery.order.restaurant.addScore(rScore)
+    delivery.order.client.addScore(cScore)
+    delivery.evaluate()
     return delivery
   }
 
-  addOrderDeliverer (orderId: number, delivererId: number) {
+  addOrder (orderId: number, deliverymanId?: number) {
     const order = this.ordersService.getById(orderId)
-    const deliverer = this.deliverersService.getById(delivererId)
-    const delivery = new Delivery(<Delivery>{ order: order, deliverer: deliverer })
+    const delivery = new Delivery(<Delivery>{ order: order, createdAt: new Date(0) })
+    if (deliverymanId) {
+      const deliveryman = this.deliverersService.getById(deliverymanId)
+      if (deliveryman?.isAvailable()) {
+        delivery.deliverer = deliveryman
+        delivery.createdAt = new Date()
+        deliveryman.addDelivery(delivery)
+      }
+    }
     this.deliveries.push(delivery)
-    deliverer.addDelivery(delivery)
     return delivery
   }
 

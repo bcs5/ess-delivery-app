@@ -125,6 +125,10 @@ export class Deliverer {
     this.deliveries.unshift(delivery);
   }
 
+  getDeliveryById (id: number): Delivery {
+    return this.deliveries.find(({ order }) => order.id == id)
+  }
+
   isAvailable(): boolean {
     return (this.deliveries.length == 0) || this.deliveries[0].inactive();
   }

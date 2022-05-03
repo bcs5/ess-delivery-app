@@ -26,4 +26,8 @@ export class ClientsService {
   getById (clientId: number): Client {
     return this.clients.find(({ id }) => id == clientId)
   }
+
+  addScore (clientId: number, value: number) {
+    return this.getById(clientId).addScore(value)
+  }
 }

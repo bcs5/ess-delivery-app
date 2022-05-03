@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NgModule } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 
 import { Delivery } from '../../Interface/delivery';
 import { DeliveriesService } from '../../Interface/deliveries.service';
@@ -13,7 +13,9 @@ import { DeliveryManService } from 'src/app/Interface/delivery-man.service';
    styleUrls: ['./deliveries.component.css']
 })
 export class DeliveriesComponent implements OnInit {
-   constructor(private deliveriesService: DeliveriesService, private deliveryManService: DeliveryManService) { }
+   constructor(private deliveriesService: DeliveriesService, private deliveryManService: DeliveryManService, titleService: Title) {
+     titleService.setTitle("Cin Delivery deliveries")
+   }
 
    user: string;
    wallet: number;

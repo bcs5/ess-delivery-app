@@ -1,21 +1,38 @@
-<div>
-   <h3>User: {{user}} </h3>
-   <h3>Wallet: {{wallet}} </h3>
+<div *ngIf="user == null">
+   <h2>You delivery is not logged in, please login to use the system.</h2>
+   <img class="rounded mx-auto d-block" src="assets/img/login.png" alt="login waiting">
 </div>
-<button (click)="activeButton()"> Refresh Data </button>
-<table>
-<tr *ngIf="deliveries.length > 0">
-   <th>Id</th>
-   <th>Restaurant</th>
-   <th>Payment</th>
-   <th>Status</th>
-   <th>details</th>
-</tr>
-<tr *ngFor="let delivery of deliveries">
-   <td id="delivery-{{delivery.id}">{{delivery.id}}</td>
-   <td>{{delivery.restaurant}}</td>
-   <td>{{delivery.payment}}</td>
-   <td>{{delivery.status}}</td>
-   <td><a [routerLink] = "['/delivery', delivery.id]">details</a></td>
-</tr>
+
+<div *ngIf="user != null">
+   <h3>Wallet: R$ <span id="deliveryman-wallet">{{wallet}}</span></h3>
+   <h3>User: <span id="deliveryman-name">{{user}}</span></h3>
+</div>
+<button id="refresh" (click)="activeButton() "> Refresh Data </button>
+
+<div *ngIf="user != null && deliveries.length == 0">
+   <br>
+   <h2 class="text-center">You do not have an order record, please wait for first order.</h2>
+   <br>
+   <img class="rounded mx-auto d-block" src="assets/img/wait.jpg" alt="waiting for deliveriy">
+</div>
+
+<table class="table">
+   <thead>
+      <tr *ngIf="deliveries.length > 0">
+         <th scope="col">Id</th>
+         <th scope="col">Restaurant</th>
+         <th scope="col">Payment</th>
+         <th scope="col">Status</th>
+         <th scope="col">details</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr *ngFor="let delivery of deliveries">
+         <th scope="row">{{delivery.id}}</th>
+         <td>{{delivery.restaurant}}</td>
+         <td>R$  {{delivery.payment}}</td>
+         <td>{{delivery.status}}</td>
+         <td><a id="delivery-{{delivery.id}}-{{delivery.status}}" [routerLink]="['/delivery', delivery.id]">details</a></td>
+      </tr>
+   </tbody>
 </table>

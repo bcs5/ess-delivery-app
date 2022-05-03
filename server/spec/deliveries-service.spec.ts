@@ -101,7 +101,7 @@ describe('O servico de pedidos', () => {
     const order = ordersService.add(order1)
     deliverersService.addDeliverer(deliverer1)
     let delivererID = deliverersService.Deliverers[0].ID
-    const result = deliveriesService.addOrderDeliverer(order.id, delivererID)
+    const result = deliveriesService.addOrder(order.id, delivererID)
 
     expect(deliveriesService.deliveries.length).toBe(1)
     expect(deliveriesService.deliveries[0]).toBe(result)
@@ -119,8 +119,8 @@ describe('O servico de pedidos', () => {
     let fstDeliverer = deliverersService.Deliverers[0]
     let sndDeliverer = deliverersService.Deliverers[1]
 
-    deliveriesService.addOrderDeliverer(orderA.id, fstDeliverer.ID)
-    deliveriesService.addOrderDeliverer(orderB.id, sndDeliverer.ID)
+    deliveriesService.addOrder(orderA.id, fstDeliverer.ID)
+    deliveriesService.addOrder(orderB.id, sndDeliverer.ID)
 
     const resultA = deliveriesService.byDeliverer(fstDeliverer.ID)
     const resultB = deliveriesService.byDeliverer(sndDeliverer.ID)
@@ -139,7 +139,7 @@ describe('O servico de pedidos', () => {
     deliverersService.addDeliverer(deliverer1)
     let deliverer = deliverersService.Deliverers[0]
     jasmine.clock().mockDate(TLED)
-    deliveriesService.addOrderDeliverer(order.id, deliverer.ID)
+    deliveriesService.addOrder(order.id, deliverer.ID)
     jasmine.clock().mockDate(NOW)
     deliveriesService.process()
 
@@ -156,7 +156,7 @@ describe('O servico de pedidos', () => {
       const order = ordersService.add(order1)
       deliverersService.addDeliverer(deliverer1)
       let deliverer = deliverersService.Deliverers[0]
-      deliveriesService.addOrderDeliverer(order.id, deliverer.ID)
+      deliveriesService.addOrder(order.id, deliverer.ID)
       deliveriesService.takeAction(deliverer.ID, order.id, Action.ACCEPT)
 
       const result = deliveriesService.byDeliverer(deliverer.ID)
@@ -173,7 +173,7 @@ describe('O servico de pedidos', () => {
       deliverersService.addDeliverer(deliverer1)
       let deliverer = deliverersService.Deliverers[0]
 
-      deliveriesService.addOrderDeliverer(order.id, deliverer.ID)
+      deliveriesService.addOrder(order.id, deliverer.ID)
       deliveriesService.takeAction(deliverer.ID, order.id, Action.REJECT)
 
       const result = deliveriesService.byDeliverer(deliverer.ID)[0]
@@ -190,7 +190,7 @@ describe('O servico de pedidos', () => {
       let deliverer = deliverersService.Deliverers[0]
 
       jasmine.clock().mockDate(FIVE_MIN_BEFORE)
-      deliveriesService.addOrderDeliverer(order.id, deliverer.ID)
+      deliveriesService.addOrder(order.id, deliverer.ID)
       deliveriesService.takeAction(deliverer.ID, order.id, Action.ACCEPT)
       jasmine.clock().mockDate(NOW)
       deliveriesService.takeAction(deliverer.ID, order.id, Action.COLLECT)
@@ -210,7 +210,7 @@ describe('O servico de pedidos', () => {
       let deliverer = deliverersService.Deliverers[0]
 
       jasmine.clock().mockDate(FIVE_MIN_BEFORE)
-      deliveriesService.addOrderDeliverer(order.id, deliverer.ID)
+      deliveriesService.addOrder(order.id, deliverer.ID)
       deliveriesService.takeAction(deliverer.ID, order.id, Action.ACCEPT)
       jasmine.clock().mockDate(ONE_MIN_BEFORE)
       deliveriesService.takeAction(deliverer.ID, order.id, Action.COLLECT)
