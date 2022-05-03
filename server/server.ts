@@ -3,8 +3,9 @@ import bodyParser = require('body-parser')
 
 import { RestaurantsService } from './src/restaurants-service'
 import { ClientsService } from './src/clients-service'
-import { Deliverer } from './src/deliverer'
+import { Address, Deliverer } from './src/deliverer'
 import { DeliverersService } from './src/deliverers-service'
+import { RegisterResponse } from './src/deliverer-register-response'
 import { OrdersService } from './src/orders-service'
 import { Order } from './src/order'
 import { DeliveriesService } from './src/deliveries-service'
@@ -47,7 +48,7 @@ const deliveryMapper: DeliveryMapper = new DeliveryMapper()
 
 var delivererLogged: Deliverer = null
 
-function extractCredentials (req: Request, res: Response): string[] {
+function extractCredentials(req: Request, res: Response): string[] {
   if (!req.headers.authorization || !req.headers.authorization.includes('Basic ')) {
     res.status(401).json({ message: 'Missing Authorization Header' }).send();
   }
@@ -90,26 +91,64 @@ app.get('/user/', function (req: express.Request, res: express.Response) {
   }
 })
 
-
 //Deliverers
-app.post('/deliverer/', function (req: express.Request, res: express.Response) {
-  try { 
-    let deliverer = <Deliverer>(req.body)
-    console.log(`${JSON.stringify(deliverer)}`)
+app.post('/deliverers/', function (req: express.Request, res: express.Response) {
+  try {
+
+    let name = req.body.name;
+    let email = req.body.email;
+    let password = req.body.password;
+    let phoneNumber = req.body.phoneNumber;
+    let cnh = req.body.cnh;
+    let birth = req.body.birth;
+    let zipcode = req.body.zipcode;
+    let street = req.body.street;
+    let number = req.body.number;
+    let neighborhood = req.body.neighborhood;
+    let city = req.body.city;
+    let state = req.body.state;
+    let complement = req.body.complement;
+
+    let deliverer = new Deliverer(
+      name,
+      email,
+      password,
+      phoneNumber,
+      cnh,
+      new Date(birth),
+      new Address(
+        zipcode,
+        street,
+        number,
+        neighborhood,
+        city,
+        state,
+        complement
+      )
+    );
+
     if (!deliverer) {
       res.status(400).send({
-        failure: 'Ops! You forgot to fill one or more fields (just \'complemento\' is not mandatory)'
+        failure: 'Ops! There is something wrong with the json format you sent!)'
       });
     } else {
-      let success = deliverersService.addDeliverer(deliverer)
-      if (success) {
+      let response = deliverersService.addDeliverer(deliverer);
+      if (response == RegisterResponse.REGISTERED) {
         res.status(201).send({
           success: "Welcome to CinEntregas!!"
         });
-      } else {
+      } else if (response == RegisterResponse.EXISTS) {
         res.status(409).send({
           failure: "Oh no! Someone is already using this cnh or email, check if this is really your data or go to login!"
         });
+      } else if (response == RegisterResponse.MISSING_DATA) {
+        res.status(400).send({
+          failure: 'Ops! You forgot to fill one or more fields!'
+        })
+      } else {
+        res.status(500).send({
+          failure: 'Ops! We could not register you, something wrong is not right!'
+        })
       }
     }
   } catch (e) {
@@ -120,26 +159,108 @@ app.post('/deliverer/', function (req: express.Request, res: express.Response) {
   }
 })
 
-app.put('/deliverer/', function (req: express.Request, res: express.Response) {
-  try { 
-    if (delivererLogged != null){  const deliverer: Deliverer = <Deliverer> req.body;
+app.put('/deliverers/', function (req: express.Request, res: express.Response) {
+  try {
+    if (delivererLogged != null) {
+      let name = req.body.name;
+      let email = req.body.email;
+      let password = req.body.password;
+      let phoneNumber = req.body.phoneNumber;
+      let cnh = req.body.cnh;
+      let birth = req.body.birth;
+      let zipcode = req.body.zipcode;
+      let street = req.body.street;
+      let number = req.body.number;
+      let neighborhood = req.body.neighborhood;
+      let city = req.body.city;
+      let state = req.body.state;
+      let complement = req.body.complement;
+  
+      let deliverer = new Deliverer(
+        name,
+        email,
+        password,
+        phoneNumber,
+        cnh,
+        new Date(birth),
+        new Address(
+          zipcode,
+          street,
+          number,
+          neighborhood,
+          city,
+          state,
+          complement
+        )
+      );
+
       const delivererUpdated = deliverersService.updateInfos(deliverer, delivererLogged.ID);
 
       if (delivererUpdated) {
-        res.status(404).send({
+        delivererLogged = deliverersService.Deliverers[0];
+        res.status(201).send({
           success: 'Deliverer infos updated with success!'
         });
       } else {
-        res.status(404).send({
+        res.status(500).send({
           failure: 'Sorry but we could not update your infos!'
         });
       }
     } else {
       res.status(400).send({
-        failure: 'Você precisa estar logado na sua conta para que seja possível a atualização dos dados!'
+        failure: 'You need to be logged to update this data!'
       });
     }
-    
+
+  } catch (e) {
+    if (e.message == 'auth failed') {
+      return res.status(401).send(e);
+    }
+    return res.status(500).send(e);
+  }
+})
+
+app.put('/deliverer/delete/', function (req: express.Request, res: express.Response) {
+  try {
+    if (delivererLogged != null) {
+      const delivererDeleted = deliverersService.deleteUser(delivererLogged.ID);
+
+      if (delivererDeleted) {
+        delivererLogged = null;
+        res.status(201).send({
+          success: 'Deliverer deleted with success!'
+        });
+      } else {
+        res.status(500).send({
+          failure: 'Sorry but we could not delete your user!'
+        });
+      }
+    } else {
+      res.status(400).send({
+        failure: 'You need to be logged to delete this user!'
+      });
+    }
+
+  } catch (e) {
+    if (e.message == 'auth failed') {
+      return res.status(401).send(e);
+    }
+    return res.status(500).send(e);
+  }
+})
+
+app.get('/deliverers/', function (req: express.Request, res: express.Response) {
+  try {
+    let deliverers = deliverersService.Deliverers;
+    if (deliverers == []) {
+      res.status(404).send({
+        failure: 'Ops! I think we need to have some deliverers registered first!'
+      });
+    } else {
+      let stringfyArray = JSON.stringify(Array.from(deliverers));
+      
+      res.status(200).send(stringfyArray);
+    }
   } catch (e) {
     if (e.message == 'auth failed') {
       return res.status(401).send(e);
@@ -149,20 +270,20 @@ app.put('/deliverer/', function (req: express.Request, res: express.Response) {
 })
 
 app.post('/deliverer/login/', function (req: express.Request, res: express.Response) {
-  try { 
+  try {
     let email = req.body.email;
     let password = req.body.password;
-    
-    if(email == '' || password == '') {
+
+    if (email == '' || password == '') {
       res.status(400).send({
         failure: 'Ops! You forgot to fill one or more fields!'
       });
     } else {
       let delivererIsLogged = deliverersService.validateCredentials(email, password);
 
-      if(delivererIsLogged) {
+      if (delivererIsLogged) {
         delivererLogged = delivererIsLogged;
-        
+
         res.status(200).send({
           success: "Login realizado com sucesso!"
         });
@@ -183,31 +304,15 @@ app.post('/deliverer/login/', function (req: express.Request, res: express.Respo
 })
 
 app.post('/deliverer/logout/', function (req: express.Request, res: express.Response) {
-  try { 
+  try {
     delivererLogged = null;
-    
+
     res.status(200).send({
       success: 'Deliverer logged out!'
     });
 
     console.log(`${delivererLogged} is logged!`)
   } catch (e) {
-    if (e.message == 'auth failed') {
-      return res.status(401).send(e);
-    }
-    return res.status(500).send(e);
-  }
-})
-
-app.get('/deliverers/', function (req: express.Request, res: express.Response) {
-   try { 
-     let deliverers = deliverersService.Deliverers;
-     if (deliverers == []) {
-      res.status(404).send('Ops! I think we need to have some deliverers registered first!');
-     } else {
-      res.status(200).send(JSON.stringify(Array.from(deliverers)));
-     }
-   } catch (e) {
     if (e.message == 'auth failed') {
       return res.status(401).send(e);
     }
@@ -283,7 +388,7 @@ app.get('/process', function (req: express.Request, res: express.Response) {
   return res.status(200).send();
 })
 
-function closeServer (): void {
+function closeServer(): void {
   clearInterval(interval);
   server.close();
 }

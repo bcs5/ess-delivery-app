@@ -1,4 +1,5 @@
-import { Deliverer, Address } from './deliverer'
+import { Deliverer } from './deliverer'
+import { RegisterResponse } from './deliverer-register-response'
 
 export class DeliverersService {
   private deliverers: Deliverer[] = [];
@@ -22,7 +23,7 @@ export class DeliverersService {
     return this.deliverers;
   }
 
-  addDeliverer (deliverer: Deliverer): boolean {
+  addDeliverer (deliverer: Deliverer): RegisterResponse {
     let name = deliverer.Name;
     let email = deliverer.Email;
     let password = deliverer.Password;
@@ -33,25 +34,23 @@ export class DeliverersService {
     let zipcode = address.zipcode;
     let street = address.street;
     let number = address.number;
-    let complement = address.complement;
     let neighborhood = address.neighborhood;
     let city = address.city;
     let state = address.state;
 
-    if (this.isNew(deliverer.CNH, deliverer.Email)) {
-      let deliverer = new Deliverer(name, email, password, phoneNumber, cnh, birth, address);
-      
-      this.setId(deliverer);
-      this.deliverers.push(deliverer);
-      return true;
+    if (!(name && email && password && phoneNumber && cnh && birth && zipcode && street && number && neighborhood && city && state)) {
+      return RegisterResponse.MISSING_DATA;
     } else {
-      return false;
+      if (this.isNew(deliverer.CNH, deliverer.Email)) {
+        let deliverer = new Deliverer(name, email, password, phoneNumber, cnh, birth, address);
+        
+        this.setId(deliverer);
+        this.deliverers.push(deliverer);
+        return RegisterResponse.REGISTERED;
+      } else {
+        return RegisterResponse.EXISTS;
+      }
     }
-  }
-
-  createAddress(zipcode: string, street: string, number: number, complement: string, neighborhood: string, city: string, state: string): Address {
-    let address = new Address(zipcode, street, number, neighborhood, city, state, complement)
-    return address
   }
 
   validateCredentials (email: string, password: string): Deliverer {
@@ -66,15 +65,24 @@ export class DeliverersService {
 
   updateInfos(delivererUpdate: Deliverer, loggedId: number): boolean {
     let delivererToUpdate = this.getById(loggedId);
-    console.log('got deliverer');
-    console.log(JSON.stringify(delivererToUpdate));
     let index = this.deliverers.indexOf(delivererToUpdate);
-    console.log(`got index: ${index}`);
-    console.log(JSON.stringify(this.deliverers[index]));
     if (index >= 0) {
       this.deliverers[index] = delivererUpdate;
+      this.deliverers[index].ID = loggedId;
       console.log('updated');
-      console.log(JSON.stringify(this.deliverers[index]));
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  deleteUser(loggedId: number): boolean {
+    let delivererToDelete = this.getById(loggedId);
+    let index = this.deliverers.indexOf(delivererToDelete);
+    if (index >= 0) {
+      let removed = this.deliverers.splice(index, 1);
+      console.log(`${removed[0].Name} was removed with success!`)
+      console.log('deleted');
       return true;
     } else {
       return false;
@@ -86,11 +94,16 @@ export class DeliverersService {
   }
 
   getById(delivererId: number): Deliverer {
-    return this.deliverers.find(({ ID }) => ID == delivererId);
+    let deliverer = this.deliverers.find(({ ID }) => ID == delivererId);
+    
+    if (deliverer) {
+      return deliverer;
+    }
+    return null;
   }
 
-  auth(username: number, password: string) {
-    const stored = this.getById(username).Password;
+  auth(ID: number, password: string) {
+    const stored = this.getById(ID).Password;
     if ((stored || '') != password) {
       throw Error('auth failed')
     }
