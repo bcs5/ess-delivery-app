@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from "@angular/forms";
 import { Router } from '@angular/router';
-import { LoginService } from 'src/app/Interface/login.service';
+import { LoginService } from '../../Interface/login.service';
 
 @Component({
   selector: 'app-login',
@@ -26,8 +26,8 @@ export class LoginComponent {
 
   login() {
     let email = this.formLogin.get('email').value;
-    console.log(`here`)
     let password = this.formLogin.get('password').value;
+    
     this.loginService.login(email, password)
     .then(res => {
       alert(res.success)
@@ -37,6 +37,7 @@ export class LoginComponent {
       alert(res)
     })
   }
+  
   goToRegister(){
     this.router.navigate(['register'])
   }

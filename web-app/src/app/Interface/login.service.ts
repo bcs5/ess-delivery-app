@@ -1,8 +1,5 @@
 import { Injectable }    from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { retry, map } from 'rxjs/operators';
-import { emit } from 'process';
 
 @Injectable()
 export class LoginService {
@@ -12,12 +9,12 @@ export class LoginService {
     constructor(private http: HttpClient) {}
 
     login(email: string, password: string) {
-        let delivererCredentials = {
+        let body = {
             'email': email,
             'password': password
         };
 
-        return this.http.post<any>(this.taURL, delivererCredentials)
+        return this.http.post<any>(this.taURL, body)
         .toPromise()
         .then(res => {
             return res

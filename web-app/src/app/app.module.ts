@@ -16,6 +16,7 @@ import { LoginService } from './Interface/login.service'
 import { HomeComponent } from './pages/home/home.component';
 import { DelivererService } from './Interface/deliverer.service';
 import { RegisterComponent } from './pages/register/register.component';
+import { RegisterService } from './Interface/register.service';
 import { TopPageComponent } from './pages/top-page/top-page.component';
 import { AboutComponent } from './pages/about/about.component';
 
@@ -69,7 +70,7 @@ import { AboutComponent } from './pages/about/about.component';
       }
     ])
   ],
-  providers: [DeliveriesService, DelivererService, LoginService],
+  providers: [DeliveriesService, DelivererService, LoginService, RegisterService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
