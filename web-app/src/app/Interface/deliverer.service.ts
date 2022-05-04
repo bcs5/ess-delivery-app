@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
-export class DeliveryManService {
+export class DelivererService {
 
   //lembrete btoa('1:senha') vai ser substituido futuramente.
   private headers = new HttpHeaders({

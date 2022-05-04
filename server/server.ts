@@ -91,21 +91,21 @@ app.get('/user/', function (req: express.Request, res: express.Response) {
 // Deliverers
 app.post('/deliverers/', function (req: express.Request, res: express.Response) {
   try {
-    const name = req.body.name
-    const email = req.body.email
-    const password = req.body.password
-    const phoneNumber = req.body.phoneNumber
-    const cnh = req.body.cnh
-    const birth = req.body.birth
-    const zipcode = req.body.zipcode
-    const street = req.body.street
-    const number = req.body.number
-    const neighborhood = req.body.neighborhood
-    const city = req.body.city
-    const state = req.body.state
-    const complement = req.body.complement
+    let name = req.body.name;
+    let email = req.body.email;
+    let password = req.body.password;
+    let phoneNumber = req.body.phoneNumber;
+    let cnh = req.body.cnh;
+    let birth = req.body.birth;
+    let zipcode = req.body.zipcode;
+    let street = req.body.street;
+    let number = req.body.number;
+    let neighborhood = req.body.neighborhood;
+    let city = req.body.city;
+    let state = req.body.state;
+    let complement = req.body.complement;
 
-    const deliverer = new Deliverer(
+    let deliverer = new Deliverer(
       name,
       email,
       password,
@@ -138,7 +138,7 @@ app.post('/deliverers/', function (req: express.Request, res: express.Response) 
           failure: 'Oh no! Someone is already using this cnh or email, check if this is really your data or go to login!'
         })
       } else if (response == RegisterResponse.MISSING_DATA) {
-        res.status(400).send({
+        res.status(401).send({
           failure: 'Ops! You forgot to fill one or more fields!'
         })
       } else {
@@ -155,24 +155,24 @@ app.post('/deliverers/', function (req: express.Request, res: express.Response) 
   }
 })
 
-app.put('/deliverers/', function (req: express.Request, res: express.Response) {
+app.put('/deliverer/logged/', function (req: express.Request, res: express.Response) {
   try {
-    if (delivererLogged != null) {
-      const name = req.body.name
-      const email = req.body.email
-      const password = req.body.password
-      const phoneNumber = req.body.phoneNumber
-      const cnh = req.body.cnh
-      const birth = req.body.birth
-      const zipcode = req.body.zipcode
-      const street = req.body.street
-      const number = req.body.number
-      const neighborhood = req.body.neighborhood
-      const city = req.body.city
-      const state = req.body.state
-      const complement = req.body.complement
-
-      const deliverer = new Deliverer(
+    if (delivererLogged) {
+      let name = req.body.name;
+      let email = req.body.email;
+      let password = req.body.password;
+      let phoneNumber = req.body.phoneNumber;
+      let cnh = req.body.cnh;
+      let birth = req.body.birth;
+      let zipcode = req.body.zipcode;
+      let street = req.body.street;
+      let number = req.body.number;
+      let neighborhood = req.body.neighborhood;
+      let city = req.body.city;
+      let state = req.body.state;
+      let complement = req.body.complement;
+  
+      let deliverer = new Deliverer(
         name,
         email,
         password,
@@ -193,7 +193,7 @@ app.put('/deliverers/', function (req: express.Request, res: express.Response) {
       const delivererUpdated = deliverersService.updateInfos(deliverer, delivererLogged.ID)
 
       if (delivererUpdated) {
-        delivererLogged = deliverersService.Deliverers[0]
+        delivererLogged = delivererUpdated;
         res.status(201).send({
           success: 'Deliverer infos updated with success!'
         })
@@ -202,14 +202,15 @@ app.put('/deliverers/', function (req: express.Request, res: express.Response) {
           failure: 'Sorry but we could not update your infos!'
         })
       }
-    } else {
+    } else {    
       res.status(400).send({
         failure: 'You need to be logged to update this data!'
       })
     }
   } catch (e) {
     if (e.message == 'auth failed') {
-      return res.status(401).send(e)
+      console.log(e.message)
+      return res.status(401).send(e);
     }
     return res.status(500).send(e)
   }
@@ -265,9 +266,9 @@ app.get('/deliverers/', function (req: express.Request, res: express.Response) {
 
 app.post('/deliverer/login/', function (req: express.Request, res: express.Response) {
   try {
-    const email = req.body.email
-    const password = req.body.password
-
+    let email = req.body.email;
+    let password = req.body.password;
+    
     if (email == '' || password == '') {
       res.status(400).send({
         failure: 'Ops! You forgot to fill one or more fields!'
@@ -282,6 +283,7 @@ app.post('/deliverer/login/', function (req: express.Request, res: express.Respo
           success: 'Login realizado com sucesso!'
         })
       } else {
+        console.log('E-mail ou senha incorretos!');
         res.status(401).send({
           failure: 'E-mail ou senha incorretos!'
         })
@@ -289,7 +291,8 @@ app.post('/deliverer/login/', function (req: express.Request, res: express.Respo
     }
   } catch (e) {
     if (e.message == 'auth failed') {
-      return res.status(401).send(e)
+      console.log(e.message);
+      return res.status(401).send(e);
     }
     return res.status(500).send(e)
   }
@@ -310,7 +313,19 @@ app.post('/deliverer/logout/', function (req: express.Request, res: express.Resp
   }
 })
 
-// Orders
+app.get('/deliverer/logged/', function (req: express.Request, res: express.Response) {
+  try {
+    console.log(`Got ${delivererLogged.Name}\'s infos`);
+    res.status(200).send(JSON.stringify(delivererLogged));
+  } catch (e) {
+    if (e.message == 'auth failed') {
+      return res.status(401).send(e);
+    }
+    return res.status(500).send(e);
+  }
+})
+
+//Orders
 app.post('/order', function (req: express.Request, res: express.Response) {
   try {
     const orderId = req.body.id

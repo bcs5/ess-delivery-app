@@ -1,0 +1,90 @@
+<section class="userAccountView col-md-6 offset-md-3">
+    <div class="container justify-content-center align-items-center">
+        <h1 class="registerTitle">Informações pessoais</h1>
+
+        <form [formGroup]="form" (ngSubmit)="update()">
+            <div class="form-group">
+                <label for="name">Nome Completo </label>
+                <input id="name" type="text" class="form-control" formControlName="name">
+            </div>
+            <div class="form-group">
+                <label for="cnh">CNH </label>
+                <input id="cnh" type="text" class="form-control" formControlName="cnh">
+            </div>
+            <div class="form-group">
+                <label for="birthDate">Data de Nascimento </label>
+                <input id="birthDate" type="date" class="form-control" formControlName="birthDate">
+            </div>
+            <div class="form-group">
+                <label for="phone">Telefone </label>
+                <input id="phone" type="text" class="form-control" formControlName="phone">
+            </div>
+            <br>
+
+            <h6 class="sectionTitle">Dados da conta</h6>
+
+            <div class="form-group">
+                <label for="email">Email </label>
+                <input id="email" type="email" class="form-control" formControlName="email" equiredminlength="5">
+            </div>
+            <div class="form-group">
+                <label for="password">Senha </label>
+                <input id="password" type="password" class="form-control" formControlName="password"
+                    equiredminlength="8">
+            </div>
+            <div class="form-group">
+                <label for="password-confirmation">Confirmar senha </label>
+                <input id="password-confirmation" type="password" class="form-control"
+                    formControlName="passwordConfirmation" equiredminlength="8">
+            </div>
+
+            <br>
+
+            <h6 class="sectionTitle">Endereço</h6>
+
+            <div class="form-group">
+                <label for="cep">CEP </label>
+                <input id="cep" type="text" class="form-control" formControlName="cep">
+            </div>
+            <div class="form-group">
+                <label for="street">Rua </label>
+                <input id="street" type="text" class="form-control" formControlName="street">
+            </div>
+            <div class="form-group">
+                <label for="number">Numero </label>
+                <input id="number" type="number" class="form-control" formControlName="number">
+            </div>
+            <div class="form-group">
+                <label for="complement">Complemento </label>
+                <input id="complement" type="text" class="form-control" formControlName="complement">
+            </div>
+            <div class="form-group">
+                <label for="district">Bairro </label>
+                <input id="district" type="text" class="form-control" formControlName="district">
+            </div>
+            <div class="form-group">
+                <label for="city">Cidade </label>
+                <input id="city" type="text" class="form-control" formControlName="city">
+            </div>
+            <div class="form-group">
+                <label for="state">Estado </label>
+                <input id="state" type="text" class="form-control" formControlName="state">
+            </div>
+            <div class="form-group">
+                <button class="btn btn btn-outline-danger" type="submit" (click)="goToHome()">Cancelar</button>
+                <button class="btn btn-danger" type="submit" [disabled]="!form.valid">Atualizar dados</button>
+            </div>
+            <div class="form-group">
+                <h3>Deletar conta</h3>
+                <p>Se você escolher deletar sua conta, essa ação será irreversível. Por favor certifique-se da sua
+                    decisão</p>
+                <button class="btn btn btn-warning" type="submit" (click)="deleteAccount()">Deletar conta</button>
+            </div>
+
+
+
+        </form>
+
+    </div>
+
+</section>

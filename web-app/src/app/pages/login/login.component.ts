@@ -1,15 +1,45 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, Validators } from "@angular/forms";
+import { Router } from '@angular/router';
+import { LoginService } from '../../Interface/login.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
+ 
+  formLogin;
+  message;
 
-  constructor() { }
+  constructor(private formBuilder:FormBuilder, private router: Router, private loginService: LoginService) {
+      this.buildForm();
+  }
 
-  ngOnInit() {
+  buildForm(){
+      this.formLogin = this.formBuilder.group({
+          email: ['', Validators.required],
+          password: ['', Validators.required],
+      });
+  }
+
+  login() {
+    let email = this.formLogin.get('email').value;
+    let password = this.formLogin.get('password').value;
+    
+    this.loginService.login(email, password)
+    .then(res => {
+      alert(res.success)
+      // this.router.navigate(['/"minhaConta"'])
+    })
+    .catch(res => {
+      alert(res)
+    })
+  }
+  
+  goToRegister(){
+    this.router.navigate(['register'])
   }
 
 }
