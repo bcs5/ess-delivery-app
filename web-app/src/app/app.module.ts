@@ -19,6 +19,7 @@ import { RegisterComponent } from './pages/register/register.component';
 import { RegisterService } from './Interface/register.service';
 import { TopPageComponent } from './pages/top-page/top-page.component';
 import { AboutComponent } from './pages/about/about.component';
+import { UserAccountComponent } from './pages/user-account/user-account.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { AboutComponent } from './pages/about/about.component';
     RegisterComponent,
     TopPageComponent,
     AboutComponent,
+    UserAccountComponent,
   ],
   imports: [
     BrowserModule,
@@ -67,6 +69,10 @@ import { AboutComponent } from './pages/about/about.component';
       {
         path: 'register',
         component: RegisterComponent
+      },
+      {
+        path: 'user-account',
+        component: UserAccountComponent
       }
     ])
   ],
