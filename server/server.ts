@@ -138,7 +138,7 @@ app.post('/deliverers/', function (req: express.Request, res: express.Response) 
           failure: 'Oh no! Someone is already using this cnh or email, check if this is really your data or go to login!'
         })
       } else if (response == RegisterResponse.MISSING_DATA) {
-        res.status(401).send({
+        res.status(400).send({
           failure: 'Ops! You forgot to fill one or more fields!'
         })
       } else {
