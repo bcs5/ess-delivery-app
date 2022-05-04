@@ -61,3 +61,28 @@ Feature: Order Management
   Scenario: check wallet after finished order
     Given I'm on the page "deliveries"
     Then deliverer wallet has "23"
+  Scenario: create a third order to deliverer
+    Given I'm on the page "deliveries"
+    When I create a order from client "1", to restaurant "1", to deliverer "1", payment "12", id "29"
+    Then I receive code "200"
+    And the order "29" appears on list with status "pending"
+  Scenario: accept third order
+    Given I'm on the page "deliveries"
+    When I click to see details from order "29" with status "pending"
+    And I accept the order "29"
+    Then the order has status "in_progress"
+  Scenario: collect third order
+    Given I'm on the page "deliveries"
+    When I click to see details from order "29" with status "in_progress"
+    And I collect the order "29"
+    Then the order has status "collected"
+  Scenario: finish third order
+    Given I'm on the page "deliveries"
+    When I click to see details from order "29" with status "collected"
+    And I finish the order "29"
+    Then the order has status "finished"
+  Scenario: evaluate third order on review page
+    Given I'm on the page "reviews"
+    When I click to evaluate order "29" with status "finished"
+    And I evaluate the order "29" with value "0" to client and "0" to restarant
+    Then the order has status "evaluated"

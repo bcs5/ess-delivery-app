@@ -26,7 +26,7 @@ defineSupportCode(function ({ Given, When, Then }) {
 
   Given(/^I'm on the page "([^\"]*)"$/, async (name) => {
     await browser.get("http://localhost:4200/"+name);
-    await expect(browser.getTitle()).to.eventually.equal("Cin Delivery "+name);
+    await expect(browser.getTitle()).to.eventually.equal("Cin Delivery deliveries");
   })
 
   When(/^I create a restaurant with name "([^\"]*)", address "([^\"]*)"$/, async (name, address) => {
@@ -89,6 +89,11 @@ defineSupportCode(function ({ Given, When, Then }) {
   })
 
   Then(/^I click to see details from order "(\d*)" with status "([^\"]*)"$/, async (orderId, status) => {
+    await element(by.id(`delivery-${orderId}-${status}`)).click()
+    await expect(browser.getTitle()).to.eventually.equal("Cin Delivery delivery " + orderId);
+  })
+
+  Then(/^I click to evaluate order "(\d*)" with status "([^\"]*)"$/, async (orderId, status) => {
     await element(by.id(`delivery-${orderId}-${status}`)).click()
     await expect(browser.getTitle()).to.eventually.equal("Cin Delivery delivery " + orderId);
   })
