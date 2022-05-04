@@ -1,7 +1,7 @@
-import { Order } from './order'
-import { Delivery } from './delivery'
-import { Client } from './client'
-import { Restaurant } from './restaurant'
+import { Order } from '../model/order'
+import { Delivery } from '../model/delivery'
+import { Client } from '../model/client'
+import { Restaurant } from '../model/restaurant'
 
 export class DeliveryMapper {
   toJsonMinimal (delivery: Delivery) {

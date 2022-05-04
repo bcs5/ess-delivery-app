@@ -1,14 +1,14 @@
 import express = require('express')
 import bodyParser = require('body-parser')
-import { RestaurantsService } from './src/restaurants-service'
-import { ClientsService } from './src/clients-service'
-import { DeliverersService } from './src/deliverers-service'
-import { OrdersService } from './src/orders-service'
-import { Order } from './src/order'
-import { DeliveriesService } from './src/deliveries-service'
+import { RestaurantsService } from './src/service/restaurants-service'
+import { ClientsService } from './src/service/clients-service'
+import { DeliverersService } from './src/service/deliverers-service'
+import { OrdersService } from './src/service/orders-service'
+import { Order } from './src/model/order'
+import { DeliveriesService } from './src/service/deliveries-service'
 import { Request, Response } from 'express-serve-static-core'
-import { DeliveryMapper } from './src/delivery-mapper'
-import { Action } from './src/delivery-action'
+import { DeliveryMapper } from './src/mapper/delivery-mapper'
+import { Action } from './src/model/delivery-action'
 
 const app = express()
 

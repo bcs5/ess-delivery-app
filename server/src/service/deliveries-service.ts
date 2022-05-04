@@ -1,7 +1,7 @@
-import { Delivery } from './delivery'
-import { Action } from './delivery-action'
-import { Status } from './delivery-status'
-import { Deliverer } from './deliverer'
+import { Delivery } from '../model/delivery'
+import { Action } from '../model/delivery-action'
+import { Status } from '../model/delivery-status'
+import { Deliverer } from '../model/deliverer'
 import { DeliverersService } from './deliverers-service'
 import { OrdersService } from './orders-service'
 

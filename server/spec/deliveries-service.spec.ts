@@ -1,12 +1,12 @@
 import 'jasmine'
-import { Client } from '../src/client'
-import { Deliverer } from '../src/deliverer'
-import { Order } from '../src/order'
-import { DeliveriesService } from '../src/deliveries-service'
-import { Restaurant } from '../src/restaurant'
-import { OrdersService } from '../src/orders-service'
-import { DeliverersService } from '../src/deliverers-service'
-import { Action } from '../src/delivery-action'
+import { Client } from '../src/model/client'
+import { Deliverer } from '../src/model/deliverer'
+import { Order } from '../src/model/order'
+import { DeliveriesService } from '../src/service/deliveries-service'
+import { Restaurant } from '../src/model/restaurant'
+import { OrdersService } from '../src/service/orders-service'
+import { DeliverersService } from '../src/service/deliverers-service'
+import { Action } from '../src/model/delivery-action'
 
 describe('O servico de pedidos', () => {
   const NOW = new Date()

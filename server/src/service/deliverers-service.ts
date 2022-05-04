@@ -1,4 +1,4 @@
-import { Deliverer } from './deliverer'
+import { Deliverer } from '../model/deliverer'
 
 export class DeliverersService {
   deliverers: Deliverer[] = []

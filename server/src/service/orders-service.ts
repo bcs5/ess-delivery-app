@@ -1,4 +1,4 @@
-import { Order } from './order'
+import { Order } from '../model/order'
 
 export class OrdersService {
   orders: Order[] = []

@@ -1,6 +1,6 @@
 import 'jasmine'
-import { Client } from '../src/client'
-import { ClientsService } from '../src/clients-service'
+import { Client } from '../src/model/client'
+import { ClientsService } from '../src/service/clients-service'
 
 describe('O servico de clientes', () => {
   let clientsService: ClientsService

@@ -1,4 +1,4 @@
-import { Client } from './client'
+import { Client } from '../model/client'
 
 export class ClientsService {
   clients: Client[] = []

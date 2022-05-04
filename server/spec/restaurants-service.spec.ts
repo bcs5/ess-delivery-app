@@ -1,6 +1,6 @@
 import 'jasmine'
-import { Restaurant } from '../src/restaurant'
-import { RestaurantsService } from '../src/restaurants-service'
+import { Restaurant } from '../src/model/restaurant'
+import { RestaurantsService } from '../src/service/restaurants-service'
 
 describe('O servico de restaurantes', () => {
   let restaurantsService: RestaurantsService

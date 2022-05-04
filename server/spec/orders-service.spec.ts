@@ -1,8 +1,8 @@
 import 'jasmine'
-import { Client } from '../src/client'
-import { Order } from '../src/order'
-import { OrdersService } from '../src/orders-service'
-import { Restaurant } from '../src/restaurant'
+import { Client } from '../src/model/client'
+import { Order } from '../src/model/order'
+import { OrdersService } from '../src/service/orders-service'
+import { Restaurant } from '../src/model/restaurant'
 
 describe('O servico de pedidos', () => {
   let ordersService: OrdersService

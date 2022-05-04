@@ -1,4 +1,4 @@
-import { Restaurant } from './restaurant'
+import { Restaurant } from '../model/restaurant'
 
 export class RestaurantsService {
   restaurants: Restaurant[] = []

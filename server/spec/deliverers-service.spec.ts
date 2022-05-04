@@ -1,6 +1,6 @@
 import 'jasmine'
-import { Deliverer } from '../src/deliverer'
-import { DeliverersService } from '../src/deliverers-service'
+import { Deliverer } from '../src/model/deliverer'
+import { DeliverersService } from '../src/service/deliverers-service'
 
 describe('O servico de entregadores', () => {
   let deliverersService: DeliverersService

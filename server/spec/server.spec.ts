@@ -1,9 +1,9 @@
 import 'jasmine'
 import request = require('request-promise')
-import { Client } from '../src/client'
-import { Deliverer } from '../src/deliverer'
-import { Order } from '../src/order'
-import { Restaurant } from '../src/restaurant'
+import { Client } from '../src/model/client'
+import { Deliverer } from '../src/model/deliverer'
+import { Order } from '../src/model/order'
+import { Restaurant } from '../src/model/restaurant'
 
 const baseUrl = 'http://localhost:3000'
 const restaurantUrl = `${baseUrl}/restaurant/`
