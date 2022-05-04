@@ -32,9 +32,9 @@
      <tr  *ngFor="let delivery of deliveries"  >
         <th  scope="row">{{delivery.id}}</th>
         <td>{{delivery.restaurant}}</td>
-        <td>{{delivery.restaurantScore}}<span>☆</span></td>
+        <td>{{delivery.restaurantScore_this_order}}<span>☆</span></td>
         <td>{{delivery.client}}</td>
-        <td>{{delivery.clientScore}}<span>☆</span></td>
+        <td>{{delivery.clientScore_this_order}}<span>☆</span></td>
         <td>{{delivery.status}}</td>
         <td><a *ngIf="isFinished(delivery)" id="delivery-{{delivery.id}}-{{delivery.status}}" [routerLink]="['/delivery', delivery.id]">Evaluate</a></td>
       </tr>
