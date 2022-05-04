@@ -9,6 +9,8 @@ export class DeliveryMapper {
       id: delivery.order.id,
       restaurant: delivery.order.restaurant.name,
       restaurantScore: delivery.order.restaurant.score,
+      client: delivery.order.client.name,
+      clientScore: delivery.order.client.score,
       payment: delivery.order.payment,
       status: delivery.status,
       created_at: delivery.createdAt

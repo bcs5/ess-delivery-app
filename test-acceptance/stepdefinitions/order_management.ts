@@ -110,8 +110,8 @@ defineSupportCode(function ({ Given, When, Then }) {
   })
 
   Then(/^I evaluate the order "(\d*)" with value "(\d*)" to client and "(\d*)" to restarant$/, async (orderId, clientGrade, restarantGrade) => {
-    await element(by.name(`cScore`)).sendKeys("value", clientGrade.toString())
-    await element(by.name(`rScore`)).sendKeys("value", restarantGrade.toString())
+    await element(by.id(`cScore`)).sendKeys("value", clientGrade.toString())
+    await element(by.id(`rScore`)).sendKeys("value", restarantGrade.toString())
     await element(by.id(`evaluated-${orderId}`)).click()
   })
 

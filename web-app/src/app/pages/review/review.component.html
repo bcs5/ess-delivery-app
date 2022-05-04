@@ -1,3 +1,42 @@
-<p>
-  review works!
-</p>
+<div *ngIf="user == null">
+  <h2>You delivery is not logged in, please login to use the system.</h2>
+  <img class="rounded mx-auto d-block" src="assets/img/login.png" alt="login waiting">
+</div>
+
+<div *ngIf="user != null">
+  <h3>Wallet: R$ <span id="deliverer-wallet">{{wallet}}</span></h3>
+  <h3>User: <span id="deliverer-name">{{user}}</span></h3>
+</div>
+<button id="refresh" (click)="activeButton() "> Refresh Data </button>
+
+<div *ngIf="user != null && deliveries.length == 0">
+  <br>
+  <h2 class="text-center">You do not have an order record, please wait for first order.</h2>
+  <br>
+  <img class="rounded mx-auto d-block" src="assets/img/wait.jpg" alt="waiting for deliveriy">
+</div>
+
+<table class="table">
+  <thead>
+     <tr *ngIf="deliveries.length > 0">
+        <th scope="col">Id</th>
+        <th scope="col">Restaurant</th>
+        <th scope="col">Score</th>
+        <th scope="col">Client</th>
+        <th scope="col">Score</th>
+        <th scope="col">Status</th>
+        <th scope="col">Retaing</th>
+     </tr>
+  </thead>
+  <tbody>
+     <tr  *ngFor="let delivery of deliveries"  >
+        <th  scope="row">{{delivery.id}}</th>
+        <td>{{delivery.restaurant}}</td>
+        <td>{{delivery.restaurantScore}}<span>☆</span></td>
+        <td>{{delivery.client}}</td>
+        <td>{{delivery.clientScore}}<span>☆</span></td>
+        <td>{{delivery.status}}</td>
+        <td><a *ngIf="isFinished(delivery)" id="delivery-{{delivery.id}}-{{delivery.status}}" [routerLink]="['/delivery', delivery.id]">Evaluate</a></td>
+      </tr>
+  </tbody>
+</table>
