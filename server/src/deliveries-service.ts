@@ -1,21 +1,21 @@
 import { Delivery } from './delivery'
 import { Action } from './delivery-action'
 import { Status } from './delivery-status'
-import { Deliveryman } from './deliveryman'
-import { DeliverymenService } from './deliverymen-service'
+import { Deliverer } from './deliverer'
+import { DeliverersService } from './deliverers-service'
 import { OrdersService } from './orders-service'
 
 const TIMELIMIT = 60 * 1000
 export class DeliveriesService {
   ordersService: OrdersService
-  deliverymenService: DeliverymenService
+  deliverersService: DeliverersService
 
   deliveries: Delivery[] = []
   idCount = 1
 
-  constructor (ordersService: OrdersService, deliverymenService: DeliverymenService) {
+  constructor (ordersService: OrdersService, deliverersService: DeliverersService) {
     this.ordersService = ordersService
-    this.deliverymenService = deliverymenService
+    this.deliverersService = deliverersService
   }
 
   removeDelivery (delivery: Delivery) {
@@ -33,29 +33,29 @@ export class DeliveriesService {
     })
     expired = this.deliveries.filter(delivery => delivery.incomplete())
 
-    const freeDeliverymen: Deliveryman[] = this.deliverymenService.getFree()
+    const freeDeliverers: Deliverer[] = this.deliverersService.getFree()
     for (let i = 0; i < expired.length; i++) {
-      const deliveryman = freeDeliverymen.find(deliveryman => deliveryman.isFree() && !expired[i].isBlocklisted(deliveryman.id))
-      if (deliveryman) {
+      const deliverer = freeDeliverers.find(deliverer => deliverer.isFree() && !expired[i].isBlocklisted(deliverer.id))
+      if (deliverer) {
         const order = expired[i].order
         const blocklist = expired[i].blocklist
-        const delivery: Delivery = new Delivery(<Delivery>{ order: order, deliveryman: deliveryman, blocklist: blocklist, createdAt: new Date() })
-        deliveryman.addDelivery(delivery)
+        const delivery: Delivery = new Delivery(<Delivery>{ order: order, deliverer: deliverer, blocklist: blocklist, createdAt: new Date() })
+        deliverer.addDelivery(delivery)
         this.deliveries.push(delivery)
         this.removeDelivery(expired[i])
       }
     }
   }
 
-  takeAction (deliverymanId: number, orderId: number, action: Action): Delivery {
-    const deliveryman = this.deliverymenService.getById(deliverymanId)
-    if (!deliveryman) {
-      throw Error('no deliveryman')
+  takeAction (delivererId: number, orderId: number, action: Action): Delivery {
+    const deliverer = this.deliverersService.getById(delivererId)
+    if (!deliverer) {
+      throw Error('no deliverer')
     }
-    if (!deliveryman.deliveries) {
+    if (!deliverer.deliveries) {
       throw Error('not performed')
     }
-    const delivery = deliveryman.deliveries[0]
+    const delivery = deliverer.deliveries[0]
     if (delivery.order.id != orderId) {
       throw Error('not performed')
     }
@@ -92,36 +92,36 @@ export class DeliveriesService {
     return delivery
   }
 
-  evaluateOrder (deliverymanId: number, orderId: number, rScore: number, cScore: number): Delivery {
-    const deliveryman = this.deliverymenService.getById(deliverymanId)
-    const delivery = deliveryman.getDeliveryById(orderId)
-    if (delivery.deliveryman && delivery.deliveryman.id != deliverymanId) throw Error('invalid delivery for deliveryman')
+  evaluateOrder (delivererId: number, orderId: number, rScore: number, cScore: number): Delivery {
+    const deliverer = this.deliverersService.getById(delivererId)
+    const delivery = deliverer.getDeliveryById(orderId)
+    if (delivery.deliverer && delivery.deliverer.id != delivererId) throw Error('invalid delivery for deliverer')
     delivery.order.restaurant.addScore(rScore)
     delivery.order.client.addScore(cScore)
     delivery.evaluate()
     return delivery
   }
 
-  addOrder (orderId: number, deliverymanId?: number) {
+  addOrder (orderId: number, delivererId?: number) {
     const order = this.ordersService.getById(orderId)
     const delivery = new Delivery(<Delivery>{ order: order, createdAt: new Date(0) })
-    if (deliverymanId) {
-      const deliveryman = this.deliverymenService.getById(deliverymanId)
-      if (deliveryman?.isFree()) {
-        delivery.deliveryman = deliveryman
+    if (delivererId) {
+      const deliverer = this.deliverersService.getById(delivererId)
+      if (deliverer?.isFree()) {
+        delivery.deliverer = deliverer
         delivery.createdAt = new Date()
-        deliveryman.addDelivery(delivery)
+        deliverer.addDelivery(delivery)
       }
     }
     this.deliveries.push(delivery)
     return delivery
   }
 
-  addDeliveryman (deliveryman: Deliveryman) {
-    return this.deliverymenService.add(deliveryman)
+  addDeliverer (deliverer: Deliverer) {
+    return this.deliverersService.add(deliverer)
   }
 
-  byDeliveryman (id: number): Delivery[] {
-    return this.deliverymenService.getById(id).deliveries
+  byDeliverer (id: number): Delivery[] {
+    return this.deliverersService.getById(id).deliveries
   }
 }

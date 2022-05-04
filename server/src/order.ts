@@ -1,23 +1,23 @@
 import { Restaurant } from './restaurant'
 import { Client } from './client'
-import { Deliveryman } from './deliveryman'
+import { Deliverer } from './deliverer'
 
 export class Order {
   id: number
   restaurant: Restaurant
   client: Client
   payment: number
-  deliveryman: Deliveryman
+  deliverer: Deliverer
 
-  constructor (order: Order) { // id: number, restaurant: Restaurant, client: Client
+  constructor (order: Order) {
     this.id = order.id
     this.restaurant = order.restaurant
     this.client = order.client
     this.payment = order.payment
-    this.deliveryman = order.deliveryman
+    this.deliverer = order.deliverer
   }
 
-  setDeliveryman (deliveryman: Deliveryman): void {
-    this.deliveryman = deliveryman
+  setDeliverer (deliverer: Deliverer): void {
+    this.deliverer = deliverer
   }
 }

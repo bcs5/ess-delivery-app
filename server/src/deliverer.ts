@@ -1,6 +1,6 @@
 import { Delivery } from './delivery'
 
-export class Deliveryman {
+export class Deliverer {
   // personal information
   name: string
   email: string
@@ -15,16 +15,16 @@ export class Deliveryman {
   wallet = 0.0
   deliveries: Delivery[] = []
 
-  constructor (deliveryman: Deliveryman) {
-    this.name = deliveryman.name
-    this.email = deliveryman.email
-    this.password = deliveryman.password
-    this.phoneNumber = deliveryman.phoneNumber
-    this.cnh = deliveryman.cnh
-    this.birthDate = deliveryman.birthDate
-    this.address = deliveryman.address
+  constructor (deliverer: Deliverer) {
+    this.name = deliverer.name
+    this.email = deliverer.email
+    this.password = deliverer.password
+    this.phoneNumber = deliverer.phoneNumber
+    this.cnh = deliverer.cnh
+    this.birthDate = deliverer.birthDate
+    this.address = deliverer.address
 
-    this.id = deliveryman.id
+    this.id = deliverer.id
   }
 
   addBalance (amount: number) {

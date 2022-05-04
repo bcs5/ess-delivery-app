@@ -1,14 +1,14 @@
 import 'jasmine'
 import request = require('request-promise')
 import { Client } from '../src/client'
-import { Deliveryman } from '../src/deliveryman'
+import { Deliverer } from '../src/deliverer'
 import { Order } from '../src/order'
 import { Restaurant } from '../src/restaurant'
 
 const baseUrl = 'http://localhost:3000'
 const restaurantUrl = `${baseUrl}/restaurant/`
 const clientUrl = `${baseUrl}/client/`
-const deliverymanUrl = `${baseUrl}/deliveryman/`
+const delivererUrl = `${baseUrl}/deliverer/`
 const orderUrl = `${baseUrl}/order/`
 const ordersUrl = `${baseUrl}/orders/`
 const processUrl = `${baseUrl}/process/`
@@ -21,13 +21,13 @@ describe('O servidor', () => {
     name: "Bob's Madalena",
     address: 'Av. Eng. Abdias de Carvalho, 365 - Ilha do Retiro, Recife - PE, 50750-257'
   }
-  const deliveryman1 = <Deliveryman> {
+  const deliverer1 = <Deliverer> {
     id: 2,
     name: 'Gabriel Mendes',
     password: 'mendao'
   }
 
-  const deliveryman2 = <Deliveryman> {
+  const deliverer2 = <Deliverer> {
     id: 3,
     name: 'Jose Cruz',
     password: 'casa'
@@ -79,12 +79,12 @@ describe('O servidor', () => {
   })
 
   it('cadastra entregador', () => {
-    const options = { method: 'POST', uri: (deliverymanUrl), body: deliveryman1, json: true }
+    const options = { method: 'POST', uri: (delivererUrl), body: deliverer1, json: true }
     return request(options)
       .then(body => {
-        const res = <Deliveryman>(body)
-        expect(res.id).toBe(deliveryman1.id)
-        expect(res.name).toBe(deliveryman1.name)
+        const res = <Deliverer>(body)
+        expect(res.id).toBe(deliverer1.id)
+        expect(res.name).toBe(deliverer1.name)
         expect(res.wallet).toBe(0.0)
       })
   })
@@ -93,15 +93,15 @@ describe('O servidor', () => {
       method: 'GET',
       uri: (userUrl),
       auth: {
-        user: deliveryman1.id.toString(),
-        pass: deliveryman1.password
+        user: deliverer1.id.toString(),
+        pass: deliverer1.password
       },
       json: true
     }
     return request(options)
       .then(body => {
         const res = body
-        expect(res.name).toBe(deliveryman1.name)
+        expect(res.name).toBe(deliverer1.name)
         expect(res.wallet).toBe(0.0)
       })
   })
@@ -130,8 +130,8 @@ describe('O servidor', () => {
       method: 'GET',
       uri: (uri),
       auth: {
-        user: deliveryman1.id.toString(),
-        pass: deliveryman1.password
+        user: deliverer1.id.toString(),
+        pass: deliverer1.password
       }
     }
 
@@ -169,8 +169,8 @@ describe('O servidor', () => {
       method: 'GET',
       uri: (uri),
       auth: {
-        user: deliveryman1.id.toString(),
-        pass: deliveryman1.password
+        user: deliverer1.id.toString(),
+        pass: deliverer1.password
       }
     }
     return request(options)
@@ -190,8 +190,8 @@ describe('O servidor', () => {
       method: 'GET',
       uri: (uri),
       auth: {
-        user: deliveryman1.id.toString(),
-        pass: deliveryman1.password
+        user: deliverer1.id.toString(),
+        pass: deliverer1.password
       },
       json: true
     }
@@ -209,8 +209,8 @@ describe('O servidor', () => {
       method: 'GET',
       uri: (ordersUrl),
       auth: {
-        user: deliveryman1.id.toString(),
-        pass: deliveryman1.password
+        user: deliverer1.id.toString(),
+        pass: deliverer1.password
       },
       json: true
     }
@@ -236,8 +236,8 @@ describe('O servidor', () => {
       method: 'GET',
       uri: (uri),
       auth: {
-        user: deliveryman1.id.toString(),
-        pass: deliveryman1.password
+        user: deliverer1.id.toString(),
+        pass: deliverer1.password
       },
       json: true
     }
@@ -261,8 +261,8 @@ describe('O servidor', () => {
       method: 'GET',
       uri: (uri),
       auth: {
-        user: deliveryman1.id.toString(),
-        pass: deliveryman1.password
+        user: deliverer1.id.toString(),
+        pass: deliverer1.password
       },
       json: true
     }
@@ -280,26 +280,26 @@ describe('O servidor', () => {
       method: 'GET',
       uri: (userUrl),
       auth: {
-        user: deliveryman1.id.toString(),
-        pass: deliveryman1.password
+        user: deliverer1.id.toString(),
+        pass: deliverer1.password
       },
       json: true
     }
     return request(options)
       .then(body => {
         const res = body
-        expect(res.name).toBe(deliveryman1.name)
+        expect(res.name).toBe(deliverer1.name)
         expect(res.wallet).toBe(order2.payment)
       })
   })
 
   it('cadastrar entregador 2', () => {
-    const options = { method: 'POST', uri: (deliverymanUrl), body: deliveryman2, json: true }
+    const options = { method: 'POST', uri: (delivererUrl), body: deliverer2, json: true }
     return request(options)
       .then(body => {
-        const res = <Deliveryman>(body)
-        expect(res.id).toBe(deliveryman2.id)
-        expect(res.name).toBe(deliveryman2.name)
+        const res = <Deliverer>(body)
+        expect(res.id).toBe(deliverer2.id)
+        expect(res.name).toBe(deliverer2.name)
         expect(res.wallet).toBe(0.0)
       })
   })
@@ -314,7 +314,7 @@ describe('O servidor', () => {
       method: 'GET',
       uri: (ordersUrl),
       auth: {
-        user: deliveryman2.id.toString(),
+        user: deliverer2.id.toString(),
         pass: 'casarao'
       },
       json: true
@@ -335,8 +335,8 @@ describe('O servidor', () => {
       method: 'GET',
       uri: (ordersUrl),
       auth: {
-        user: deliveryman2.id.toString(),
-        pass: deliveryman2.password
+        user: deliverer2.id.toString(),
+        pass: deliverer2.password
       },
       json: true
     }
@@ -359,8 +359,8 @@ describe('O servidor', () => {
       method: 'GET',
       uri: (orderUrl + order1.id),
       auth: {
-        user: deliveryman1.id.toString(),
-        pass: deliveryman1.password
+        user: deliverer1.id.toString(),
+        pass: deliverer1.password
       },
       json: true
     }

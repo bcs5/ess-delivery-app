@@ -2,7 +2,7 @@ import express = require('express')
 import bodyParser = require('body-parser')
 import { RestaurantsService } from './src/restaurants-service'
 import { ClientsService } from './src/clients-service'
-import { DeliverymenService } from './src/deliverymen-service'
+import { DeliverersService } from './src/deliverers-service'
 import { OrdersService } from './src/orders-service'
 import { Order } from './src/order'
 import { DeliveriesService } from './src/deliveries-service'
@@ -24,9 +24,9 @@ app.use(bodyParser.json())
 
 const restaurantService: RestaurantsService = new RestaurantsService()
 const clientsService: ClientsService = new ClientsService()
-const deliverymenService: DeliverymenService = new DeliverymenService()
+const deliverersService: DeliverersService = new DeliverersService()
 const ordersService: OrdersService = new OrdersService()
-const deliveriesService: DeliveriesService = new DeliveriesService(ordersService, deliverymenService)
+const deliveriesService: DeliveriesService = new DeliveriesService(ordersService, deliverersService)
 const deliveryMapper: DeliveryMapper = new DeliveryMapper()
 
 function extractCredentials (req: Request, res: Response): string[] {
@@ -58,8 +58,8 @@ app.post('/client', function (req, res) {
   return res.send(clientsService.add(req.body))
 })
 
-app.post('/deliveryman', function (req, res) {
-  return res.send(deliverymenService.add(req.body))
+app.post('/deliverer', function (req, res) {
+  return res.send(deliverersService.add(req.body))
 })
 
 app.post('/order', function (req, res) {
@@ -67,12 +67,12 @@ app.post('/order', function (req, res) {
     const orderId = req.body.id
     const client = clientsService.getById(req.body.clientId)
     const restaurant = restaurantService.getById(req.body.restaurantId)
-    const deliveryman = req.body.deliverymanId
+    const deliverer = req.body.delivererId
     const payment = Number(req.body.payment)
     if (!client) throw Error('invalid client')
     if (!restaurant) throw Error('invalid restaurant')
     const order = ordersService.add(<Order>{ id: orderId, restaurant: restaurant, client: client, payment: payment })
-    deliveriesService.addOrder(order.id, deliveryman)
+    deliveriesService.addOrder(order.id, deliverer)
     return res.send(order)
   } catch (e) {
     return res.status(500).send(e)
@@ -82,9 +82,9 @@ app.post('/order', function (req, res) {
 app.get('/order/:orderId', function (req, res) {
   try {
     const [username, password] = extractCredentials(req, res)
-    deliverymenService.auth(Number(username), password)
+    deliverersService.auth(Number(username), password)
 
-    const delivery = deliveriesService.byDeliveryman(Number(username)).find(({ order }) => req.params.orderId == order.id)
+    const delivery = deliveriesService.byDeliverer(Number(username)).find(({ order }) => req.params.orderId == order.id)
     return res.send(deliveryMapper.toJson(delivery))
   } catch (e) {
     if (e.message == 'auth failed') {
@@ -97,7 +97,7 @@ app.get('/order/:orderId', function (req, res) {
 app.get('/order/:orderId/:action', function (req, res) {
   try {
     const [username, password] = extractCredentials(req, res)
-    deliverymenService.auth(Number(username), password)
+    deliverersService.auth(Number(username), password)
 
     const delivery = deliveriesService.takeAction(Number(username), Number(req.params.orderId), <Action>(req.params.action))
     return res.send(deliveryMapper.toJson(delivery))
@@ -112,7 +112,7 @@ app.get('/order/:orderId/:action', function (req, res) {
 app.post('/evaluation', function (req, res) {
   try {
     const [username, password] = extractCredentials(req, res)
-    deliverymenService.auth(Number(username), password)
+    deliverersService.auth(Number(username), password)
     const delivery = deliveriesService.evaluateOrder(Number(username), Number(req.body.id), Number(req.body.restaurantScore), Number(req.body.clientScore))
     return res.send(deliveryMapper.toJson(delivery))
   } catch (e) {
@@ -126,9 +126,9 @@ app.post('/evaluation', function (req, res) {
 app.get('/orders/', function (req, res) {
   try {
     const [username, password] = extractCredentials(req, res)
-    deliverymenService.auth(Number(username), password)
+    deliverersService.auth(Number(username), password)
 
-    const ans = deliveriesService.byDeliveryman(Number(username)).map(delivery => deliveryMapper.toJsonMinimal(delivery))
+    const ans = deliveriesService.byDeliverer(Number(username)).map(delivery => deliveryMapper.toJsonMinimal(delivery))
     return res.status(200).send(ans)
   } catch (e) {
     if (e.message == 'auth failed') {
@@ -141,9 +141,9 @@ app.get('/orders/', function (req, res) {
 app.get('/user/', function (req, res) {
   try {
     const [username, password] = extractCredentials(req, res)
-    deliverymenService.auth(Number(username), password)
-    const deliveryman = deliverymenService.getById(Number(username))
-    return res.status(200).send({ name: deliveryman.name, wallet: deliveryman.wallet })
+    deliverersService.auth(Number(username), password)
+    const deliverer = deliverersService.getById(Number(username))
+    return res.status(200).send({ name: deliverer.name, wallet: deliverer.wallet })
   } catch (e) {
     if (e.message == 'auth failed') {
       return res.status(401).send(e)
