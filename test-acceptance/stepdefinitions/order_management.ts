@@ -13,12 +13,11 @@ var lastResponse: Response
 defineSupportCode(function ({ Given, When, Then }) {
   Given("server is up", async () => {
     const response = await serverClient.send(new Request("GET", "/"))
-    expect(response.body).to.equal("Hello world!");
+    expect(response.body).to.equal("Welcome to CinEntrega Server!");
   })
 
-  When(/^I create a client with name "([^\"]*)", address "([^\"]*)", id "(\d*)"$/, async (name, address, id) => {
+  When(/^I create a client with name "([^\"]*)", address "([^\"]*)"$/, async (name, address) => {
     const response = await serverClient.send(new Request("POST", "/client", {
-      "id": id,
       "name": name,
       "address": address
     }))
@@ -30,20 +29,29 @@ defineSupportCode(function ({ Given, When, Then }) {
     await expect(browser.getTitle()).to.eventually.equal("Cin Delivery "+name);
   })
 
-  When(/^I create a restaurant with name "([^\"]*)", address "([^\"]*)", id "(\d*)"$/, async (name, address, id) => {
+  When(/^I create a restaurant with name "([^\"]*)", address "([^\"]*)"$/, async (name, address) => {
     const response = await serverClient.send(new Request("POST", "/restaurant", {
-      "id": id,
       "name": name,
       "address": address
     }))
     lastResponse = response
   })
 
-  When(/^I create a deliverer with name "([^\"]*)", password "([^\"]*)", id "(\d*)"$/, async (name, password, id) => {
-    const response = await serverClient.send(new Request("POST", "/deliverer", {
-      "id": id,
+  When(/^I create a deliverer with name "([^\"]*)", email "([^\"]*)", password "([^\"]*)", phoneNumber "(\d*)", cnh "(\d*)", birthDate "([^\"]*)", zipcode "([^\"]*)", street "([^\"]*)", number "(\d*)", complement "([^\"]*)", neighborhood "([^\"]*)", city"([^\"]*)", state "([^\"]*)"$/, async (name, email, password, phoneNumber, cnh, birthDate, zipcode, street, number, complement, neighborhood, city, state ) => {
+    const response = await serverClient.send(new Request("POST", "/deliverers", {
       "name": name,
-      "password": password
+      "email": email,
+      "password": password,
+      "phoneNumber": phoneNumber,
+      "cnh": cnh,
+      "birthDate": birthDate,
+      "zipcode": zipcode,
+      "street": street,
+      "number":number,
+      "complement": complement,
+      "neighborhood": neighborhood,
+      "city": city,
+      "state":state
     }))
     lastResponse = response
   })
@@ -74,6 +82,10 @@ defineSupportCode(function ({ Given, When, Then }) {
 
   Then(/^I receive a response with field "([^\"]*)" value "([^\"]*)"$/, async (field, value) => {
     expect(JSON.parse(lastResponse.body)[field.toString()]).to.equal(value)
+  })
+
+  Then(/^I receive a response with number field "([^\"]*)" value "([^\"]*)"$/, async (field, value) => {
+    expect(JSON.parse(lastResponse.body)[field.toString()]).to.equal(Number(value))
   })
 
   Then(/^I click to see details from order "(\d*)" with status "([^\"]*)"$/, async (orderId, status) => {
