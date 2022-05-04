@@ -12,7 +12,7 @@ import { Delivery } from 'src/app/Interface/delivery';
 })
 export class DeliveryComponent implements OnInit {
   delivery: Delivery = new Delivery();
-  
+  currentRate = 5;
   creationTime: Date;
   start: any;
   id: number;

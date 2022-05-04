@@ -16,6 +16,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { DeliveryManService } from './Interface/delivery-man.service';
 import { TopPageComponent } from './pages/top-page/top-page.component';
 import { AboutComponent } from './pages/about/about.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { AboutComponent } from './pages/about/about.component';
     AboutComponent
   ],
   imports: [
+    NgbModule,
     BrowserModule,
     AppRoutingModule,
     FormsModule,
