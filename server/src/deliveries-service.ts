@@ -99,7 +99,7 @@ export class DeliveriesService {
     delivery.order.restaurant.addScore(rScore)
     delivery.order.client.addScore(cScore)
     console.log(cScore)
-    delivery.order.addScore(cScore,rScore)
+    delivery.order.addScore(cScore, rScore)
     delivery.evaluate()
     return delivery
   }

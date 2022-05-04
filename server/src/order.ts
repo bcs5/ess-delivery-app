@@ -8,10 +8,10 @@ export class Order {
   client: Client
   payment: number
   deliverer: Deliverer
-  
+
   // company information
-  restaurantScore : number
-  clientScore : number
+  restaurantScore: number
+  clientScore: number
 
   constructor (order: Order) { // id: number, restaurant: Restaurant, client: Client
     this.id = order.id
@@ -27,9 +27,9 @@ export class Order {
     this.deliverer = deliverer
   }
 
-  addScore (clientScore: number, restaurantScore:number){
+  addScore (clientScore: number, restaurantScore: number) {
     console.log(clientScore)
-    this.clientScore = clientScore;
-    this.restaurantScore = restaurantScore;
+    this.clientScore = clientScore
+    this.restaurantScore = restaurantScore
   }
 }
