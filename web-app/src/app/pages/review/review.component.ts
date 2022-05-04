@@ -5,7 +5,7 @@ import { Delivery } from '../../Interface/delivery';
 import { DeliveriesService } from '../../Interface/deliveries.service';
 import { interval } from 'rxjs';
 import { Subscription } from 'rxjs';
-import { DeliveryManService } from 'src/app/Interface/delivery-man.service';
+import { DelivererService } from 'src/app/Interface/deliverer.service';
 
 @Component({
   selector: 'app-review',
@@ -13,7 +13,7 @@ import { DeliveryManService } from 'src/app/Interface/delivery-man.service';
   styleUrls: ['./review.component.css']
 })
 export class ReviewComponent implements OnInit {
-   constructor(private deliveriesService: DeliveriesService, private deliveryManService: DeliveryManService, titleService: Title) {
+   constructor(private deliveriesService: DeliveriesService, private deliveryManService: DelivererService, titleService: Title) {
       titleService.setTitle("Cin Delivery deliveries")
    }
 
