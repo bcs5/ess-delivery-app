@@ -109,6 +109,12 @@ defineSupportCode(function ({ Given, When, Then }) {
     await element(by.id(`finished-${orderId}`)).click()
   })
 
+  Then(/^I evaluate the order "(\d*)" with value "(\d*)" to client and "(\d*)" to restarant$/, async (orderId, clientGrade, restarantGrade) => {
+    await element(by.name(`cScore`)).sendKeys("value", clientGrade.toString())
+    await element(by.name(`rScore`)).sendKeys("value", restarantGrade.toString())
+    await element(by.id(`evaluated-${orderId}`)).click()
+  })
+
   Then(/^the order has status "([^\"]*)"$/, async (status) => {
     await expect(element(by.id(`delivery-status`)).getText()).to.eventually.equal(status)
   })

@@ -53,6 +53,11 @@ Feature: Order Management
     When I click to see details from order "22" with status "collected"
     And I finish the order "22"
     Then the order has status "finished"
+  Scenario: evaluate second order
+    Given I'm on the page "deliveries"
+    When I click to see details from order "22" with status "finished"
+    And I evaluate the order "22" with value "1" to client and "1" to restarant
+    Then the order has status "evaluated"
   Scenario: check wallet after finished order
     Given I'm on the page "deliveries"
     Then deliverer wallet has "23"
