@@ -158,9 +158,9 @@ app.post('/deliverers/', function (req: express.Request, res: express.Response) 
   }
 })
 
-app.put('/deliverers/', function (req: express.Request, res: express.Response) {
+app.put('/deliverer/logged/', function (req: express.Request, res: express.Response) {
   try {
-    if (delivererLogged != null) {
+    if (delivererLogged) {
       let name = req.body.name;
       let email = req.body.email;
       let password = req.body.password;
@@ -205,8 +205,7 @@ app.put('/deliverers/', function (req: express.Request, res: express.Response) {
           failure: 'Sorry but we could not update your infos!'
         });
       }
-    } else {
-      
+    } else {    
       res.status(400).send({
         failure: 'You need to be logged to update this data!'
       });
@@ -315,6 +314,18 @@ app.post('/deliverer/logout/', function (req: express.Request, res: express.Resp
     });
 
     console.log(`${delivererLogged} is logged!`)
+  } catch (e) {
+    if (e.message == 'auth failed') {
+      return res.status(401).send(e);
+    }
+    return res.status(500).send(e);
+  }
+})
+
+app.get('/deliverer/logged/', function (req: express.Request, res: express.Response) {
+  try {
+    console.log(`Got ${delivererLogged.Name}\'s infos`);
+    res.status(200).send(JSON.stringify(delivererLogged));
   } catch (e) {
     if (e.message == 'auth failed') {
       return res.status(401).send(e);

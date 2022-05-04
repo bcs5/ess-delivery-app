@@ -8,7 +8,7 @@ export class LoginService {
 
     constructor(private http: HttpClient) {}
 
-    login(email: string, password: string) {
+    login(email: string, password: string): Promise<any> {
         let body = {
             'email': email,
             'password': password

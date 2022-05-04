@@ -20,6 +20,7 @@ import { RegisterService } from './Interface/register.service';
 import { TopPageComponent } from './pages/top-page/top-page.component';
 import { AboutComponent } from './pages/about/about.component';
 import { UserAccountComponent } from './pages/user-account/user-account.component';
+import { UserAccountService } from './Interface/user-account.service'
 
 @NgModule({
   declarations: [
@@ -76,7 +77,7 @@ import { UserAccountComponent } from './pages/user-account/user-account.componen
       }
     ])
   ],
-  providers: [DeliveriesService, DelivererService, LoginService, RegisterService],
+  providers: [DeliveriesService, DelivererService, LoginService, RegisterService, UserAccountService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

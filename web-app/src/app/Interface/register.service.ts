@@ -8,7 +8,7 @@ export class RegisterService {
 
     constructor(private http: HttpClient) { }
 
-    register(name: string, email: string, password: string, phoneNumber: string, cnh: string, birth: Date, zipcode: string, street: string, number: number, neighborhood: string, city: string, state: string, complement: string) {
+    register(name: string, email: string, password: string, phoneNumber: string, cnh: string, birth: Date, zipcode: string, street: string, number: number, neighborhood: string, city: string, state: string, complement: string): Promise<any> {
         let body = {
             'name': name,
             'email': email,

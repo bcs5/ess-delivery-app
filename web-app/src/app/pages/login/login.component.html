@@ -1,31 +1,28 @@
 <div class="d-flex justify-content-center align-items-center">
-<div class="card p-3">
+    <div class="card p-3">
 
-        <form [formGroup]="formLogin" (ngSubmit)="login()" > 
+        <form [formGroup]="formLogin" (ngSubmit)="login()">
             <div class="form-group">
 
                 <label for="email">E-mail</label>
 
-                <input type="email" id="email" class="form-control"  formControlName="email"
-
- requiredminlength="5">
+                <input type="email" id="email" class="form-control" formControlName="email" requiredminlength="5">
 
             </div>
 
-           <div class="form-group">
+            <div class="form-group">
 
-               <label for="password">Senha</label>
+                <label for="password">Senha</label>
 
-               <input type="password" id="password" class="form-control" formControlName="password"
+                <input type="password" id="password" class="form-control" formControlName="password"
+                    requiredminlength="8">
 
- requiredminlength="8">
-
-           </div>
-           <div class="form-group">
-           <button class="btn btn-outline-danger" type="submit" (click)="goToRegister()">Criar conta</button> 
-           <button class="btn btn-danger" type="submit"  [disabled]="!formLogin.valid">Entrar</button> 
-        </div>
-       </form>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-outline-danger" type="submit" (click)="goToRegister()">Criar conta</button>
+                <button class="btn btn-danger" type="submit" [disabled]="!formLogin.valid">Entrar</button>
+            </div>
+        </form>
 
     </div>
 
