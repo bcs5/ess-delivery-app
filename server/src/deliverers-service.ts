@@ -63,16 +63,16 @@ export class DeliverersService {
     return null
   }
 
-  updateInfos (delivererUpdate: Deliverer, loggedId: number): boolean {
-    const delivererToUpdate = this.getById(loggedId)
-    const index = this.deliverers.indexOf(delivererToUpdate)
+  updateInfos(delivererUpdate: Deliverer, loggedId: number): Deliverer {
+    let delivererToUpdate = this.getById(loggedId);
+    let index = this.deliverers.indexOf(delivererToUpdate);
     if (index >= 0) {
-      this.deliverers[index] = delivererUpdate
-      this.deliverers[index].ID = loggedId
-      console.log('updated')
-      return true
+      this.deliverers[index] = delivererUpdate;
+      this.deliverers[index].ID = loggedId;
+      console.log('updated');
+      return this.deliverers[index];
     } else {
-      return false
+      return null;
     }
   }
 

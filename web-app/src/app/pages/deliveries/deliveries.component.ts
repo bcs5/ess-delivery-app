@@ -5,7 +5,7 @@ import { Delivery } from '../../Interface/delivery';
 import { DeliveriesService } from '../../Interface/deliveries.service';
 import { interval } from 'rxjs';
 import { Subscription } from 'rxjs';
-import { DeliveryManService } from 'src/app/Interface/delivery-man.service';
+import { DelivererService } from 'src/app/Interface/deliverer.service';
 
 @Component({
    selector: 'app-root',
@@ -13,7 +13,7 @@ import { DeliveryManService } from 'src/app/Interface/delivery-man.service';
    styleUrls: ['./deliveries.component.css']
 })
 export class DeliveriesComponent implements OnInit {
-   constructor(private deliveriesService: DeliveriesService, private deliveryManService: DeliveryManService, titleService: Title) {
+   constructor(private deliveriesService: DeliveriesService, private delivererService: DelivererService, titleService: Title) {
      titleService.setTitle("Cin Delivery deliveries")
    }
 
@@ -36,7 +36,7 @@ export class DeliveriesComponent implements OnInit {
       this.deliveriesService.getDeliveries()
          .then((deliveries) => this.deliveries = deliveries);
 
-      this.deliveryManService.getUser().then(value => {
+      this.delivererService.getUser().then(value => {
          this.user = value.name;
          this.wallet = value.wallet;
       });

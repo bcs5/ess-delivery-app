@@ -11,6 +11,7 @@ const deliverersUrl = `${baseUrl}/deliverers/`
 const delivererLoginUrl = `${baseUrl}/deliverer/login/`
 const delivererLogoutUrl = `${baseUrl}/deliverer/logout/`
 const delivererDeleteUrl = `${baseUrl}/deliverer/delete/`
+const delivererLoggedUrl = `${baseUrl}/deliverer/logged/`
 const orderUrl = `${baseUrl}/order/`
 const ordersUrl = `${baseUrl}/orders/`
 const processUrl = `${baseUrl}/process/`
@@ -256,7 +257,7 @@ describe('O servidor', () => {
   it('Atualiza dados do entregador', () => {
     const options = {
       method: 'PUT',
-      uri: deliverersUrl,
+      uri: delivererLoggedUrl,
       body: deliverer1Update,
       json: true
     }
