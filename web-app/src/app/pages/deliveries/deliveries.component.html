@@ -21,6 +21,9 @@
       <tr *ngIf="deliveries.length > 0">
          <th scope="col">Id</th>
          <th scope="col">Restaurant</th>
+         <th scope="col">Restaurant score</th>
+         <th scope="col">Client</th>
+         <th scope="col">Client score</th>
          <th scope="col">Payment</th>
          <th scope="col">Status</th>
          <th scope="col">details</th>
@@ -30,6 +33,9 @@
       <tr *ngFor="let delivery of deliveries">
          <th scope="row">{{delivery.id}}</th>
          <td>{{delivery.restaurant}}</td>
+         <td>{{delivery.restaurantScore}}</td>
+         <td>{{delivery.client}}</td>
+         <td>{{delivery.clientScore}}</td>
          <td>R$  {{delivery.payment}}</td>
          <td>{{delivery.status}}</td>
          <td><a id="delivery-{{delivery.id}}-{{delivery.status}}" [routerLink]="['/delivery', delivery.id]">details</a></td>

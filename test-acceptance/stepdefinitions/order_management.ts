@@ -13,12 +13,11 @@ var lastResponse: Response
 defineSupportCode(function ({ Given, When, Then }) {
   Given("server is up", async () => {
     const response = await serverClient.send(new Request("GET", "/"))
-    expect(response.body).to.equal("Hello world!");
+    expect(response.body).to.equal("Welcome to CinEntrega Server!");
   })
 
-  When(/^I create a client with name "([^\"]*)", address "([^\"]*)", id "(\d*)"$/, async (name, address, id) => {
+  When(/^I create a client with name "([^\"]*)", address "([^\"]*)"$/, async (name, address) => {
     const response = await serverClient.send(new Request("POST", "/client", {
-      "id": id,
       "name": name,
       "address": address
     }))
@@ -27,23 +26,32 @@ defineSupportCode(function ({ Given, When, Then }) {
 
   Given(/^I'm on the page "([^\"]*)"$/, async (name) => {
     await browser.get("http://localhost:4200/"+name);
-    await expect(browser.getTitle()).to.eventually.equal("Cin Delivery "+name);
+    await expect(browser.getTitle()).to.eventually.equal("Cin Delivery deliveries");
   })
 
-  When(/^I create a restaurant with name "([^\"]*)", address "([^\"]*)", id "(\d*)"$/, async (name, address, id) => {
+  When(/^I create a restaurant with name "([^\"]*)", address "([^\"]*)"$/, async (name, address) => {
     const response = await serverClient.send(new Request("POST", "/restaurant", {
-      "id": id,
       "name": name,
       "address": address
     }))
     lastResponse = response
   })
 
-  When(/^I create a deliverer with name "([^\"]*)", password "([^\"]*)", id "(\d*)"$/, async (name, password, id) => {
-    const response = await serverClient.send(new Request("POST", "/deliverer", {
-      "id": id,
+  When(/^I create a deliverer with name "([^\"]*)", email "([^\"]*)", password "([^\"]*)", phoneNumber "(\d*)", cnh "(\d*)", birthDate "([^\"]*)", zipcode "([^\"]*)", street "([^\"]*)", number "(\d*)", complement "([^\"]*)", neighborhood "([^\"]*)", city"([^\"]*)", state "([^\"]*)"$/, async (name, email, password, phoneNumber, cnh, birthDate, zipcode, street, number, complement, neighborhood, city, state ) => {
+    const response = await serverClient.send(new Request("POST", "/deliverers", {
       "name": name,
-      "password": password
+      "email": email,
+      "password": password,
+      "phoneNumber": phoneNumber,
+      "cnh": cnh,
+      "birthDate": birthDate,
+      "zipcode": zipcode,
+      "street": street,
+      "number":number,
+      "complement": complement,
+      "neighborhood": neighborhood,
+      "city": city,
+      "state":state
     }))
     lastResponse = response
   })
@@ -76,7 +84,16 @@ defineSupportCode(function ({ Given, When, Then }) {
     expect(JSON.parse(lastResponse.body)[field.toString()]).to.equal(value)
   })
 
+  Then(/^I receive a response with number field "([^\"]*)" value "([^\"]*)"$/, async (field, value) => {
+    expect(JSON.parse(lastResponse.body)[field.toString()]).to.equal(Number(value))
+  })
+
   Then(/^I click to see details from order "(\d*)" with status "([^\"]*)"$/, async (orderId, status) => {
+    await element(by.id(`delivery-${orderId}-${status}`)).click()
+    await expect(browser.getTitle()).to.eventually.equal("Cin Delivery delivery " + orderId);
+  })
+
+  Then(/^I click to evaluate order "(\d*)" with status "([^\"]*)"$/, async (orderId, status) => {
     await element(by.id(`delivery-${orderId}-${status}`)).click()
     await expect(browser.getTitle()).to.eventually.equal("Cin Delivery delivery " + orderId);
   })
@@ -95,6 +112,12 @@ defineSupportCode(function ({ Given, When, Then }) {
 
   Then(/^I finish the order "(\d*)"$/, async (orderId) => {
     await element(by.id(`finished-${orderId}`)).click()
+  })
+
+  Then(/^I evaluate the order "(\d*)" with value "(\d*)" to client and "(\d*)" to restarant$/, async (orderId, clientGrade, restarantGrade) => {
+    await element(by.id(`cScore`)).sendKeys("value", clientGrade.toString())
+    await element(by.id(`rScore`)).sendKeys("value", restarantGrade.toString())
+    await element(by.id(`evaluated-${orderId}`)).click()
   })
 
   Then(/^the order has status "([^\"]*)"$/, async (status) => {

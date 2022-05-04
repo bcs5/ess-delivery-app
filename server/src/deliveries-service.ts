@@ -98,6 +98,8 @@ export class DeliveriesService {
     if (delivery.deliverer && delivery.deliverer.ID != delivererId) throw Error('invalid delivery for deliverer')
     delivery.order.restaurant.addScore(rScore)
     delivery.order.client.addScore(cScore)
+    console.log(cScore)
+    delivery.order.addScore(cScore, rScore)
     delivery.evaluate()
     return delivery
   }

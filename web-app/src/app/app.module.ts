@@ -21,6 +21,7 @@ import { TopPageComponent } from './pages/top-page/top-page.component';
 import { AboutComponent } from './pages/about/about.component';
 import { UserAccountComponent } from './pages/user-account/user-account.component';
 import { UserAccountService } from './Interface/user-account.service'
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { UserAccountService } from './Interface/user-account.service'
     UserAccountComponent,
   ],
   imports: [
+    NgbModule,
     BrowserModule,
     AppRoutingModule,
     FormsModule,
