@@ -2,7 +2,6 @@ import 'jasmine'
 import { Client } from '../src/client'
 import { Deliverer, Address } from '../src/deliverer'
 import { DeliveriesService } from '../src/deliveries-service'
-import { RegisterResponse } from '../src/deliverer-register-response'
 import { Order } from '../src/order'
 import { Restaurant } from '../src/restaurant'
 import { OrdersService } from '../src/orders-service'
@@ -29,32 +28,32 @@ describe('O servico de pedidos', () => {
     name: 'Bezaliel Silva',
     address: 'Rua Visconde de Barbacena, 329 - Várzea, Recife - PE, 50740-445'
   }
-  
-  const deliverer1 = new Deliverer ('João da Silva', 
-  'js@email.com', 
-  '1234', 
-  '(85)8682-7970', 
-  '25769318041', 
-  new Date(4, 12, 1995), 
-  new Address('69059-422', 
-    'Rua Tanna Holanda', 
-    92,
-    'Jardim Arapongas', 
-    'Manaus', 
-    'AM')
+
+  const deliverer1 = new Deliverer('João da Silva',
+    'js@email.com',
+    '1234',
+    '(85)8682-7970',
+    '25769318041',
+    new Date(4, 12, 1995),
+    new Address('69059-422',
+      'Rua Tanna Holanda',
+      92,
+      'Jardim Arapongas',
+      'Manaus',
+      'AM')
   )
 
-  const deliverer2 = new Deliverer ('Ágatha Santos Barbosa', 
-    'AgathaSantosBarbosa@rhyta.com', 
-    '4539', 
-    '(11)9233-3706', 
+  const deliverer2 = new Deliverer('Ágatha Santos Barbosa',
+    'AgathaSantosBarbosa@rhyta.com',
+    '4539',
+    '(11)9233-3706',
     '59603923567',
-    new Date(10, 26, 1988), 
-    new Address('45810-000', 
-      'Ladeira do Aeroporto', 
-      317, 
-      'Aeroporto', 
-      'Porto Seguro', 
+    new Date(10, 26, 1988),
+    new Address('45810-000',
+      'Ladeira do Aeroporto',
+      317,
+      'Aeroporto',
+      'Porto Seguro',
       'BA')
   )
 
@@ -100,7 +99,7 @@ describe('O servico de pedidos', () => {
   it('cadastra pedido com entregador', () => {
     const order = ordersService.add(order1)
     deliverersService.addDeliverer(deliverer1)
-    let delivererID = deliverersService.Deliverers[0].ID
+    const delivererID = deliverersService.Deliverers[0].ID
     const result = deliveriesService.addOrder(order.id, delivererID)
 
     expect(deliveriesService.deliveries.length).toBe(1)
@@ -116,8 +115,8 @@ describe('O servico de pedidos', () => {
     const orderA = ordersService.add(order1)
     const orderB = ordersService.add(order2)
 
-    let fstDeliverer = deliverersService.Deliverers[0]
-    let sndDeliverer = deliverersService.Deliverers[1]
+    const fstDeliverer = deliverersService.Deliverers[0]
+    const sndDeliverer = deliverersService.Deliverers[1]
 
     deliveriesService.addOrder(orderA.id, fstDeliverer.ID)
     deliveriesService.addOrder(orderB.id, sndDeliverer.ID)
@@ -137,7 +136,7 @@ describe('O servico de pedidos', () => {
   it('pedido expirado, status expired, entregador na blocklist', () => {
     const order = ordersService.add(order1)
     deliverersService.addDeliverer(deliverer1)
-    let deliverer = deliverersService.Deliverers[0]
+    const deliverer = deliverersService.Deliverers[0]
     jasmine.clock().mockDate(TLED)
     deliveriesService.addOrder(order.id, deliverer.ID)
     jasmine.clock().mockDate(NOW)
@@ -155,7 +154,7 @@ describe('O servico de pedidos', () => {
     it('aceita pedido, status in_progress', () => {
       const order = ordersService.add(order1)
       deliverersService.addDeliverer(deliverer1)
-      let deliverer = deliverersService.Deliverers[0]
+      const deliverer = deliverersService.Deliverers[0]
       deliveriesService.addOrder(order.id, deliverer.ID)
       deliveriesService.takeAction(deliverer.ID, order.id, Action.ACCEPT)
 
@@ -171,7 +170,7 @@ describe('O servico de pedidos', () => {
     it('rejeita pedido, status rejected, entregador na blocklist', () => {
       const order = ordersService.add(order1)
       deliverersService.addDeliverer(deliverer1)
-      let deliverer = deliverersService.Deliverers[0]
+      const deliverer = deliverersService.Deliverers[0]
 
       deliveriesService.addOrder(order.id, deliverer.ID)
       deliveriesService.takeAction(deliverer.ID, order.id, Action.REJECT)
@@ -187,7 +186,7 @@ describe('O servico de pedidos', () => {
     it('coleta pedido, status collected', () => {
       const order = ordersService.add(order1)
       deliverersService.addDeliverer(deliverer1)
-      let deliverer = deliverersService.Deliverers[0]
+      const deliverer = deliverersService.Deliverers[0]
 
       jasmine.clock().mockDate(FIVE_MIN_BEFORE)
       deliveriesService.addOrder(order.id, deliverer.ID)
@@ -207,7 +206,7 @@ describe('O servico de pedidos', () => {
     it('finaliza pedido, status finished, adicionar payment a carteira do entregador', () => {
       const order = ordersService.add(order1)
       deliverersService.addDeliverer(deliverer1)
-      let deliverer = deliverersService.Deliverers[0]
+      const deliverer = deliverersService.Deliverers[0]
 
       jasmine.clock().mockDate(FIVE_MIN_BEFORE)
       deliveriesService.addOrder(order.id, deliverer.ID)
@@ -231,7 +230,7 @@ describe('O servico de pedidos', () => {
     it('pedido assinalado para entregador', () => {
       const order = ordersService.add(order1)
       deliverersService.addDeliverer(deliverer1)
-      let deliverer = deliverersService.Deliverers[0]
+      const deliverer = deliverersService.Deliverers[0]
 
       deliveriesService.addOrder(order.id)
       deliveriesService.process()
@@ -246,11 +245,11 @@ describe('O servico de pedidos', () => {
     it('pedido rejeitado por entregador, assinala proximo', () => {
       const order = ordersService.add(order1)
       deliverersService.addDeliverer(deliverer1)
-      let fstDeliverer = deliverersService.Deliverers[0]
+      const fstDeliverer = deliverersService.Deliverers[0]
       deliveriesService.addOrder(order.id)
       deliveriesService.process()
       deliverersService.addDeliverer(deliverer2)
-      let sndDeliverer = deliverersService.Deliverers[1]
+      const sndDeliverer = deliverersService.Deliverers[1]
       deliveriesService.takeAction(fstDeliverer.ID, order.id, Action.REJECT)
       deliveriesService.process()
 

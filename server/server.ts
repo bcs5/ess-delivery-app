@@ -24,16 +24,13 @@ import { Action } from './src/delivery-action'
   200: OK (o request tá de boas - pode ser usado em casos de get talvez)
   201: Created (request OK e POST OK - é usado sempre em POST, acredito que em PUT também)
  */
-
-import e = require('express')
-
 const app = express()
 
 const allowCrossDomain = function (req: Request, res: Response, next: express.NextFunction) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
-  next();
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
+  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+  next()
 }
 
 app.use(allowCrossDomain)
@@ -46,52 +43,52 @@ const ordersService: OrdersService = new OrdersService()
 const deliveriesService: DeliveriesService = new DeliveriesService(ordersService, deliverersService)
 const deliveryMapper: DeliveryMapper = new DeliveryMapper()
 
-var delivererLogged: Deliverer = null
+let delivererLogged: Deliverer = null
 
-function extractCredentials(req: Request, res: Response): string[] {
+function extractCredentials (req: Request, res: Response): string[] {
   if (!req.headers.authorization || !req.headers.authorization.includes('Basic ')) {
-    res.status(401).json({ message: 'Missing Authorization Header' }).send();
+    res.status(401).json({ message: 'Missing Authorization Header' }).send()
   }
-  const base64Credentials = req.headers.authorization.split(' ')[1];
-  const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
-  return credentials.split(':');
+  const base64Credentials = req.headers.authorization.split(' ')[1]
+  const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii')
+  return credentials.split(':')
 }
 
 const server = app.listen(3000, function () {
-  console.log('CinEntrega listening on port 3000!');
+  console.log('CinEntrega listening on port 3000!')
 })
 
 const interval = setInterval(function () {
-  deliveriesService.process();
+  deliveriesService.process()
 }, 1000)
 
 app.get('/', function (req: express.Request, res: express.Response) {
-  return res.status(200).send('Welcome to CinEntrega Server!');
+  return res.status(200).send('Welcome to CinEntrega Server!')
 })
 
 app.post('/restaurant', function (req: express.Request, res: express.Response) {
-  return res.status(201).send(restaurantService.add(req.body));
+  return res.status(201).send(restaurantService.add(req.body))
 })
 
 app.post('/client', function (req: express.Request, res: express.Response) {
-  return res.status(201).send(clientsService.add(req.body));
+  return res.status(201).send(clientsService.add(req.body))
 })
 
 app.get('/user/', function (req: express.Request, res: express.Response) {
   try {
-    const [username, password] = extractCredentials(req, res);
-    deliverersService.auth(Number(username), password);
-    const deliverer = deliverersService.getById(Number(username));
-    return res.status(200).send({ name: deliverer.Name, wallet: deliverer.Wallet });
+    const [username, password] = extractCredentials(req, res)
+    deliverersService.auth(Number(username), password)
+    const deliverer = deliverersService.getById(Number(username))
+    return res.status(200).send({ name: deliverer.Name, wallet: deliverer.Wallet })
   } catch (e) {
     if (e.message == 'auth failed') {
-      return res.status(401).send(e);
+      return res.status(401).send(e)
     }
-    return res.status(500).send(e);
+    return res.status(500).send(e)
   }
 })
 
-//Deliverers
+// Deliverers
 app.post('/deliverers/', function (req: express.Request, res: express.Response) {
   try {
     let name = req.body.name;
@@ -124,22 +121,22 @@ app.post('/deliverers/', function (req: express.Request, res: express.Response) 
         state,
         complement
       )
-    );
+    )
 
     if (!deliverer) {
       res.status(400).send({
         failure: 'Ops! There is something wrong with the json format you sent!)'
-      });
+      })
     } else {
-      let response = deliverersService.addDeliverer(deliverer);
+      const response = deliverersService.addDeliverer(deliverer)
       if (response == RegisterResponse.REGISTERED) {
         res.status(201).send({
-          success: "Welcome to CinEntregas!!"
-        });
+          success: 'Welcome to CinEntregas!!'
+        })
       } else if (response == RegisterResponse.EXISTS) {
         res.status(409).send({
-          failure: "Oh no! Someone is already using this cnh or email, check if this is really your data or go to login!"
-        });
+          failure: 'Oh no! Someone is already using this cnh or email, check if this is really your data or go to login!'
+        })
       } else if (response == RegisterResponse.MISSING_DATA) {
         res.status(401).send({
           failure: 'Ops! You forgot to fill one or more fields!'
@@ -152,9 +149,9 @@ app.post('/deliverers/', function (req: express.Request, res: express.Response) 
     }
   } catch (e) {
     if (e.message == 'auth failed') {
-      return res.status(401).send(e);
+      return res.status(401).send(e)
     }
-    return res.status(500).send(e);
+    return res.status(500).send(e)
   }
 })
 
@@ -191,81 +188,79 @@ app.put('/deliverer/logged/', function (req: express.Request, res: express.Respo
           state,
           complement
         )
-      );
+      )
 
-      const delivererUpdated = deliverersService.updateInfos(deliverer, delivererLogged.ID);
+      const delivererUpdated = deliverersService.updateInfos(deliverer, delivererLogged.ID)
 
       if (delivererUpdated) {
         delivererLogged = delivererUpdated;
         res.status(201).send({
           success: 'Deliverer infos updated with success!'
-        });
+        })
       } else {
         res.status(500).send({
           failure: 'Sorry but we could not update your infos!'
-        });
+        })
       }
     } else {    
       res.status(400).send({
         failure: 'You need to be logged to update this data!'
-      });
+      })
     }
-
   } catch (e) {
     if (e.message == 'auth failed') {
       console.log(e.message)
       return res.status(401).send(e);
     }
-    return res.status(500).send(e);
+    return res.status(500).send(e)
   }
 })
 
 app.put('/deliverer/delete/', function (req: express.Request, res: express.Response) {
   try {
     if (delivererLogged != null) {
-      const delivererDeleted = deliverersService.deleteUser(delivererLogged.ID);
+      const delivererDeleted = deliverersService.deleteUser(delivererLogged.ID)
 
       if (delivererDeleted) {
-        delivererLogged = null;
+        delivererLogged = null
         res.status(201).send({
           success: 'Deliverer deleted with success!'
-        });
+        })
       } else {
         res.status(500).send({
           failure: 'Sorry but we could not delete your user!'
-        });
+        })
       }
     } else {
       res.status(400).send({
         failure: 'You need to be logged to delete this user!'
-      });
+      })
     }
-
   } catch (e) {
     if (e.message == 'auth failed') {
-      return res.status(401).send(e);
+      return res.status(401).send(e)
     }
-    return res.status(500).send(e);
+    return res.status(500).send(e)
   }
 })
 
 app.get('/deliverers/', function (req: express.Request, res: express.Response) {
   try {
-    let deliverers = deliverersService.Deliverers;
+    const deliverers = deliverersService.Deliverers
     if (deliverers == []) {
       res.status(404).send({
         failure: 'Ops! I think we need to have some deliverers registered first!'
-      });
+      })
     } else {
-      let stringfyArray = JSON.stringify(Array.from(deliverers));
-      
-      res.status(200).send(stringfyArray);
+      const stringfyArray = JSON.stringify(Array.from(deliverers))
+
+      res.status(200).send(stringfyArray)
     }
   } catch (e) {
     if (e.message == 'auth failed') {
-      return res.status(401).send(e);
+      return res.status(401).send(e)
     }
-    return res.status(500).send(e);
+    return res.status(500).send(e)
   }
 })
 
@@ -277,23 +272,21 @@ app.post('/deliverer/login/', function (req: express.Request, res: express.Respo
     if (email == '' || password == '') {
       res.status(400).send({
         failure: 'Ops! You forgot to fill one or more fields!'
-      });
+      })
     } else {
-      let delivererIsLogged = deliverersService.validateCredentials(email, password);
+      const delivererIsLogged = deliverersService.validateCredentials(email, password)
 
       if (delivererIsLogged) {
-        delivererLogged = delivererIsLogged;
+        delivererLogged = delivererIsLogged
 
         res.status(200).send({
-          success: "Login realizado com sucesso!"
-        });
-
-        console.log(`${delivererLogged.Name} is logged!`)
+          success: 'Login realizado com sucesso!'
+        })
       } else {
         console.log('E-mail ou senha incorretos!');
         res.status(401).send({
           failure: 'E-mail ou senha incorretos!'
-        });
+        })
       }
     }
   } catch (e) {
@@ -301,24 +294,22 @@ app.post('/deliverer/login/', function (req: express.Request, res: express.Respo
       console.log(e.message);
       return res.status(401).send(e);
     }
-    return res.status(500).send(e);
+    return res.status(500).send(e)
   }
 })
 
 app.post('/deliverer/logout/', function (req: express.Request, res: express.Response) {
   try {
-    delivererLogged = null;
+    delivererLogged = null
 
     res.status(200).send({
       success: 'Deliverer logged out!'
-    });
-
-    console.log(`${delivererLogged} is logged!`)
+    })
   } catch (e) {
     if (e.message == 'auth failed') {
-      return res.status(401).send(e);
+      return res.status(401).send(e)
     }
-    return res.status(500).send(e);
+    return res.status(500).send(e)
   }
 })
 
@@ -348,53 +339,53 @@ app.post('/order', function (req: express.Request, res: express.Response) {
     deliveriesService.addOrder(order.id, deliverer)
     return res.send(order)
   } catch (e) {
-    return res.status(500).send(e);
+    return res.status(500).send(e)
   }
 })
 
 app.get('/order/:orderId', function (req: express.Request, res: express.Response) {
   try {
-    const [username, password] = extractCredentials(req, res);
-    deliverersService.auth(Number(username), password);
+    const [username, password] = extractCredentials(req, res)
+    deliverersService.auth(Number(username), password)
 
-    const delivery = deliveriesService.byDeliverer(Number(username)).find(({ order }) => req.params.orderId == order.id);
-    return res.status(200).send(deliveryMapper.toJson(delivery));
+    const delivery = deliveriesService.byDeliverer(Number(username)).find(({ order }) => req.params.orderId == order.id)
+    return res.status(200).send(deliveryMapper.toJson(delivery))
   } catch (e) {
     if (e.message == 'auth failed') {
-      return res.status(401).send(e);
+      return res.status(401).send(e)
     }
-    return res.status(500).send(e);
+    return res.status(500).send(e)
   }
 })
 
 app.get('/order/:orderId/:action', function (req: express.Request, res: express.Response) {
   try {
     const [username, password] = extractCredentials(req, res)
-    deliverersService.auth(Number(username), password);
+    deliverersService.auth(Number(username), password)
 
-    const delivery = deliveriesService.takeAction(Number(username), Number(req.params.orderId), <Action>(req.params.action));
-    return res.status(200).send(deliveryMapper.toJson(delivery));
+    const delivery = deliveriesService.takeAction(Number(username), Number(req.params.orderId), <Action>(req.params.action))
+    return res.status(200).send(deliveryMapper.toJson(delivery))
   } catch (e) {
     if (e.message == 'auth failed') {
-      return res.status(401).send(e);
+      return res.status(401).send(e)
     }
-    return res.status(500).send(e);
+    return res.status(500).send(e)
   }
 })
 
 app.get('/orders/', function (req: express.Request, res: express.Response) {
   try {
-    const [username, password] = extractCredentials(req, res);
-    deliverersService.auth(Number(username), password);
+    const [username, password] = extractCredentials(req, res)
+    deliverersService.auth(Number(username), password)
 
-    const ans = deliveriesService.byDeliverer(Number(username)).map(delivery => deliveryMapper.toJsonMinimal(delivery));
-    return res.status(200).send(ans);
+    const ans = deliveriesService.byDeliverer(Number(username)).map(delivery => deliveryMapper.toJsonMinimal(delivery))
+    return res.status(200).send(ans)
   } catch (e) {
     if (e.message == 'auth failed') {
-      return res.status(401).send(e);
+      return res.status(401).send(e)
     }
     console.log(e)
-    return res.status(500).send(e);
+    return res.status(500).send(e)
   }
 })
 
@@ -413,13 +404,13 @@ app.post('/evaluation', function (req, res) {
 })
 
 app.get('/process', function (req: express.Request, res: express.Response) {
-  deliveriesService.process();
-  return res.status(200).send();
+  deliveriesService.process()
+  return res.status(200).send()
 })
 
-function closeServer(): void {
-  clearInterval(interval);
-  server.close();
+function closeServer (): void {
+  clearInterval(interval)
+  server.close()
 }
 
 export { app, server, closeServer }

@@ -123,11 +123,11 @@ describe('O servidor', () => {
   })
 
   it('cadastra cliente', () => {
-    const options = { 
-      method: 'POST', 
-      uri: (clientUrl), 
-      body: client, 
-      json: true 
+    const options = {
+      method: 'POST',
+      uri: (clientUrl),
+      body: client,
+      json: true
     }
     return request(options)
       .then(body => {
@@ -139,51 +139,55 @@ describe('O servidor', () => {
   })
 
   it('Cadastra Entregador 1 com Sucesso', () => {
-    const options = { 
-      method: 'POST', 
-      uri: (deliverersUrl), 
-      body: deliverer1, 
-      json: true }
+    const options = {
+      method: 'POST',
+      uri: (deliverersUrl),
+      body: deliverer1,
+      json: true
+    }
 
-    return request(options).catch( ({statusCode}) => {
-      expect(statusCode).toBe(201);
-    })   
+    return request(options).catch(({ statusCode }) => {
+      expect(statusCode).toBe(201)
+    })
   })
 
   it('Cadastra Entregador 2 com Sucesso', () => {
-    const options = { 
-      method: 'POST', 
+    const options = {
+      method: 'POST',
       uri: (deliverersUrl),
-      body: deliverer2, 
-      json: true }
+      body: deliverer2,
+      json: true
+    }
 
-    return request(options).catch( ({statusCode}) => {
-      expect(statusCode).toBe(201);
-    })  
+    return request(options).catch(({ statusCode }) => {
+      expect(statusCode).toBe(201)
+    })
   })
 
   it('Nao Cadastra Entregador 1 Novamente', () => {
-    const options = { 
-      method: 'POST', 
-      uri: (deliverersUrl), 
-      body: deliverer2, 
-      json: true }
+    const options = {
+      method: 'POST',
+      uri: (deliverersUrl),
+      body: deliverer2,
+      json: true
+    }
 
-    return request(options).catch( ({statusCode}) => {
-      expect(statusCode).toBe(409);
-    })  
+    return request(options).catch(({ statusCode }) => {
+      expect(statusCode).toBe(409)
+    })
   })
 
   it('Nao Cadastra Entregador Com Dados Obrigatórios Ausentes', () => {
-    const options = { 
-      method: 'POST', 
-      uri: (deliverersUrl), 
-      body: deliverer3, 
-      json: true }
+    const options = {
+      method: 'POST',
+      uri: (deliverersUrl),
+      body: deliverer3,
+      json: true
+    }
 
-    return request(options).catch( ({statusCode}) => {
-      expect(statusCode).toBe(400);
-    })  
+    return request(options).catch(({ statusCode }) => {
+      expect(statusCode).toBe(400)
+    })
   })
 
   it('Requisita entregadores cadastrados', () => {
@@ -194,7 +198,7 @@ describe('O servidor', () => {
     return request(options)
       .then(body => {
         const res: string = body
-        
+
         expect(res.includes(deliverer1.name))
         expect(res.includes(deliverer2.name))
         expect(!res.includes(deliverer3.name))
@@ -202,60 +206,64 @@ describe('O servidor', () => {
   })
 
   it('Nao Realiza Login do Entregador: Ausência de Email ou Senha', () => {
-    const options = { 
-      method: 'POST', 
-      uri: (delivererLoginUrl), 
+    const options = {
+      method: 'POST',
+      uri: (delivererLoginUrl),
       body: {
         email: deliverer1.email,
         password: ''
-      }, 
-      json: true }
+      },
+      json: true
+    }
 
-    return request(options).catch( ({statusCode}) => {
-      expect(statusCode).toBe(400);
-    })  
+    return request(options).catch(({ statusCode }) => {
+      expect(statusCode).toBe(400)
+    })
   })
 
   it('Nao Realiza Login do Entregador: Email ou Senha Incorretos', () => {
-    const options = { 
-      method: 'POST', 
-      uri: (delivererLoginUrl), 
+    const options = {
+      method: 'POST',
+      uri: (delivererLoginUrl),
       body: {
         email: deliverer1.email,
         password: 'senhaincorreta'
-      }, 
-      json: true }
+      },
+      json: true
+    }
 
-    return request(options).catch( ({statusCode}) => {
-      expect(statusCode).toBe(401);
-    })  
+    return request(options).catch(({ statusCode }) => {
+      expect(statusCode).toBe(401)
+    })
   })
 
   it('Realiza Login do Entregador 1 Com Sucesso', () => {
-    const options = { 
-      method: 'POST', 
-      uri: (delivererLoginUrl), 
+    const options = {
+      method: 'POST',
+      uri: (delivererLoginUrl),
       body: {
         email: deliverer1.email,
         password: deliverer1.password
-      }, 
-      json: true }
+      },
+      json: true
+    }
 
-    return request(options).catch( ({statusCode}) => {
-      expect(statusCode).toBe(200);
-    })  
+    return request(options).catch(({ statusCode }) => {
+      expect(statusCode).toBe(200)
+    })
   })
 
   it('Atualiza dados do entregador', () => {
-    const options = { 
-      method: 'PUT', 
+    const options = {
+      method: 'PUT',
       uri: deliverersUrl,
-      body: deliverer1Update, 
-      json: true }
+      body: deliverer1Update,
+      json: true
+    }
 
-    return request(options).catch( ({statusCode}) => {
-      expect(statusCode).toBe(201);
-    })  
+    return request(options).catch(({ statusCode }) => {
+      expect(statusCode).toBe(201)
+    })
   })
 
   it('checa dados entregador', () => {
@@ -295,7 +303,7 @@ describe('O servidor', () => {
       })
 
     const uri = orderUrl + order1.id + '/reject'
-    
+
     const options: any = {
       method: 'GET',
       uri: (uri),
@@ -533,39 +541,40 @@ describe('O servidor', () => {
   })
 
   it('Realiza Logout do Entregador Com Sucesso', () => {
-    const options = { 
-      method: 'POST', 
+    const options = {
+      method: 'POST',
       uri: (delivererLogoutUrl)
     }
 
-    return request(options).catch( ({statusCode}) => {
-      expect(statusCode).toBe(200);
-    })  
+    return request(options).catch(({ statusCode }) => {
+      expect(statusCode).toBe(200)
+    })
   })
 
   it('Realiza Login do Entregador 2 Com Sucesso', () => {
-    const options = { 
-      method: 'POST', 
-      uri: (delivererLoginUrl), 
+    const options = {
+      method: 'POST',
+      uri: (delivererLoginUrl),
       body: {
         email: deliverer2.email,
         password: deliverer2.password
-      }, 
-      json: true }
+      },
+      json: true
+    }
 
-    return request(options).catch( ({statusCode}) => {
-      expect(statusCode).toBe(200);
-    })  
+    return request(options).catch(({ statusCode }) => {
+      expect(statusCode).toBe(200)
+    })
   })
 
   it('Deleta Conta do Entregador 2 Com Sucesso', () => {
-    const options = { 
-      method: 'PUT', 
-      uri: (delivererDeleteUrl) 
+    const options = {
+      method: 'PUT',
+      uri: (delivererDeleteUrl)
     }
 
-    return request(options).catch( ({statusCode}) => {
-      expect(statusCode).toBe(200);
-    })  
+    return request(options).catch(({ statusCode }) => {
+      expect(statusCode).toBe(200)
+    })
   })
 })
